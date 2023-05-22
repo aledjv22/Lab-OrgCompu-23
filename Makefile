@@ -20,7 +20,7 @@ kernel8.img: memmap $(ASM_OBJS)
 	$(ARMGNU)-objcopy kernel8.elf -O binary kernel8.img
 
 runQEMU: kernel8.img
-	qemu-system-aarch64 -M raspi3 -kernel kernel8.img -serial stdio -qtest unix:/tmp/qtest.sock,server,nowait
+	qemu-system-aarch64 -M raspi3b -kernel kernel8.img -serial stdio -qtest unix:/tmp/qtest.sock,server,nowait
 
 runGPIOM: bin/gpiom
 	./bin/gpiom
