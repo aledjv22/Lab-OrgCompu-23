@@ -54,15 +54,16 @@ loop0:
 	// Infinite Loop
 
 	//AQUÍ EMPIEZA MI PRUEBA PARA TOCAR LA TECLA 'W' Y CAMBIAR DE ROSA A VERDE LA PANTALLA
+leyendo2:
 	movz x15, 0x00, lsl 16
 	movk x15, 0xFF00, lsl 00
 	mov x0, x20 //guardo en x16 la dirección base del framebuffer
-leyendo:
+	add w10, wzr, wzr //reseteo el valor w10
 	ldr w10, [x9, GPIO_GPLEV0]//leo el estado de los GPIO 0 - 31
 	//Al hacer AND revela el estado del bit 2,ie, el estado del GPIO 1
 	and w11, w10, 0b00000010
 	SUBS wzr, w11, 0b00000010
-	B.NE leyendo
+	B.NE leyendo2
 	mov x2, SCREEN_HEIGH         // Y Size
 loop3:
 	mov x1, SCREEN_WIDTH         // X Size
@@ -73,8 +74,33 @@ loop2:
 	cbnz x1,loop2  // Si no terminó la fila, salto
 	sub x2,x2,1    // Decrementar contador Y
 	cbnz x2,loop3  // Si no es la última fila, salto
+	b leyendo1
 	//AQUÍ FINALIZA MI PRUEBA, SI SE TOCA 'W' DE NUEVO, 
 	//NO SE REGRESA AL COLOR ANTERIOR YA QUE FINALIZO EL PROGRAMA
+
+
+	//Aqui inicia otro extra para conseguir cambiar el color de nuevo
+leyendo1:
+	movz x15, 0xC7, lsl 16
+	movk x15, 0x1585, lsl 00
+	mov x0, x20 //guardo en x16 la dirección base del framebuffer
+	add w10, wzr, wzr //reseteo el valor w10
+	ldr w10, [x9, GPIO_GPLEV0]//leo el estado de los GPIO 0 - 31
+	//Al hacer AND revela el estado del bit 2,ie, el estado del GPIO 1
+	and w11, w10, 0b00000010
+	SUBS wzr, w11, 0b00000010
+	B.NE leyendo2
+	mov x2, SCREEN_HEIGH         // Y Size
+loop5:
+	mov x1, SCREEN_WIDTH         // X Size
+loop4:
+	stur w15,[x0]  // Colorear el pixel N
+	add x0,x0,4    // Siguiente pixel
+	sub x1,x1,1    // Decrementar contador X
+	cbnz x1,loop4  // Si no terminó la fila, salto
+	sub x2,x2,1    // Decrementar contador Y
+	cbnz x2,loop5  // Si no es la última fila, salto
+	b leyendo2
 
 InfLoop:
 	b InfLoop
