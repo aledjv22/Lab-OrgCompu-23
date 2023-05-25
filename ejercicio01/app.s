@@ -9,16 +9,23 @@
 	.globl main
 
 main:
-	// x0 contiene la direccion base del framebuffer
-	mov x20, x0 // Guarda la dirección base del framebuffer en x20
-	//---------------- CODE HERE ------------------------------------
+    //x0 contiene la dirección base del framebuffer
+    mov x20, x0 //Guarda la dirección base del framebuffer en x20
+    //---------------- CODE HERE ------------------------------------
+    
+    //Configuraciones generales:
+    mov x9, GPIO_BASE //Almaceno la dirección base del GPIO en x9
+    str wzr, [x9, GPIO_GPFSEL0] //Setea gpios 0 - 9 como lectura
 
-	movz x10, 0xC7, lsl 16
-	movk x10, 0x1585, lsl 00
+    //Fondo de color rosa
+rosa:
+    mov x0, x20
+    movz x10, 0xC7, lsl 16 //color rosa parte 1
+    movk x10, 0x1585, lsl 00//color rosa parte 2
 
-	mov x2, SCREEN_HEIGH         // Y Size
+    mov x2, SCREEN_HEIGH //almaceno el tamaño de Y en x2
 loop1:
-	mov x1, SCREEN_WIDTH         // X Size
+	mov x1, SCREEN_WIDTH //almaceno el tamaño de X en x1
 loop0:
 	stur w10,[x0]  // Colorear el pixel N
 	add x0,x0,4    // Siguiente pixel
@@ -26,81 +33,49 @@ loop0:
 	cbnz x1,loop0  // Si no terminó la fila, salto
 	sub x2,x2,1    // Decrementar contador Y
 	cbnz x2,loop1  // Si no es la última fila, salto
+    add w10, wzr, wzr //reseteo el valor de w10
 
-	// Ejemplo de uso de gpios
-	mov x9, GPIO_BASE
+leoRosa:
+    ldr w10, [x9, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
+    and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
+    sub w10, w10, 0b10
+    cbnz w10, leoRosa //Si la tecla 'w' no fue precionado leo de nuevo
 
-	// Atención: se utilizan registros w porque la documentación de broadcom
-	// indica que los registros que estamos leyendo y escribiendo son de 32 bits
+releoRosa:
+    ldr w10, [x9, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
+    and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
+    //sub w10, w10, 0b10
+    cbnz w10, releoRosa //Si la tecla 'w' no fue precionado leo de nuevo
+    b verde 
 
-	// Setea gpios 0 - 9 como lectura
-	str wzr, [x9, GPIO_GPFSEL0]
+verde: 
+    mov x0, x20
+    movz x10, 0x00, lsl 16 //color rosa parte 1
+    movk x10, 0xFF00, lsl 00//color rosa parte 2
 
-	// Lee el estado de los GPIO 0 - 31
-	ldr w10, [x9, GPIO_GPLEV0]
-
-	// And bit a bit mantiene el resultado del bit 2 en w10 (notar 0b... es binario)
-	// al inmediato se lo refiere como "máscara" en este caso:
-	// - Al hacer AND revela el estado del bit 2
-	// - Al hacer OR "setea" el bit 2 en 1
-	// - Al hacer AND con el complemento "limpia" el bit 2 (setea el bit 2 en 0)
-	and w11, w10, 0b00000010
-
-	// si w11 es 0 entonces el GPIO 1 estaba liberado
-	// de lo contrario será distinto de 0, (en este caso particular 2)
-	// significando que el GPIO 1 fue presionado
-
-	//---------------------------------------------------------------
-	// Infinite Loop
-
-	//AQUÍ EMPIEZA MI PRUEBA PARA TOCAR LA TECLA 'W' Y CAMBIAR DE ROSA A VERDE LA PANTALLA
-leyendo2:
-	movz x15, 0x00, lsl 16
-	movk x15, 0xFF00, lsl 00
-	mov x0, x20 //guardo en x16 la dirección base del framebuffer
-	add w10, wzr, wzr //reseteo el valor w10
-	ldr w10, [x9, GPIO_GPLEV0]//leo el estado de los GPIO 0 - 31
-	//Al hacer AND revela el estado del bit 2,ie, el estado del GPIO 1
-	and w11, w10, 0b00000010
-	SUBS wzr, w11, 0b00000010
-	B.NE leyendo2
-	mov x2, SCREEN_HEIGH         // Y Size
+    mov x2, SCREEN_HEIGH //almaceno el tamaño de Y en x2
 loop3:
-	mov x1, SCREEN_WIDTH         // X Size
+	mov x1, SCREEN_WIDTH //almaceno el tamaño de X en x1
 loop2:
-	stur w15,[x0]  // Colorear el pixel N
+	stur w10,[x0]  // Colorear el pixel N
 	add x0,x0,4    // Siguiente pixel
 	sub x1,x1,1    // Decrementar contador X
 	cbnz x1,loop2  // Si no terminó la fila, salto
 	sub x2,x2,1    // Decrementar contador Y
 	cbnz x2,loop3  // Si no es la última fila, salto
-	b leyendo1
-	//AQUÍ FINALIZA MI PRUEBA, SI SE TOCA 'W' DE NUEVO, 
-	//NO SE REGRESA AL COLOR ANTERIOR YA QUE FINALIZO EL PROGRAMA
+    add w10, wzr, wzr //reseteo el valor de w10
 
+leoVerde:
+    ldr w10, [x9, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
+    and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
+    sub w10, w10, 0b10
+    cbnz w10, leoVerde //Si la tecla 'w' no fue precionado leo de nuevo
 
-	//Aqui inicia otro extra para conseguir cambiar el color de nuevo
-leyendo1:
-	movz x15, 0xC7, lsl 16
-	movk x15, 0x1585, lsl 00
-	mov x0, x20 //guardo en x16 la dirección base del framebuffer
-	add w10, wzr, wzr //reseteo el valor w10
-	ldr w10, [x9, GPIO_GPLEV0]//leo el estado de los GPIO 0 - 31
-	//Al hacer AND revela el estado del bit 2,ie, el estado del GPIO 1
-	and w11, w10, 0b00000010
-	SUBS wzr, w11, 0b00000010
-	B.NE leyendo2
-	mov x2, SCREEN_HEIGH         // Y Size
-loop5:
-	mov x1, SCREEN_WIDTH         // X Size
-loop4:
-	stur w15,[x0]  // Colorear el pixel N
-	add x0,x0,4    // Siguiente pixel
-	sub x1,x1,1    // Decrementar contador X
-	cbnz x1,loop4  // Si no terminó la fila, salto
-	sub x2,x2,1    // Decrementar contador Y
-	cbnz x2,loop5  // Si no es la última fila, salto
-	b leyendo2
+releoVerde:
+    ldr w10, [x9, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
+    and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
+    cbnz w10, releoVerde //Si la tecla 'w' no fue precionado leo de nuevo
+    b rosa 
 
 InfLoop:
 	b InfLoop
