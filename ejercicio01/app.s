@@ -37,26 +37,31 @@ loop2:
 gris:
     mov x0, x20
     movz x10, 0xC0, lsl 16 //color gris parte 1
-    movk x10, 0xC0C0, lsl 00 //color gris parte 2
+    movk x10, 0xC0C0, lsl 00 //color gris parte 2 
+    mov x15,0 //PY
+    mov x17,120 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,520 //FX
+    bl rectangulo
 
-    mov x2, 520 //almaceno el tamaño de X en x2
-loop4:
-    mov x1, SCREEN_HEIGH //almaceno el tamaño de Y en x1
-loop5:
-    mov x12, 640 //almaceno 640
-    mul x11, x1,x12 //Multiplico Y * 640
-    add x11, x11,x2 //Le sumo la X a x11: X + Y*640 
-    mov x13, 4 //Almaceno 4
-    mul x11, x11, x13 //4 * (X + Y*640 )
-    add x11, x0, x11 //Sumo la dirección de inicio
-    stur w10,[x11] //Pinto pixel
-    sub x1,x1,1
-    subs xzr,x1,0
-    b.ge loop5
-    sub x2,x2,1
-    subs xzr,x2,120
-    b.ge loop4
-    //cbnz x2,loop4
+//Funcion encargada de dibujar un rectangulo
+rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=aux
+    mov x19,x17 //almaceno el valor inicial de X
+    loop0:
+        mov x17,x19 //restauro el valor inicial de X
+    loop1:
+        mov x21, SCREEN_WIDTH //almaceno 640
+        mul x21,x15,x21 //multiplico Y*640
+        add x21,x17,x21 //X + Y*640
+        lsl x21,x21,2 //4 * (X + Y*640)
+        add x21,x0,x21 //direIni + 4*(X + Y*640)
+        stur w10,[x21] //pinto el pixel
+        add x17,x17,1 //X++
+        subs xzr,x17,x18
+        b.le loop1
+        add x15,x15,1//Y++
+        subs xzr,x15,x16
+        b.le loop0
 
 InfLoop:
 	b InfLoop
