@@ -15,34 +15,22 @@ main:
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
 lima:
-    mov x0, x20
     movz x10, 0x49, lsl 16 //color lima parte 1
     movk x10, 0x8602, lsl 00 //color lima parte 2
-
-
-    mov x2, SCREEN_HEIGH //almaceno el tamaño de Y en x2
-loop3:
-    mov x1, SCREEN_WIDTH //almaceno el tamaño de X en x1
-loop2:
-    stur w10,[x0]  // Colorear el pixel N
-    add x0,x0,4    // Siguiente pixel
-    sub x1,x1,1    // Decrementar contador X
-    cbnz x1,loop2  // Si no terminó la fila, salto
-    sub x2,x2,1    // Decrementar contador Y
-    cbnz x2,loop3  // Si no es la última fila, salto
-    add w10, wzr, wzr //reseteo el valor de w10
-
-
+    mov x15,0 //PY
+    mov x17,0 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,SCREEN_WIDTH //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
 gris:
-    mov x0, x20
     movz x10, 0xC0, lsl 16 //color gris parte 1
     movk x10, 0xC0C0, lsl 00 //color gris parte 2 
     mov x15,0 //PY
     mov x17,120 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,520 //FX
-    bl rectangulo
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
 //Funcion encargada de dibujar un rectangulo
 rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=aux
@@ -62,6 +50,7 @@ rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=aux
         add x15,x15,1//Y++
         subs xzr,x15,x16
         b.le loop0
+        br lr //Retorno a la ubicación de la llamada almacenada en LR (una alternativa es 'ret')
 
 InfLoop:
 	b InfLoop
