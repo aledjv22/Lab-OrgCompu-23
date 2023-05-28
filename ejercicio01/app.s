@@ -14,7 +14,7 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
-lima:
+fondo:
     movz x10, 0x49, lsl 16 //color lima parte 1
     movk x10, 0x8602, lsl 00 //color lima parte 2
     mov x15,0 //PY
@@ -23,7 +23,7 @@ lima:
     mov x18,SCREEN_WIDTH //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
-gris:
+asfalto:
     movz x10, 0xC0, lsl 16 //color gris parte 1
     movk x10, 0xC0C0, lsl 00 //color gris parte 2 
     mov x15,0 //PY
@@ -31,6 +31,49 @@ gris:
     mov x16,SCREEN_HEIGH //FY
     mov x18,520 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+lineasRojas:
+    movz x10, 0xFF, lsl 16 //color rojo
+    mov x15,0 //PY
+    mov x17,120 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,125 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    movz x10, 0xFF, lsl 16 //color rojo
+    mov x15,0 //PY
+    mov x17,515 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,520 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+blanco:
+    movz x10, 0xFF, lsl 16 //color blanco parte 1
+    movk x10, 0xFFFF, lsl 00 //color blanco parte 2 
+    mov x17,120 //PX
+    mov x18,125 //FX
+    mov x15,0 //PY
+    mov x16,10 //FY
+    tam:
+        bl rectangulo
+        mov x17,120 //PX
+        mov x18,125 //FX
+        add x15,x16,10 //PY = FY+10
+        add x16,x15,10 //FY = PY+10
+        subs xzr,x16,SCREEN_HEIGH
+        b.lt tam
+    mov x17,515 //PX
+    mov x18,520 //FX
+    mov x15,0 //PY
+    mov x16,10 //FY
+    tam2:
+        bl rectangulo
+        mov x17,515 //PX
+        mov x18,520 //FX
+        add x15,x16,10 //PY = FY+10
+        add x16,x15,10 //FY = PY+10
+        subs xzr,x16,SCREEN_HEIGH
+        b.lt tam2
+    b InfLoop
 
 //Funcion encargada de dibujar un rectangulo
 rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=aux
