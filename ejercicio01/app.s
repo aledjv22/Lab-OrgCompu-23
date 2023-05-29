@@ -46,33 +46,35 @@ lineasRojas:
     mov x18,520 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
-blanco:
+puntBlanco:
     movz x10, 0xFF, lsl 16 //color blanco parte 1
     movk x10, 0xFFFF, lsl 00 //color blanco parte 2 
     mov x17,120 //PX
     mov x18,125 //FX
     mov x15,0 //PY
     mov x16,10 //FY
-    tam:
-        bl rectangulo
-        mov x17,120 //PX
-        mov x18,125 //FX
-        add x15,x16,10 //PY = FY+10
-        add x16,x15,10 //FY = PY+10
-        subs xzr,x16,SCREEN_HEIGH
-        b.lt tam
+    bl puntRectan
     mov x17,515 //PX
     mov x18,520 //FX
     mov x15,0 //PY
     mov x16,10 //FY
-    tam2:
+    bl puntRectan
+
+puntRectan:
+    mov x22,lr //guardo dire de llamada
+    mov x23,x17 //copio px
+    mov x24,x18 //copio fx
+    repe:
         bl rectangulo
-        mov x17,515 //PX
-        mov x18,520 //FX
+        mov x17,x23 //PX
+        mov x18,x24 //FX
         add x15,x16,10 //PY = FY+10
         add x16,x15,10 //FY = PY+10
-        subs xzr,x16,SCREEN_HEIGH
-        b.lt tam2
+        subs xzr,x16,480
+        b.lt repe
+    mov lr,x22 //retorno el valor de llamada
+    br lr
+
     b InfLoop
 
 //Funcion encargada de dibujar un rectangulo
