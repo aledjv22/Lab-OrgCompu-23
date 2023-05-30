@@ -21,6 +21,8 @@ fondo:
     mov x17,0 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,SCREEN_WIDTH //FX
+    mov x22,SCREEN_HEIGH //tam de largo de lineas
+    mov x23,0 //sep del punteado
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
 asfalto:
@@ -30,6 +32,8 @@ asfalto:
     mov x17,120 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,520 //FX
+    mov x22,SCREEN_HEIGH //tam de largo de lineas
+    mov x23,0 //sep del punteado
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
 lineasRojas:
@@ -38,12 +42,16 @@ lineasRojas:
     mov x17,120 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,125 //FX
+    mov x22,SCREEN_HEIGH //tam de largo de lineas
+    mov x23,0 //sep del punteado
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
     movz x10, 0xFF, lsl 16 //color rojo
     mov x15,0 //PY
     mov x17,515 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,520 //FX
+    mov x22,SCREEN_HEIGH //tam de largo de lineas
+    mov x23,0 //sep del punteado
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
 puntBlanco:
@@ -52,37 +60,28 @@ puntBlanco:
     mov x17,120 //PX
     mov x18,125 //FX
     mov x15,0 //PY
-    mov x16,10 //FY
-    bl puntRectan
+    mov x16,SCREEN_HEIGH //FY
+    mov x22,15 //tam de largo de lineas
+    mov x23,10 //sep del punteado
+    bl rectangulo
     mov x17,515 //PX
     mov x18,520 //FX
     mov x15,0 //PY
-    mov x16,10 //FY
-    bl puntRectan
-
-puntRectan:
-    mov x22,lr //guardo dire de llamada
-    mov x23,x17 //copio px
-    mov x24,x18 //copio fx
-    repe:
-        bl rectangulo
-        mov x17,x23 //PX
-        mov x18,x24 //FX
-        add x15,x16,10 //PY = FY+10
-        add x16,x15,10 //FY = PY+10
-        subs xzr,x16,480
-        b.lt repe
-    mov lr,x22 //retorno el valor de llamada
-    br lr
+    mov x16,SCREEN_HEIGH //FY
+    mov x22,15 //tam de largo de lineas
+    mov x23,10 //sep del punteado
+    bl rectangulo
 
     b InfLoop
 
-//Funcion encargada de dibujar un rectangulo
+//Funcion encargada de dibujar una linea punteada
 rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=aux
+        //x22=tam de lineas;x23=sep del punteado,x24=auxT
+    mov x24,0 //inicializo en 0 el aux de tam
     mov x19,x17 //almaceno el valor inicial de X
-    loop0:
+    loop3:
         mov x17,x19 //restauro el valor inicial de X
-    loop1:
+    loop2:
         mov x21, SCREEN_WIDTH //almaceno 640
         mul x21,x15,x21 //multiplico Y*640
         add x21,x17,x21 //X + Y*640
@@ -90,11 +89,16 @@ rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=aux
         add x21,x0,x21 //direIni + 4*(X + Y*640)
         stur w10,[x21] //pinto el pixel
         add x17,x17,1 //X++
-        subs xzr,x17,x18
-        b.le loop1
-        add x15,x15,1//Y++
-        subs xzr,x15,x16
-        b.le loop0
+        subs xzr,x17,x18 //PX <= FX
+        b.le loop2
+        add x15,x15,1 //Y++
+        add x24,x24,1 //auxT++
+        subs xzr,x24,x22 //auxT <= tamLine
+        b.le loop3
+        add x15,x15,x23 //Y += sep del punteado
+        mov x24,0 //reinicio el valor del aux de tam
+        subs xzr,x15,x16 //Y < FY 
+        b.lt loop3
         br lr //Retorno a la ubicación de la llamada almacenada en LR (una alternativa es 'ret')
 
 InfLoop:
