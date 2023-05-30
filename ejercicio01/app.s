@@ -72,6 +72,25 @@ puntBlanco:
     mov x23,10 //sep del punteado
     bl rectangulo
 
+separador:
+    movz x10, 0xFF, lsl 16 //color blanco parte 1
+    movk x10, 0xFFFF, lsl 00 //color blanco parte 2 
+    mov x17,253 //PX
+    mov x18,256 //FX
+    mov x15,0 //PY
+    mov x16,SCREEN_HEIGH //FY
+    mov x22,30 //tam de largo de lineas
+    mov x23,10 //sep del punteado
+    bl rectangulo
+    mov x17,384 //PX
+    mov x18,387 //FX
+    mov x15,0 //PY
+    mov x16,SCREEN_HEIGH //FY
+    mov x22,30 //tam de largo de lineas
+    mov x23,10 //sep del punteado
+    bl rectangulo
+
+
     b InfLoop
 
 //Funcion encargada de dibujar una linea punteada
