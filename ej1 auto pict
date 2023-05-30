@@ -1,0 +1,93 @@
+	.equ SCREEN_WIDTH,   640
+	.equ SCREEN_HEIGH,   480
+	.equ BITS_PER_PIXEL, 32
+
+	.equ GPIO_BASE,    0x3f200000
+	.equ GPIO_GPFSEL0, 0x00
+	.equ GPIO_GPLEV0,  0x34
+
+	.globl main
+
+main:
+	// x0 contiene la direccion base del framebuffer
+	mov x20, x0 // Guarda la dirección base del framebuffer en x20
+	//---------------- CODE HERE ------------------------------------
+
+	movz x10, 0x00, lsl 16
+	movk x10, 0xff00, lsl 00
+
+
+	mov x2, SCREEN_HEIGH         // Y Size
+loop1:
+	mov x1, SCREEN_WIDTH        // X Size
+	// sub x1, x1, 1000   
+
+MarioSuit:
+	// left side of the pant
+	add x0, x20, x17 // x0 gets the base address of the framebuffer
+	ldr x9, =0x6804C
+	add x0, x0, x9 // load the adress X=275, Y=166
+	mov x10, #20 // Width of the line = 20
+	movz w2, 0xD9, lsl 16 // Red colour
+	movk w2, 0x0000, lsl 00 // Red colour
+	bl DrawHorizontalLineWidth // Calls the function with the parameters set above.
+ 
+	// right side of the pant
+	add x0, x20, x17 // x0 gets the base address of the framebuffer
+	ldr x9, =0x68114
+	add x0, x0, x9 // load the adress X=325, Y=166
+	bl DrawHorizontalLineWidth // Calls the function with the parameters set above.
+
+	// Stomach
+	// stomach base
+	add x0, x20, x17 // x0 gets the base address of the framebuffer
+	ldr x9, =0x5B874
+	add x0, x0, x9 // load the adress X=285, Y=146
+	mov x1, #60 // Length of the line = 60
+	mov x10, #30 // Width of the line = 30
+	bl DrawHorizontalLineWidth // Calls the function with the parameters set above.
+
+	// top stomach
+	add x0, x20, x17 // x0 gets the base address of the framebuffer
+	ldr x9, =0x5549C
+	add x0, x0, x9 // load the adress X=295, Y=136	
+	mov x1, #40 // Length of the line = 40
+	mov x10, #10 // Width of the line = 10
+	bl DrawHorizontalLineWidth // Calls the function with the parameters set above.
+	
+	//suspenders
+	//left suspender
+	add x0, x20, x17 // x0 gets the base address of the framebuffer
+	ldr x9, =0x5549C
+	add x0, x0, x9 // load the adress X=295, Y=136	
+	mov x1, #20 // Length of the line = 20
+	mov x10, #10 // Width of the line = 10	
+	bl DrawVerticalLineWidth // Calls the function with the parameters set above.
+
+	//right suspender
+	add x0, x20, x17 // x0 gets the base address of the framebuffer
+	ldr x9, =0x55514
+	add x0, x0, x9 // load the adress X=325, Y=136	
+	mov x1, #10 // Length of the line = 10
+	mov x10, #10 // Width of the line = 10	
+	bl DrawVerticalLineWidth // Calls the function with the parameters set above.
+
+	//yellow buttons
+	//left button
+	add x0, x20, x17 // x0 gets the base address of the framebuffer
+	ldr x9, =0x5B89C
+	add x0, x0, x9 // load the adress X=295, Y=146	
+	mov x1, #10 // Length of the line = 10
+	mov x10, #10 // Width of the line = 10
+	movz w2, 0xF9, lsl 16 // Yellow colour
+	movk w2, 0xAA00, lsl 00 // Yellow colour
+	bl DrawHorizontalLineWidth // Calls the function with the parameters set above.
+ 
+	//right button
+	add x0, x20, x17 // x0 gets the base address of the framebuffer
+	ldr x9, =0x5B914
+	add x0, x0, x9 // load the adress X=325, Y=146
+	bl DrawHorizontalLineWidth // Calls the function with the parameters set above.
+	b InfLoop
+InfLoop:
+	b InfLoop
