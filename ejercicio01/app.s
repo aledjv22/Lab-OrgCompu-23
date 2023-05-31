@@ -88,13 +88,6 @@ separador:
     mov x23,10 //sep del punteado
     bl rectangulo
 
-arbustos:
-    //cordenadas, radio y color ale jejeje
-    mov x17,320 //x
-    mov x15,240 //y
-    mov x4,40
-    movz x10, 0xFF, lsl 16 //color rojo
-    bl circulo
 
     b InfLoop
 
@@ -161,6 +154,27 @@ pintar_pixel:
     add x21,x0,x21 //direIni + 4*(X + Y*640)
     stur w10,[x21] //pinto el pixel
     br lr
+    
+arbol:
+    //tronco
+    mov x26,lr //guardo la dire de partida
+    movz x10, 0x6F, lsl 16 //color marron parte 1
+    movk x10, 0x4908, lsl 00 //color marron parte 2 
+    mov x15,70 //PY
+    mov x17,55 //PX
+    mov x16,105 //FY
+    mov x18,65 //FX
+    mov x22,0 //tam de largo de lineas
+    mov x23,0 //sep del punteado
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion
+    //Hojas
+    mov x17,60 //x
+    mov x15,50 //y
+    mov x4,30
+    movz x10,0x15,lsl 16 //color verde oscuro parte 1
+    movk x10,0x7705, lsl 00 //color verde oscuro parte 2
+    bl circulo
+    br x26 //regreso a la dire de llamada
 
 InfLoop:
 	b InfLoop
