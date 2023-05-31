@@ -88,6 +88,10 @@ separador:
     mov x23,10 //sep del punteado
     bl rectangulo
 
+arbolada:
+    mov x17,60
+    mov x15,50
+    bl arbol
 
     b InfLoop
 
@@ -112,8 +116,9 @@ rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=aux
         mov x24,0 //reinicio el valor del aux de tam
         subs xzr,x15,x16 //Y < FY 
         b.lt loop3
-        mov lr,x25 //restauro ubi de partida
-        br lr //Retorno a la ubicación de la llamada almacenada en LR (una alternativa es 'ret')
+        sub x16,x16,55
+        mov x17,x19 //restauro el valor inicial de X
+        br x25 //Retorno a la ubicación de la llamada almacenada en LR (una alternativa es 'ret')
 
 //Funcion encargada de dibujar un circulo
 circulo:
@@ -157,22 +162,23 @@ pintar_pixel:
     
 arbol:
     //tronco
+    mov x27,x15 //inicial y
     mov x26,lr //guardo la dire de partida
     movz x10, 0x6F, lsl 16 //color marron parte 1
-    movk x10, 0x4908, lsl 00 //color marron parte 2 
-    mov x15,70 //PY
-    mov x17,55 //PX
-    mov x16,105 //FY
-    mov x18,65 //FX
+    movk x10, 0x4908, lsl 00 //color marron parte 2
+    add x17,x17,5 //PX
+    add x18,x17,5 //FX x-5+10=x+5
+    add x15,x15,20 //PY
+    add x16,x15,35 //FY
     mov x22,0 //tam de largo de lineas
     mov x23,0 //sep del punteado
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion
     //Hojas
-    mov x17,60 //x
-    mov x15,50 //y
-    mov x4,30
     movz x10,0x15,lsl 16 //color verde oscuro parte 1
     movk x10,0x7705, lsl 00 //color verde oscuro parte 2
+    mov x17,x19
+    mov x15,x27
+    mov x4,30
     bl circulo
     br x26 //regreso a la dire de llamada
 
