@@ -40,35 +40,31 @@ lineasRojas:
     mov x17,120 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,125 //FX
-    mov x22,SCREEN_HEIGH //tam de largo de lineas
-    mov x23,0 //sep del punteado
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
     movz x10, 0xFF, lsl 16 //color rojo
     mov x15,0 //PY
     mov x17,515 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,520 //FX
-    mov x22,SCREEN_HEIGH //tam de largo de lineas
-    mov x23,0 //sep del punteado
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
 puntBlanco:
-    movz x10, 0xFF, lsl 16 //color blanco parte 1
-    movk x10, 0xFFFF, lsl 00 //color blanco parte 2 
+    movz x10, 0xE5, lsl 16 //color blanco parte 1
+    movk x10, 0xE4E4, lsl 00 //color blanco parte 2 
     mov x17,120 //PX
     mov x18,125 //FX
     mov x15,0 //PY
-    mov x16,SCREEN_HEIGH //FY
-    mov x22,15 //tam de largo de lineas
+    mov x16,15 //FY
     mov x23,10 //sep del punteado
-    bl rectangulo
+    mov x24,SCREEN_HEIGH //tam de largo de todo
+    bl repRectanguloY
     mov x17,515 //PX
     mov x18,520 //FX
     mov x15,0 //PY
-    mov x16,SCREEN_HEIGH //FY
-    mov x22,15 //tam de largo de lineas
+    mov x16,15 //FY
     mov x23,10 //sep del punteado
-    bl rectangulo
+    mov x24,SCREEN_HEIGH //tam de largo de todo
+    bl repRectanguloY
 
 separador:
     movz x10, 0xFF, lsl 16 //color blanco parte 1
@@ -76,17 +72,17 @@ separador:
     mov x17,253 //PX
     mov x18,256 //FX
     mov x15,0 //PY
-    mov x16,SCREEN_HEIGH //FY
-    mov x22,30 //tam de largo de lineas
+    mov x16,30 //FY
     mov x23,10 //sep del punteado
-    bl rectangulo
+    mov x24,SCREEN_HEIGH //tam de largo de todo
+    bl repRectanguloY
     mov x17,384 //PX
     mov x18,387 //FX
     mov x15,0 //PY
-    mov x16,SCREEN_HEIGH //FY
-    mov x22,30 //tam de largo de lineas
+    mov x16,30 //FY
     mov x23,10 //sep del punteado
-    bl rectangulo
+    mov x24,SCREEN_HEIGH //tam de largo de todo
+    bl repRectanguloY
 
 arbolada:
     mov x17,60
@@ -96,29 +92,38 @@ arbolada:
     b InfLoop
 
 //Funcion encargada de dibujar un rectangulo
-rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=aux
-        //x22=tam de lineas;x23=sep del punteado,x24=auxT
-    mov x25,lr //guardo dire de partida
-    mov x24,0 //inicializo en 0 el aux de tam
+rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=auxY;x22=auxDire
+    mov x22,lr //guardo dire de partida
     mov x19,x17 //almaceno el valor inicial de X
-    loop3:
+    mov x21,x15 //almaceno el valor inicial de y
+    loop1:
         mov x17,x19 //restauro el valor inicial de X
-    loop2:
+    loop0:
         bl pintar_pixel
         add x17,x17,1 //X++
         subs xzr,x17,x18 //PX <= FX
-        b.le loop2
+        b.le loop0
         add x15,x15,1 //Y++
-        add x24,x24,1 //auxT++
-        subs xzr,x24,x22 //auxT <= tamLine
-        b.le loop3
-        add x15,x15,x23 //Y += sep del punteado
-        mov x24,0 //reinicio el valor del aux de tam
         subs xzr,x15,x16 //Y < FY 
-        b.lt loop3
-        sub x16,x16,55
-        mov x17,x19 //restauro el valor inicial de X
-        br x25 //Retorno a la ubicación de la llamada almacenada en LR (una alternativa es 'ret')
+        b.lt loop1
+        mov x15,x21 //restauro el valor inicial de Y/PY
+        mov x17,x19 //restauro el valor inicial de X/PX
+        br x22 //Retorno a la ubicación de la llamada 
+
+
+//Funcion encargada de dibujar rectangulos repetidos en Y
+repRectanguloY:
+    mov x25,lr //Almaceno la direccion de llamada
+    sub x26,x16,x15 //tam y
+    loopRec:
+        bl rectangulo
+        add x15,x16,x23 //PY += tamDeSeparación
+        add x16,x15,x26 //FY 
+        subs xzr,x16,x24
+        b.lt loopRec
+    br x25 //Retorno a la ubicación de la llamada 
+
+
 
 //Funcion encargada de dibujar un circulo
 circulo:
