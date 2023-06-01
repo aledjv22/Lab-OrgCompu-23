@@ -85,8 +85,11 @@ separador:
     bl repRectanguloY
 
 arbolada:
-    mov x17,60
-    mov x15,50
+    mov x17,60 //X -> PX
+    mov x15,50 //Y -> PY
+    bl arbol
+    mov x17,300 //X -> PX
+    mov x15,150 //Y -> PY
     bl arbol
 
     b InfLoop
@@ -154,7 +157,7 @@ circulo:
         add x15,x15,1
         cmp x21,x15
         b.ne loopcircle
-        ret x16 
+        ret x16
 
 pintar_pixel:
     mov x21,SCREEN_WIDTH //x21 = 640
@@ -163,25 +166,25 @@ pintar_pixel:
     lsl x21,x21,2 //4 * (X + Y*640)
     add x21,x0,x21 //direIni + 4*(X + Y*640)
     stur w10,[x21] //pinto el pixel
+    mov x0,x20
     br lr
     
 arbol:
     //tronco
     mov x27,x15 //inicial y
+    mov x28,x17 //inicial x
     mov x26,lr //guardo la dire de partida
     movz x10, 0x6F, lsl 16 //color marron parte 1
     movk x10, 0x4908, lsl 00 //color marron parte 2
-    add x17,x17,5 //PX
-    add x18,x17,5 //FX x-5+10=x+5
-    add x15,x15,20 //PY
-    add x16,x15,35 //FY
-    mov x22,0 //tam de largo de lineas
-    mov x23,0 //sep del punteado
+    sub x17,x17,3 //PX
+    add x18,x28,3 //FX
+    add x15,xzr,x15 //PY
+    add x16,x15,60 //FY
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion
     //Hojas
     movz x10,0x15,lsl 16 //color verde oscuro parte 1
     movk x10,0x7705, lsl 00 //color verde oscuro parte 2
-    mov x17,x19
+    mov x17,x28
     mov x15,x27
     mov x4,30
     bl circulo
