@@ -105,7 +105,14 @@ arbolada:
         cmp x29,SCREEN_HEIGH
         b.lt arbDer
     
-    b InfLoop
+betaTriangulo:
+    mov x2,320
+    mov x1,240
+    mov x5,30
+    movz x3,0xFF,lsl 16
+    bl paint_triangle
+
+b InfLoop
 
 //Funcion encargada de dibujar un rectangulo
 rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=auxY;x22=auxDire
@@ -202,6 +209,62 @@ arbol:
     mov x4,30
     bl circulo
     br x26 //regreso a la dire de llamada
+
+//Funcion encargada de dibujar un triangulo
+paint_triangle:
+	// Paints a triangle given a (x,y) coords (x2, x1) a height (x5) and a color (x3)
+	mov x17, x30
+    mov x24, x4
+    mov x25, x5
+    mov x22, x2
+    mov x21, x1
+	mov x4, 1  //  x4 = x22 x5 = x23
+	bl paint_pixel
+loopT:
+	bl paint_horizontal_row  // Paint row 
+	add x1, x1, 1  
+	bl paint_horizontal_row
+
+	add x1, x1, 1  
+	sub x2, x2, 1  // Next row
+
+	add x4, x4, 2  // Increment row size
+
+	sub x5, x5, 1  // Decrement height counter
+	cmp xzr, x5    // Compare with 0
+	b.lt loopT     // If bigger than 0 repeat, else continue
+    mov x4, x24
+    mov x5, x25
+	ret x17
+
+paint_horizontal_row:
+	// Paints an horizontal row given a (x,y) coords (x2,x1) a length (x4) and a color (x3)  
+	mov x16, x30
+	mov x10, x4
+loopHR:
+	bl paint_pixel    // Paint pixel
+	add x2, x2, 1     // Next pixel
+	sub x10, x10, 1   // Decrement length counter
+	cmp xzr, x10      // Compare with 0
+	b.lt loopHR       // If bigger than 0 repeat, else continue
+	sub x2, x2, x4    // Reset X coord
+
+	ret x16
+
+paint_pixel:      
+	// Paint a pixel given coords (x,y) (x2,x1) and a color (x3)
+	mov x11, SCREEN_WIDTH
+	mov x12, 4         // Save the width and the number 4 in x11 and x12
+
+	mul x11, x1, x11   // Calculate the pixel position
+	add x11, x2, x11
+	mul x11, x12, x11
+
+	add x0, x0, x11    // Set x0 to the position
+	stur w3, [x0]      // Paint the pixel
+	mov x0, x20        // Reset x0
+
+	br lr
 
 InfLoop:
 	b InfLoop
