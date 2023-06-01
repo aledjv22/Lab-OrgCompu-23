@@ -85,9 +85,25 @@ separador:
     bl repRectanguloY
 
 arbolada:
-    mov x17,60 //X -> PX
-    mov x15,50 //Y -> PY
-    bl arbol
+        mov x15,50 //Y -> PY
+        mov x29,x15//val inicial de Y
+    arbIzq:
+        mov x17,60 //X -> PX
+        mov x15,x29
+        bl arbol
+        add x29,x29,110
+        cmp x29,SCREEN_HEIGH
+        b.lt arbIzq
+
+        mov x15,50 //Y -> PY
+        mov x29,x15//val inicial de Y
+    arbDer:
+        mov x17,580 //X -> PX
+        mov x15,x29
+        bl arbol
+        add x29,x29,110
+        cmp x29,SCREEN_HEIGH
+        b.lt arbDer
     
     b InfLoop
 
