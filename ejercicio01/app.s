@@ -88,10 +88,7 @@ arbolada:
     mov x17,60 //X -> PX
     mov x15,50 //Y -> PY
     bl arbol
-    mov x17,300 //X -> PX
-    mov x15,150 //Y -> PY
-    bl arbol
-
+    
     b InfLoop
 
 //Funcion encargada de dibujar un rectangulo
@@ -134,7 +131,7 @@ circulo:
 	mov x16,lr //guardo el valor del lr(x30)
 	mov x18,x17 // Save center coords
 	mov x19,x15
-	add x21,x15,x4 // Save end of vertical lines
+	add x27,x15,x4 // Save end of vertical lines
 	add x25,x17,x4 // Save end of horizontal line
 	sub x17,x17,x4
 	sub x15,x15,x4 // set the coords to the leftmost top corner of the square r^2
@@ -155,7 +152,7 @@ circulo:
         sub x17,x17,x4
         sub x17,x17,x4 // Reset x coord
         add x15,x15,1
-        cmp x21,x15
+        cmp x27,x15
         b.ne loopcircle
         ret x16
 
