@@ -111,6 +111,11 @@ betaTriangulo:
     mov x5,30
     movz x3,0xFF,lsl 16
     bl paint_triangle
+    mov x2,320
+    mov x1,100
+    mov x5,30
+    movz x3,0xFF,lsl 16
+    bl paint_triangle
 
 b InfLoop
 
@@ -213,12 +218,11 @@ arbol:
 //Funcion encargada de dibujar un triangulo
 paint_triangle:
 	// Paints a triangle given a (x,y) coords (x2, x1) a height (x5) and a color (x3)
-	mov x17, x30
-    mov x24, x4
+	mov x27, x30
     mov x25, x5
     mov x22, x2
     mov x21, x1
-	mov x4, 1  //  x4 = x22 x5 = x23
+	mov x4, 1
 	bl paint_pixel
 loopT:
 	bl paint_horizontal_row  // Paint row 
@@ -233,9 +237,8 @@ loopT:
 	sub x5, x5, 1  // Decrement height counter
 	cmp xzr, x5    // Compare with 0
 	b.lt loopT     // If bigger than 0 repeat, else continue
-    mov x4, x24
     mov x5, x25
-	ret x17
+	br x27
 
 paint_horizontal_row:
 	// Paints an horizontal row given a (x,y) coords (x2,x1) a length (x4) and a color (x3)  
