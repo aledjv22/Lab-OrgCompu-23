@@ -12,7 +12,43 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
+    arbolecitos:
+    bl fondo
+    bl asfalto
+    bl lineasRojas
+    bl puntBlanco
+    bl separador
+    bl arbolada
+    
+    //Configuraciones generales del GPIO
+    mov x2, GPIO_BASE //Almaceno la dirección base del GPIO en x2
+    str wzr, [x2, GPIO_GPFSEL0] //Setea gpios 0 - 9 como lectura
+leoW:
+    ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
+    and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
+    sub w10, w10, 0b10
+    cbnz w10, leoW //Si la tecla 'w' no fue precionado leo de nuevo
+
+releoW:
+    ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
+    and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
+    cbnz w10, releoW //Si la tecla 'w' no fue precionado leo de nuevo
+    b pinitos 
+
+pinitos:
+    bl fondo
+    bl asfalto
+    bl lineasRojas
+    bl puntBlanco
+    bl separador
+    bl pinar
+
+
+    b InfLoop
+
+//Funcion encargada de dibujar el fondo (pasto)
 fondo:
+    mov x1,lr
     movz x10, 0x49, lsl 16 //color lima parte 1
     movk x10, 0x8602, lsl 00 //color lima parte 2
     mov x15,0 //PY
@@ -22,8 +58,11 @@ fondo:
     mov x22,SCREEN_HEIGH //tam de largo de lineas
     mov x23,0 //sep del punteado
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    br x1
 
+//Funcion encargada de dibujar el asfalto
 asfalto:
+    mov x1,lr
     movz x10, 0xC0, lsl 16 //color gris parte 1
     movk x10, 0xC0C0, lsl 00 //color gris parte 2 
     mov x15,0 //PY
@@ -33,8 +72,11 @@ asfalto:
     mov x22,SCREEN_HEIGH //tam de largo de lineas
     mov x23,0 //sep del punteado
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    br x1
 
+//Funcion encargada de plasmar las lineas rojas del borde del asfalto
 lineasRojas:
+    mov x1,lr
     movz x10, 0xFF, lsl 16 //color rojo
     mov x15,0 //PY
     mov x17,120 //PX
@@ -47,8 +89,11 @@ lineasRojas:
     mov x16,SCREEN_HEIGH //FY
     mov x18,520 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    br x1
 
+//Funcion encargada de dibujar lineas separadas en el borde del asfalto
 puntBlanco:
+    mov x1,lr
     movz x10, 0xE5, lsl 16 //color blanco parte 1
     movk x10, 0xE4E4, lsl 00 //color blanco parte 2 
     mov x17,120 //PX
@@ -65,8 +110,11 @@ puntBlanco:
     mov x23,10 //sep del punteado
     mov x24,SCREEN_HEIGH //tam de largo de todo
     bl repRectanguloY
+    br x1
 
+//Funcion encargada de plasmar las lineas que separan las carreteras
 separador:
+    mov x1,lr
     movz x10, 0xFF, lsl 16 //color blanco parte 1
     movk x10, 0xFFFF, lsl 00 //color blanco parte 2 
     mov x17,253 //PX
@@ -83,10 +131,13 @@ separador:
     mov x23,10 //sep del punteado
     mov x24,SCREEN_HEIGH //tam de largo de todo
     bl repRectanguloY
+    br x1
 
+//Funcion encargada de plasmar un pinar
 pinar:
-        mov x15,80 //Y -> PY
-        mov x29,x15//val inicial de Y
+    mov x1,lr
+    mov x15,80 //Y -> PY
+    mov x29,x15//val inicial de Y
     pinoIzq:
         mov x17,60 //X -> PX
         mov x15,x29
@@ -104,8 +155,8 @@ pinar:
         add x29,x29,160
         cmp x29,SCREEN_HEIGH
         b.lt pinoDer
+    br x1
 
-b InfLoop
 
 //Funcion encargada de dibujar un rectangulo
 rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=auxY;x22=auxDire
@@ -214,6 +265,7 @@ pintarFila:
         sub x17,x17,x4 //Reseteo X
         br x24
 
+//Funcion encargada de dibujar un arbol normal (copa circular)
 arbol:
     //tronco
     mov x27,x15 //inicial y
@@ -235,6 +287,7 @@ arbol:
     bl circulo
     br x26 //regreso a la dire de llamada
 
+//Funcion encargada de dibujar un pino
 pino:
     //tronco
     mov x27,x15 //inicial y
@@ -268,9 +321,11 @@ pino:
     bl triangulo
     br x26 //regreso a la dire de llamada
 
+//Funcion encargada de plasmar una arbolada de copa circular
 arbolada:
-        mov x15,50 //Y -> PY
-        mov x29,x15//val inicial de Y
+    mov x1,lr
+    mov x15,50 //Y -> PY
+    mov x29,x15//val inicial de Y
     arbIzq:
         mov x17,60 //X -> PX
         mov x15,x29
@@ -288,5 +343,7 @@ arbolada:
         add x29,x29,110
         cmp x29,SCREEN_HEIGH
         b.lt arbDer
+    br x1
+
 InfLoop:
 	b InfLoop
