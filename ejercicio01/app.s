@@ -84,33 +84,26 @@ separador:
     mov x24,SCREEN_HEIGH //tam de largo de todo
     bl repRectanguloY
 
-arbolada:
-        mov x15,50 //Y -> PY
+pinar:
+        mov x15,80 //Y -> PY
         mov x29,x15//val inicial de Y
-    arbIzq:
+    pinoIzq:
         mov x17,60 //X -> PX
         mov x15,x29
-        bl arbol
-        add x29,x29,110
+        bl pino
+        add x29,x29,160
         cmp x29,SCREEN_HEIGH
-        b.lt arbIzq
+        b.lt pinoIzq
 
-        mov x15,50 //Y -> PY
+        mov x15,80 //Y -> PY
         mov x29,x15//val inicial de Y
-    arbDer:
+    pinoDer:
         mov x17,580 //X -> PX
         mov x15,x29
-        bl arbol
-        add x29,x29,110
+        bl pino
+        add x29,x29,160
         cmp x29,SCREEN_HEIGH
-        b.lt arbDer
-    
-betaTriangulo:
-    mov x17,320
-    mov x15,100
-    mov x16,30
-    movz x10,0xFF,lsl 16
-    bl pino
+        b.lt pinoDer
 
 b InfLoop
 
@@ -258,16 +251,42 @@ pino:
     movz x10,0x0F,lsl 16 //color verde oscuro parte 1
     movk x10,0x6C41, lsl 00 //color verde oscuro parte 2
     mov x17,x28
-    sub x15,x27,30
-    mov x16,30
+    sub x15,x27,35
+    mov x16,40
     bl triangulo
-    movz x10,0xFF,lsl 16 //color verde oscuro parte 1
-    movk x10,0xFFFF, lsl 00 //color verde oscuro parte 2
+    movz x10,0x0F,lsl 16 //color verde oscuro parte 1
+    movk x10,0x6C41, lsl 00 //color verde oscuro parte 2
     mov x17,x28
-    sub x15,x27,30
-    mov x16,10
+    sub x15,x27,70
+    mov x16,40
+    bl triangulo
+    movz x10,0x0F,lsl 16 //color verde oscuro parte 1
+    movk x10,0x6C41, lsl 00 //color verde oscuro parte 2
+    mov x17,x28
+    sub x15,x27,50
+    mov x16,40
     bl triangulo
     br x26 //regreso a la dire de llamada
 
+arbolada:
+        mov x15,50 //Y -> PY
+        mov x29,x15//val inicial de Y
+    arbIzq:
+        mov x17,60 //X -> PX
+        mov x15,x29
+        bl arbol
+        add x29,x29,110
+        cmp x29,SCREEN_HEIGH
+        b.lt arbIzq
+
+        mov x15,50 //Y -> PY
+        mov x29,x15//val inicial de Y
+    arbDer:
+        mov x17,580 //X -> PX
+        mov x15,x29
+        bl arbol
+        add x29,x29,110
+        cmp x29,SCREEN_HEIGH
+        b.lt arbDer
 InfLoop:
 	b InfLoop
