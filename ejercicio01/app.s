@@ -106,16 +106,11 @@ arbolada:
         b.lt arbDer
     
 betaTriangulo:
-    mov x2,320
-    mov x1,240
-    mov x5,30
-    movz x3,0xFF,lsl 16
-    bl paint_triangle
-    mov x2,320
-    mov x1,100
-    mov x5,30
-    movz x3,0xFF,lsl 16
-    bl paint_triangle
+    mov x17,320
+    mov x15,100
+    mov x16,30
+    movz x10,0xFF,lsl 16
+    bl pino
 
 b InfLoop
 
@@ -193,7 +188,39 @@ pintar_pixel:
     stur w10,[x21] //pinto el pixel
     mov x0,x20
     br lr
-    
+
+//Funcion encargada de dibujar un triangulo   
+triangulo:
+    //coordenadas (x,y) son (x17,x15), color x10, dire x27,alto x16
+    mov x23,lr //almaceno la dire de llamada
+    mov x4,1 //determino 1 la longitud de la fila horizontal
+    bl pintar_pixel //pinto el pixel actual
+    loopTriangulo:
+        bl pintarFila //pinta una fila
+        add x15,x15,1 //Y++
+        bl pintarFila
+        add x15,x15,1 //Y++
+        sub x17,x17,1 //X--
+        add x4,x4,2 //Incremento el tamaño de la fila
+        sub x16, x16, 1  //Decremento el contador de tamaño
+        cmp xzr,x16 // 0 < x16 (alt)
+        b.lt loopTriangulo
+        br x23
+
+//Funcion encargada de pintar una fila
+pintarFila:
+    //Pinta una fila horizontal dadas unas (x,y) coords (x17,x15) una longitud (x4) y un color (x10)
+    mov x24,lr //almaceno la dire de llamada
+    mov x25,x4 //almaceno el valor inicial de la longitud en x25
+    loopHorizontal:
+        bl pintar_pixel //pinto el pixel actual
+        add x17,x17,1 //X++
+        sub x25,x25,1 //Disminuyo en 1 el valor de la longitud
+        cmp xzr,x25 //0 < longitud
+        b.lt loopHorizontal
+        sub x17,x17,x4 //Reseteo X
+        br x24
+
 arbol:
     //tronco
     mov x27,x15 //inicial y
@@ -215,59 +242,32 @@ arbol:
     bl circulo
     br x26 //regreso a la dire de llamada
 
-//Funcion encargada de dibujar un triangulo
-paint_triangle:
-	// Paints a triangle given a (x,y) coords (x2, x1) a height (x5) and a color (x3)
-	mov x27, x30
-    mov x25, x5
-    mov x22, x2
-    mov x21, x1
-	mov x4, 1
-	bl paint_pixel
-loopT:
-	bl paint_horizontal_row  // Paint row 
-	add x1, x1, 1  
-	bl paint_horizontal_row
-
-	add x1, x1, 1  
-	sub x2, x2, 1  // Next row
-
-	add x4, x4, 2  // Increment row size
-
-	sub x5, x5, 1  // Decrement height counter
-	cmp xzr, x5    // Compare with 0
-	b.lt loopT     // If bigger than 0 repeat, else continue
-    mov x5, x25
-	br x27
-
-paint_horizontal_row:
-	// Paints an horizontal row given a (x,y) coords (x2,x1) a length (x4) and a color (x3)  
-	mov x16, x30
-	mov x10, x4
-loopHR:
-	bl paint_pixel    // Paint pixel
-	add x2, x2, 1     // Next pixel
-	sub x10, x10, 1   // Decrement length counter
-	cmp xzr, x10      // Compare with 0
-	b.lt loopHR       // If bigger than 0 repeat, else continue
-	sub x2, x2, x4    // Reset X coord
-
-	ret x16
-
-paint_pixel:      
-	// Paint a pixel given coords (x,y) (x2,x1) and a color (x3)
-	mov x11, SCREEN_WIDTH
-	mov x12, 4         // Save the width and the number 4 in x11 and x12
-
-	mul x11, x1, x11   // Calculate the pixel position
-	add x11, x2, x11
-	mul x11, x12, x11
-
-	add x0, x0, x11    // Set x0 to the position
-	stur w3, [x0]      // Paint the pixel
-	mov x0, x20        // Reset x0
-
-	br lr
+pino:
+    //tronco
+    mov x27,x15 //inicial y
+    mov x28,x17 //inicial x
+    mov x26,lr //guardo la dire de partida
+    movz x10, 0x6F, lsl 16 //color marron parte 1
+    movk x10, 0x4908, lsl 00 //color marron parte 2
+    sub x17,x17,3 //PX
+    add x18,x28,3 //FX
+    add x15,xzr,x15 //PY
+    add x16,x15,60 //FY
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion
+    //Hojas
+    movz x10,0x0F,lsl 16 //color verde oscuro parte 1
+    movk x10,0x6C41, lsl 00 //color verde oscuro parte 2
+    mov x17,x28
+    sub x15,x27,30
+    mov x16,30
+    bl triangulo
+    movz x10,0xFF,lsl 16 //color verde oscuro parte 1
+    movk x10,0xFFFF, lsl 00 //color verde oscuro parte 2
+    mov x17,x28
+    sub x15,x27,30
+    mov x16,10
+    bl triangulo
+    br x26 //regreso a la dire de llamada
 
 InfLoop:
 	b InfLoop
