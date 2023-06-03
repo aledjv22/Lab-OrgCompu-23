@@ -49,8 +49,6 @@ fondo:
     mov x17,0 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,SCREEN_WIDTH //FX
-    mov x22,SCREEN_HEIGH //tam de largo de lineas
-    mov x23,0 //sep del punteado
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
     br x1
 
@@ -304,13 +302,13 @@ pino:
     movz x10,0x0F,lsl 16 //color verde oscuro parte 1
     movk x10,0x6C41, lsl 00 //color verde oscuro parte 2
     mov x17,x28
-    sub x15,x27,70
+    sub x15,x27,50
     mov x16,40
     bl triangulo
     movz x10,0x0F,lsl 16 //color verde oscuro parte 1
     movk x10,0x6C41, lsl 00 //color verde oscuro parte 2
     mov x17,x28
-    sub x15,x27,50
+    sub x15,x27,70
     mov x16,40
     bl triangulo
     br x26 //regreso a la dire de llamada
