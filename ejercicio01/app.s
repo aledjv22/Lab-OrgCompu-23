@@ -29,12 +29,6 @@ leoW:
     sub w10, w10, 0b10
     cbnz w10, leoW //Si la tecla 'w' no fue precionado leo de nuevo
 
-releoW:
-    ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
-    and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
-    cbnz w10, releoW //Si la tecla 'w' no fue precionado leo de nuevo
-    b pinitos 
-
 pinitos:
     bl fondo
     bl asfalto
