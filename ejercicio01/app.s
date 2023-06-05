@@ -19,6 +19,7 @@ main:
     bl puntBlanco
     bl separador
     bl arbolada
+    bl autoRojo
     
     //Configuraciones generales del GPIO
     mov x2, GPIO_BASE //Almaceno la dirección base del GPIO en x2
@@ -335,6 +336,115 @@ arbolada:
         add x29,x29,110
         cmp x29,SCREEN_HEIGH
         b.lt arbDer
+    br x1
+
+autoRojo:
+    mov x1,lr //almaceno la dire de llamado
+
+    movz x10, 0xFF, lsl 16 //color rojo
+    mov x15,295 //PY
+    mov x16,400 //FY
+    mov x17,159 //PX
+    mov x18,219 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //luz delantera izquierda 
+    movz x10,0xFF,lsl 16 //color amarillo parte 1
+    movk x10,0xFF00,lsl 00 //color amarillo parte 2
+    mov x15,291 //PY
+    mov x16,295 //FY
+    mov x17,163 //PX
+    mov x18,173 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //luz delantera derecha
+    mov x15,291 //PY
+    mov x16,295 //FY
+    mov x17,205 //PX
+    mov x18,215 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //luz trasera izquierda 
+    movz x10,0xAA,lsl 16 //color amarillo parte 1
+    movk x10,0x2A01,lsl 00 //color amarillo parte 2
+    mov x15,400 //PY
+    mov x16,404 //FY
+    mov x17,163 //PX
+    mov x18,175 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //luz trasera derecha
+    mov x15,400 //PY
+    mov x16,404 //FY
+    mov x17,203 //PX
+    mov x18,215 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //linea blanca de arriba
+    movz x10,0xFF,lsl 16 //color blanco parte 1
+    movk x10,0xFFFF,lsl 00 //color blanco parte 2
+    mov x15,295 //PY
+    mov x16,315 //FY
+    mov x17,185 //PX
+    mov x18,193 //FX 
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //vidrio delantero
+    movz x10,0x00,lsl 16 //color negro
+    mov x17,189
+    mov x15,330
+    mov x4,17
+    bl circulo
+
+    //arreglo de vidrio delantero
+    movz x10, 0xFF, lsl 16 //color rojo
+    mov x15,335 //PY
+    mov x16,347 //FY
+    mov x17,159 //PX
+    mov x18,219 //FX 
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //linea blanca de baja
+    movz x10,0xFF,lsl 16 //color blanco parte 1
+    movk x10,0xFFFF,lsl 00 //color blanco parte 2
+    mov x15,335 //PY
+    mov x16,400 //FY
+    mov x17,185 //PX
+    mov x18,193 //FX 
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //rueda superior izquierda
+    movz x10,0x37,lsl 16 //color blanco parte 1
+    movk x10,0x3737,lsl 00 //color blanco parte 2
+    mov x15,310 //PY
+    mov x16,332 //FY
+    mov x17,154 //PX
+    mov x18,159 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //rueda superior derecha
+    mov x15,310 //PY
+    mov x16,332 //FY
+    mov x17,219 //PX
+    mov x18,224 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //rueda inferior izquierda
+    movz x10,0x37,lsl 16 //color blanco parte 1
+    movk x10,0x3737,lsl 00 //color blanco parte 2
+    mov x15,363 //PY
+    mov x16,385 //FY
+    mov x17,154 //PX
+    mov x18,159 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //rueda inferior derecha
+    mov x15,363 //PY
+    mov x16,385 //FY
+    mov x17,219 //PX
+    mov x18,224 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
     br x1
 
 InfLoop:
