@@ -12,7 +12,7 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
-    arbolecitos:
+arbolecitos:
     bl fondo
     bl asfalto
     bl lineasRojas
@@ -21,15 +21,7 @@ main:
     bl arbolada
     bl autoAzul
     bl auto
-    
-    //Configuraciones generales del GPIO
-    mov x2, GPIO_BASE //Almaceno la dirección base del GPIO en x2
-    str wzr, [x2, GPIO_GPFSEL0] //Setea gpios 0 - 9 como lectura
-leoW:
-    ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
-    and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
-    sub w10, w10, 0b10
-    cbnz w10, leoW //Si la tecla 'w' no fue precionado leo de nuevo
+    bl leoW
 
 pinitos:
     bl fondo
@@ -39,9 +31,26 @@ pinitos:
     bl separador
     bl pinar
     bl autoRojo
+    bl leoW
+    b arbolecitos
 
 
     b InfLoop
+
+leoW:
+    //Configuraciones generales del GPIO
+    mov x2, GPIO_BASE //Almaceno la dirección base del GPIO en x2
+    str wzr, [x2, GPIO_GPFSEL0] //Setea gpios 0 - 9 como lectura
+    leo:
+        ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
+        and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
+        sub w10, w10, 0b10
+        cbnz w10, leo //Si la tecla 'w' no fue precionado leo de nuevo
+    releo:
+        ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
+        and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
+        cbnz w10, releo //Si la tecla 'w' no fue precionado leo de nuevo
+        br lr
 
 //Funcion encargada de dibujar el fondo (pasto)
 fondo:
