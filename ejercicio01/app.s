@@ -552,11 +552,28 @@ auto1:
     br x11
 
 //Funcion 'auto0' encargada de dibujar otro modelo de auto
-auto:
+auto :
+    mov x11, lr
+
     //dibujamos por capas
 
+    // Dibujamos las ruedas del auto
+    movz x10, 0x00, lsl 16 // Color negro parte 1
+    movk x10, 0x0000, lsl 00 // Color negro parte 2
+    //ARRIBA
+    mov x15, 329 // PY (posición Y)
+    mov x16, 358 // FY (fin Y)
+    mov x17, 148 // PX (posición X)
+    mov x18, 231 // FX (fin X)
+    bl rectangulo 
+    //abajo
+    mov x15, 396 // PY (posición Y)
+    mov x16, 425 // FY (fin Y)
+    mov x17, 148 // PX (posición X)
+    mov x18, 231 // FX (fin X)
+    bl rectangulo 
+
     //contornos negros
-    mov x1, lr
     movz x10, 0x00, lsl 16 //negro
     movk x10, 0x0000, lsl 00 //negro
     mov x15,318 //PY  arriba abajo
@@ -564,35 +581,6 @@ auto:
     mov x16,439 //FY
     mov x18,226 //FX ancho
     bl rectangulo
-
-    // Dibujamos las ruedas del auto
-    //rueda izquierda
-    movz x10, 0x00, lsl 16 // Color negro parte 1
-    movk x10, 0x0000, lsl 00 // Color negro parte 2
-    mov x15, 325 // PY (posición Y)
-    mov x17, 148 // PX (posición X)
-    mov x16, 360 // FY (fin Y)
-    mov x18, 155 // FX (fin X)
-    bl rectangulo 
-    //rueda derechas
-    mov x15, 325 // PY (posición Y)
-    mov x17, 225     // PX (posición X)
-    mov x16, 360 // FY (fin Y)
-    mov x18, 232 // FX (fin X)
-    bl rectangulo
-    //rueda baja izq
-    mov x15, 390 // PY (posición Y)
-    mov x17, 148 // PX (posición X)
-    mov x16, 425 // FY (fin Y)
-    mov x18, 155 // FX (fin X)
-    bl rectangulo 
-    //rueda derec abajo
-    mov x15, 390 // PY (posición Y)
-    mov x17, 225 // PX (posición X)
-    mov x16, 425 // FY (fin Y)
-    mov x18, 231 // FX (fin X)
-    bl rectangulo
-
     //base auto
     movz x10, 0xFF, lsl 16 //colorblanco 1
     movk x10, 0xFFFF, lsl 00 //color blanco parte 2 
@@ -603,7 +591,7 @@ auto:
     bl rectangulo
     
     //capots
-    //centro
+    //centro  
     movz x10, 0xE7, lsl 16 // Color negro parte 1
     movk x10, 0xE7E7, lsl 00 // Color negro parte 2
     mov x15, 315 // PY (posición Y)
@@ -616,7 +604,7 @@ auto:
     movk x10, 0xFFFF, lsl 00 // Color negro parte 2
     mov x15, 315 // PY (posición Y)
     mov x17, 179 // PX (posición X)
-    mov x16, 435 // FY (fin Y)
+    mov x16, 405 // FY (fin Y)
     mov x18, 200 // FX (fin X)
     bl rectangulo
 
@@ -630,29 +618,23 @@ auto:
     bl rectangulo // Dibujar rueda izquierda
 
     //parabrisaS 
-    //delantero 
+    //delantero y parte del baul
     movz x10, 0x00, lsl 16 // Color negro parte 1
     movk x10, 0x000, lsl 00 // Color negro parte 2
     mov x15, 352 // PY (posición Y)
     mov x17, 171 // PX (posición X)
-    mov x16, 412 // FY (fin Y)
+    mov x16, 420 // FY (fin Y)
     mov x18, 211 // FX (fin X)
     bl rectangulo 
     
+
     //parabrisa puertas izq
     movz x10, 0x00, lsl 16 // Color negro parte 1
     movk x10, 0x0000, lsl 00 // Color negro parte 2
     mov x15, 372 // PY (posición Y)
-    mov x17, 163 // PX (posición X)
-    mov x16, 395 // FY (fin Y)
+    mov x17, 160 // PX (posición X)
+    mov x16, 389 // FY (fin Y)
     mov x18, 167 // FX (fin X)
-    bl rectangulo 
-    movz x10, 0x00, lsl 16 // Color negro parte 1
-    movk x10, 0x0000, lsl 00 // Color negro parte 2
-    mov x15, 379 // PY (posición Y)
-    mov x17, 159 // PX (posición X)
-    mov x16, 400 // FY (fin Y)
-    mov x18, 164 // FX (fin X)
     bl rectangulo 
 
     //parabrisa puertas der
@@ -660,25 +642,47 @@ auto:
     movk x10, 0x0000, lsl 00 // Color negro parte 2
     mov x15, 372 // PY (posición Y)
     mov x17, 215 // PX (posición X)
-    mov x16, 395     // FY (fin Y)
-    mov x18, 219 // FX (fin X)
-    bl rectangulo 
-    movz x10, 0x00, lsl 16 // Color negro parte 1
-    movk x10, 0x0000, lsl 00 // Color negro parte 2
-    mov x15, 379 // PY (posición Y)
-    mov x17, 220 // PX (posición X)
-    mov x16, 400 // FY (fin Y)
-    mov x18, 223 // FX (fin X)
+    mov x16, 389 // FY (fin Y)
+    mov x18, 222 // FX (fin X)
     bl rectangulo 
 
-    //DETALLE BAUL
-    movz x10, 0xFF, lsl 16 // Color negro parte 1
-    movk x10, 0xFFFF, lsl 00 // Color negro parte 2
-    mov x15, 375 // PY (posición Y)
-    mov x17, 181 // PX (posición X)
-    mov x16, 435 // FY (fin Y)
-    mov x18, 200 // FX (fin X)
+    //BAUL
+    movz x10, 0x00, lsl 16 // Color negro parte 1
+    movk x10, 0x0000, lsl 00 // Color negro parte 2
+    mov x15, 395 // PY (posición Y)
+    mov x17, 163 // PX (posición X)
+    mov x16, 425 // FY (fin Y)
+    mov x18, 220 // FX (fin X)
     bl rectangulo
+    //detalles baul
+    movz x10, 0x40, lsl 16 // Color negro parte 1
+    movk x10, 0x4040, lsl 00 // Color negro parte 2
+    mov x15, 398 // PY (posición Y)
+    mov x17, 168 // PX (posición X)
+    mov x16, 422 // FY (fin Y)
+    mov x18, 173 // FX (fin X)
+    bl rectangulo
+    mov x15, 393 // PY (posición Y)
+    mov x17, 178 // PX (posición X)
+    mov x16, 422 // FY (fin Y)
+    mov x18, 184 // FX (fin X)
+    bl rectangulo
+    mov x15, 393 // PY (posición Y)
+    mov x17, 190 // PX (posición X)
+    mov x16, 422 // FY (fin Y)
+    mov x18, 196 // FX (fin X)
+    bl rectangulo
+    mov x15, 393 // PY (posición Y)
+    mov x17, 202 // PX (posición X)
+    mov x16, 422 // FY (fin Y)
+    mov x18, 206 // FX (fin X)
+    bl rectangulo
+    mov x15, 398 // PY (posición Y)
+    mov x17, 212 // PX (posición X)
+    mov x16, 422 // FY (fin Y)
+    mov x18, 216 // FX (fin X)
+    bl rectangulo
+
 
     //PARABRISA DELANTERO
     movz x10, 0x00, lsl 16 // Color negro parte 1
@@ -697,39 +701,40 @@ auto:
     bl rectangulo 
 
     //techo uno
-    movz x10, 0xD5, lsl 16 // Color negro parte 1
+    movz x10, 0xD2, lsl 16 // Color negro parte 1
     movk x10, 0xD2D2, lsl 00 // Color negro parte 2
-    mov x15, 373 // PY (posición Y)
+    mov x15, 367 // PY (posición Y)
     mov x17, 170 // PX (posición X)
-    mov x16, 395 // FY (fin Y)
-    mov x18, 211 // FX (fin X)
+    mov x16, 390 // FY (fin Y)
+    mov x18, 212 // FX (fin X)
     bl rectangulo 
     //techo uno b
     movz x10, 0XB5, lsl 16 // Color negro parte 1
     movk x10, 0xB5B5, lsl 00 // Color negro parte 2
-    mov x15, 378 // PY (posición Y)
+    mov x15, 372 // PY (posición Y)
     mov x17, 175 // PX (posición X)
-    mov x16, 393 // FY (fin Y)
+    mov x16, 389 // FY (fin Y)
     mov x18, 210 // FX (fin X)
     bl rectangulo 
 
     //techo colores
     movz x10, 0x00, lsl 16 // Color negro parte 1
     movk x10, 0x0B80, lsl 00 // Color negro parte 2
-    mov x15, 380 // PY (posición Y)
+    mov x15, 375 // PY (posición Y)
     mov x17, 195 // PX (posición X)
-    mov x16, 390 // FY (fin Y)
+    mov x16, 385 // FY (fin Y)
     mov x18, 205 // FX (fin X)
     bl rectangulo 
     movz x10, 0x91, lsl 16 // Color negro parte 1
     movk x10, 0x0404, lsl 00 // Color negro parte 2
-    mov x15, 380 // PY (posición Y)
+    mov x15, 375 // PY (posición Y)
     mov x17, 175 // PX (posición X)
-    mov x16, 390 // FY (fin Y)
+    mov x16, 385 // FY (fin Y)
     mov x18, 185 // FX (fin X)
     bl rectangulo 
 
     //luces izq
+    
     //contorno
     movz x10, 0x00, lsl 16 //negro sobra
     mov x15,315 //PY  arriba abajo
@@ -746,7 +751,7 @@ auto:
     mov x18,170 //FX ancho
     bl rectangulo
     
-    //contorno
+    //contorno 
     movz x10, 0x00, lsl 16 //negro sobra
     mov x15,315 //PY  arriba abajo
     mov x17,207 //PX ancho hacia izq
@@ -764,7 +769,7 @@ auto:
 
     // luces rojas y contornos negros
     movz x10, 0x00, lsl 16 //negro sobra
-    mov x15,427 //PY  arriba abajo
+    mov x15,429 //PY  arriba abajo
     mov x17,153 //PX ancho hacia izq
     mov x16,442 //FY
     mov x18,173 //FX ancho
@@ -778,7 +783,7 @@ auto:
 
     //luces der
     movz x10, 0x00, lsl 16 //negro sobmbra
-    mov x15,427 //PY  arriba abajo
+    mov x15,429 //PY  arriba abajo
     mov x17,206 //PX ancho hacia izq
     mov x16,442 //FY
     mov x18,226 //FX ancho
@@ -790,7 +795,7 @@ auto:
     mov x18,223 //FX ancho
     bl rectangulo
 
-    br x1
+    br x11
 
 
 InfLoop:
