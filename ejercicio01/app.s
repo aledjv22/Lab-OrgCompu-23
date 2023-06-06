@@ -37,6 +37,7 @@ pinitos:
     bl puntBlanco
     bl separador
     bl pinar
+    bl autoAzul
 
 
     b InfLoop
@@ -338,182 +339,207 @@ arbolada:
         b.lt arbDer
     br x1
 
+//Funcion encargada de dibujar un auto rojo (diseño aunto1)
 autoRojo:
     mov x1,lr //almaceno la dire de llamado
+    mov x17,159 //valor de X
+    mov x15,295 //valor de Y
+    movz x14,0xFF,lsl 16 //Color base
+    movz x9,0xC0,lsl 16 //color sombra 
+    bl auto1
+    br x1
 
-    movz x10, 0xFF, lsl 16 //color rojo
-    mov x15,295 //PY
-    mov x16,400 //FY
-    mov x17,159 //PX
-    mov x18,219 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+autoAzul:
+    mov x1,lr //almaceno la dire de llamado
+    mov x17,290 //valor de X
+    mov x15,295 //valor de Y
+    movz x14,0xFF,lsl 00 //Color base
+    movz x9,0x03,lsl 16 //color sombra parte 1
+    movk x9,0x039F,lsl 00 //color sombra parte 2
+    bl auto1
+    br x1
 
-    //luz delantera izquierda 
-    movz x10,0xFF,lsl 16 //color amarillo parte 1
-    movk x10,0xFF00,lsl 00 //color amarillo parte 2
-    mov x15,291 //PY
-    mov x16,295 //FY
-    mov x17,163 //PX
-    mov x18,173 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+auto1:
+    mov x11,lr //almaceno la dire de llamado
+    
+    //guardado de valores iniciales X e Y
+    mov x12,x17 //x12 val inicial de X
+    mov x13,x15 //x13 val inicial de Y
 
-    //luz delantera derecha
-    mov x15,291 //PY
-    mov x16,295 //FY
-    mov x17,205 //PX
-    mov x18,215 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
-
-    //luz trasera izquierda 
-    movz x10,0xAA,lsl 16 //color amarillo parte 1
-    movk x10,0x2A01,lsl 00 //color amarillo parte 2
-    mov x15,400 //PY
-    mov x16,404 //FY
-    mov x17,163 //PX
-    mov x18,175 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
-
-    //luz trasera derecha
-    mov x15,400 //PY
-    mov x16,404 //FY
-    mov x17,203 //PX
-    mov x18,215 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
-
-    //linea blanca de arriba
-    movz x10,0xFF,lsl 16 //color blanco parte 1
-    movk x10,0xFFFF,lsl 00 //color blanco parte 2
-    mov x15,295 //PY
-    mov x16,315 //FY
-    mov x17,185 //PX
-    mov x18,193 //FX 
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
-
-    //vidrio delantero
-    movz x10,0x00,lsl 16 //color negro
-    mov x17,189
-    mov x15,330
-    mov x4,17
-    bl circulo
-
-    //arreglo de vidrio delantero
-    movz x10, 0xFF, lsl 16 //color rojo
-    mov x15,332 //PY
-    mov x16,347 //FY
-    mov x17,159 //PX
-    mov x18,219 //FX 
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
-    movz x10, 0xC0, lsl 16 //color rojo
-    mov x15,335 //PY
-    mov x16,364 //FY
-    mov x17,178 //PX
-    mov x18,200 //FX 
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
-
-    //linea blanca de baja
-    movz x10,0xFF,lsl 16 //color blanco parte 1
-    movk x10,0xFFFF,lsl 00 //color blanco parte 2
-    mov x15,332 //PY
-    mov x16,400 //FY
-    mov x17,185 //PX
-    mov x18,193 //FX 
+    //base del auto
+    mov x10,x14 //color base
+    mov x15,x13 //PY
+    add x16,x15,105 //FY
+    mov x17,x12 //PX
+    add x18,x17,60 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
     //rueda superior izquierda
     movz x10,0x37,lsl 16 //color blanco parte 1
     movk x10,0x3737,lsl 00 //color blanco parte 2
-    mov x15,310 //PY
-    mov x16,332 //FY
-    mov x17,154 //PX
-    mov x18,159 //FX
+    add x15,x13,15 //PY
+    add x16,x15,22 //FY
+    sub x17,x12,5 //PX
+    mov x18,x12 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
     //rueda superior derecha
-    mov x15,310 //PY
-    mov x16,332 //FY
-    mov x17,219 //PX
-    mov x18,224 //FX
+    add x15,x13,15 //PY
+    add x16,x15,22 //FY
+    add x17,x12,60 //PX
+    add x18,x17,5 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
     //rueda inferior izquierda
     movz x10,0x37,lsl 16 //color blanco parte 1
     movk x10,0x3737,lsl 00 //color blanco parte 2
-    mov x15,363 //PY
-    mov x16,385 //FY
-    mov x17,154 //PX
-    mov x18,159 //FX
+    add x15,x13,68 //PY
+    add x16,x15,22 //FY
+    sub x17,x12,5 //PX
+    mov x18,x12 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
     //rueda inferior derecha
-    mov x15,363 //PY
-    mov x16,385 //FY
-    mov x17,219 //PX
-    mov x18,224 //FX
+    add x15,x13,68 //PY
+    add x16,x15,22 //FY
+    add x17,x12,60 //PX
+    add x18,x17,5 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //luz delantera izquierda 
+    movz x10,0xFF,lsl 16 //color amarillo parte 1
+    movk x10,0xFF00,lsl 00 //color amarillo parte 2
+    sub x15,x13,4 //PY
+    mov x16,x13 //FY
+    add x17,x12,4 //PX
+    add x18,x17,10 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //luz delantera derecha
+    sub x15,x13,4 //PY
+    mov x16,x13 //FY
+    add x17,x12,46 //PX
+    add x18,x17,10 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //luz trasera izquierda 
+    movz x10,0xAA,lsl 16 //color amarillo parte 1
+    movk x10,0x2A01,lsl 00 //color amarillo parte 2
+    add x15,x13,105 //PY
+    add x16,x15,4 //FY
+    add x17,x12,4 //PX
+    add x18,x17,12 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //luz trasera derecha
+    add x15,x13,105 //PY
+    add x16,x15,4 //FY
+    add x17,x12,44 //PX
+    add x18,x17,12 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //linea blanca de arriba
+    movz x10,0xFF,lsl 16 //color blanco parte 1
+    movk x10,0xFFFF,lsl 00 //color blanco parte 2
+    mov x15,x13 //PY
+    add x16,x15,20 //FY
+    add x17,x12,26 //PX
+    add x18,x17,8 //FX 
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //vidrio delantero
+    movz x10,0x00,lsl 16 //color negro
+    add x17,x12,30 //X
+    add x15,x13,35 //Y
+    mov x4,17
+    bl circulo
+
+    //arreglo de vidrio delantero
+    mov x10,x14 //color base
+    add x15,x13,37 //PY
+    add x16,x15,15 //FY
+    mov x17,x12 //PX
+    add x18,x17,60 //FX 
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    mov x10,x9 //color sombra
+    add x15,x13,40 //PY
+    add x16,x15,29 //FY
+    add x17,x12,19 //PX
+    add x18,x17,22 //FX 
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+
+    //linea blanca de baja
+    movz x10,0xFF,lsl 16 //color blanco parte 1
+    movk x10,0xFFFF,lsl 00 //color blanco parte 2
+    add x15,x13,37 //PY
+    add x16,x15,68 //FY
+    add x17,x12,26 //PX
+    add x18,x17,8 //FX 
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
     //ventana izquierda
     movz x10,0x00,lsl 16 //color negro parte
-    mov x15,335 //PY
-    mov x16,360 //FY
-    mov x17,169 //PX
-    mov x18,172 //FX
+    add x15,x13,40 //PY
+    add x16,x15,25 //FY
+    add x17,x12,10 //PX
+    add x18,x17,3 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
-    mov x15,339 //PY
-    mov x16,364 //FY
-    mov x17,172 //PX
-    mov x18,175 //FX
+    add x15,x13,44 //PY
+    add x16,x15,25 //FY
+    add x17,x12,13 //PX
+    add x18,x17,3 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
     //ventana derecha
     movz x10,0x00,lsl 16 //color negro parte
-    mov x15,335 //PY
-    mov x16,360 //FY
-    mov x17,206 //PX
-    mov x18,209 //FX
+    add x15,x13,40 //PY
+    add x16,x15,25 //FY
+    add x17,x12,47 //PX
+    add x18,x17,3 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
-    mov x15,339 //PY
-    mov x16,364 //FY
-    mov x17,203 //PX
-    mov x18,206 //FX
+    add x15,x13,44 //PY
+    add x16,x15,25 //FY
+    add x17,x12,44 //PX
+    add x18,x17,3 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
 
     //ventana trasera
     movz x10,0x1E,lsl 16 //color gris oscuro parte 1
     movk x10,0x1E1E //color gris oscuro parte 2
-    mov x15,387 //PY
-    mov x16,392 //FY
-    mov x17,175 //PX
-    mov x18,203 //FX
+    add x15,x13,92 //PY
+    add x16,x15,5 //FY
+    add x17,x12,16 //PX
+    add x18,x17,28 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
     movz x10,0x2E,lsl 16 //color gris claro parte 1
     movk x10,0x2E2E //color gris claro parte 2
-    mov x15,382 //PY
-    mov x16,387 //FY
-    mov x17,175 //PX
-    mov x18,203 //FX
+    add x15,x13,87 //PY
+    add x16,x15,5 //FY
+    add x17,x12,16 //PX
+    add x18,x17,28 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
     movz x10,0x1E,lsl 16 //color gris oscuro parte 1
     movk x10,0x1E1E //color gris oscuro parte 2
-    mov x15,377 //PY
-    mov x16,382 //FY
-    mov x17,175 //PX
-    mov x18,203 //FX
+    add x15,x13,82 //PY
+    add x16,x15,5 //FY
+    add x17,x12,16 //PX
+    add x18,x17,28 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
     movz x10,0x2E,lsl 16 //color gris claro parte 1
     movk x10,0x2E2E //color gris claro parte 2
-    mov x15,372 //PY
-    mov x16,377 //FY
-    mov x17,175 //PX
-    mov x18,203 //FX
+    add x15,x13,77 //PY
+    add x16,x15,5 //FY
+    add x17,x12,16 //PX
+    add x18,x17,28 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
     movz x10,0x1E,lsl 16 //color gris oscuro parte 1
     movk x10,0x1E1E //color gris oscuro parte 2
-    mov x15,367 //PY
-    mov x16,372 //FY
-    mov x17,175 //PX
-    mov x18,203 //FX
+    add x15,x13,72 //PY
+    add x16,x15,5 //FY
+    add x17,x12,16 //PX
+    add x18,x17,28 //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
-    br x1
+    br x11
 
 InfLoop:
 	b InfLoop
