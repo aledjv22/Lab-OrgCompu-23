@@ -226,7 +226,7 @@ circulo:
         add x15,x15,1
         cmp x27,x15
         b.ne loopcircle
-        ret x16
+        br x16
 
 pintar_pixel:
     mov x21,SCREEN_WIDTH //x21 = 640
