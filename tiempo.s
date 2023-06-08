@@ -12,12 +12,13 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
-    mov x5,#-30
+    mov x5,0
+    sub x5,x5,SCREEN_HEIGH
 arbolecitos:
-    bl fondo
     bl asfalto
+    bl fondo
     bl lineasRojas
-    add x5,x5,1
+    add x5,x5,13
     bl puntBlanco
     bl separador
     bl arbolada
@@ -42,9 +43,9 @@ pinitos:
 
     b InfLoop
 tiempo:
-    //mov x6, #0x0EE6B280 //07735940
-    movz x6,0x0773,lsl 16 //tiempo de delay parte 1
-    movk x6,0x5940,lsl 00 //tiempo de delay parte 2
+    //mov x6, #0x0EE6B280 = 250000000 //07735940
+    movz x6,0x0EE6,lsl 16 //tiempo de delay parte 1
+    movk x6,0xB280,lsl 00 //tiempo de delay parte 2
     delay_loop:
         sub x6, x6, #0x1
         cbnz x6,delay_loop
@@ -70,8 +71,13 @@ fondo:
     movz x10, 0x49, lsl 16 //color lima parte 1
     movk x10, 0x8602, lsl 00 //color lima parte 2
     mov x15,0 //PY
-    mov x17,0 //PX
     mov x16,SCREEN_HEIGH //FY
+    mov x17,0 //PX
+    mov x18,120 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    mov x15,0 //PY
+    mov x16,SCREEN_HEIGH //FY
+    mov x17,520 //PX
     mov x18,SCREEN_WIDTH //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
     br x1
@@ -115,9 +121,11 @@ puntBlanco:
     mov x17,120 //PX
     mov x18,125 //FX
     mov x15,x5 //PY
-    mov x16,0 //FY
+    add x16,x15,15 //FY
     mov x23,10 //sep del punteado
-    mov x24,SCREEN_HEIGH //tam de largo de todo
+    mov x7,SCREEN_HEIGH
+    mov x8,2
+    mul x24,x7,x8 //tam de largo de todo
     bl repRectanguloY
     mov x17,515 //PX
     mov x18,520 //FX
