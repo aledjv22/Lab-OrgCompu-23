@@ -12,20 +12,21 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
-    mov x5,0
-    sub x5,x5,SCREEN_HEIGH
+    mov x5,-9999
 arbolecitos:
     bl asfalto
-    bl fondo
-    bl lineasRojas
-    add x5,x5,13
-    bl puntBlanco
-    bl separador
-    bl arbolada
     bl autoAzul
     bl caminetaBlanca
+tonto:
+    add x5,x5,5
+    bl lineasRojas
+    bl puntBlanco
+    bl separador
+    bl fondo
+    add x5,x5,7
+    bl arbolada
     bl tiempo
-    b arbolecitos
+    b tonto
     bl leoW
 
 pinitos:
@@ -42,14 +43,16 @@ pinitos:
 
 
     b InfLoop
+
 tiempo:
     //mov x6, #0x0EE6B280 = 250000000 //07735940
-    movz x6,0x0EE6,lsl 16 //tiempo de delay parte 1
-    movk x6,0xB280,lsl 00 //tiempo de delay parte 2
+    movz x6,0x0773,lsl 16 //tiempo de delay parte 1
+    movk x6,0x5940,lsl 00 //tiempo de delay parte 2
     delay_loop:
-        sub x6, x6, #0x1
+        sub x6, x6, #0x5
         cbnz x6,delay_loop
     br lr
+
 leoW:
     //Configuraciones generales del GPIO
     mov x2, GPIO_BASE //Almaceno la dirección base del GPIO en x2
@@ -67,7 +70,7 @@ leoW:
 
 //Funcion encargada de dibujar el fondo (pasto)
 fondo:
-    mov x1,lr
+    mov x1,lr //Almaceno la direccion de llamada
     movz x10, 0x49, lsl 16 //color lima parte 1
     movk x10, 0x8602, lsl 00 //color lima parte 2
     mov x15,0 //PY
@@ -80,7 +83,7 @@ fondo:
     mov x17,520 //PX
     mov x18,SCREEN_WIDTH //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
-    br x1
+    br x1 //Retorno a la direccion de llamada
 
 //Funcion encargada de dibujar el asfalto
 asfalto:
@@ -123,16 +126,14 @@ puntBlanco:
     mov x15,x5 //PY
     add x16,x15,15 //FY
     mov x23,10 //sep del punteado
-    mov x7,SCREEN_HEIGH
-    mov x8,2
-    mul x24,x7,x8 //tam de largo de todo
+    mov x24,700 //tam de largo de todo
     bl repRectanguloY
     mov x17,515 //PX
     mov x18,520 //FX
-    mov x15,0 //PY
-    mov x16,15 //FY
+    mov x15,x5 //PY
+    add x16,x15,15 //FY
     mov x23,10 //sep del punteado
-    mov x24,SCREEN_HEIGH //tam de largo de todo
+    mov x24,700 //tam de largo de todo
     bl repRectanguloY
     br x1
 
@@ -143,17 +144,17 @@ separador:
     movk x10, 0xFFFF, lsl 00 //color blanco parte 2 
     mov x17,253 //PX
     mov x18,256 //FX
-    mov x15,0 //PY
-    mov x16,30 //FY
+    mov x15,x5 //PY
+    add x16,x15,30 //FY
     mov x23,10 //sep del punteado
-    mov x24,SCREEN_HEIGH //tam de largo de todo
+    mov x24,700 //tam de largo de todo
     bl repRectanguloY
     mov x17,384 //PX
     mov x18,387 //FX
-    mov x15,0 //PY
-    mov x16,30 //FY
+    mov x15,x5 //PY
+    add x16,x15,30 //FY
     mov x23,10 //sep del punteado
-    mov x24,SCREEN_HEIGH //tam de largo de todo
+    mov x24,700 //tam de largo de todo
     bl repRectanguloY
     br x1
 
@@ -210,9 +211,11 @@ repRectanguloY:
         bl rectangulo
         add x15,x16,x23 //PY += tamDeSeparación
         add x16,x15,x26 //FY 
-        subs xzr,x16,x24
+        cmp x16,x24
         b.lt loopRec
     br x25 //Retorno a la ubicación de la llamada 
+
+
 
 //Funcion encargada de dibujar un circulo
 circulo:
@@ -346,24 +349,24 @@ pino:
 //Funcion encargada de plasmar una arbolada de copa circular
 arbolada:
     mov x1,lr
-    mov x15,50 //Y -> PY
+    mov x15,x5 //Y -> PY
     mov x29,x15//val inicial de Y
     arbIzq:
         mov x17,60 //X -> PX
         mov x15,x29
         bl arbol
         add x29,x29,110
-        cmp x29,SCREEN_HEIGH
+        cmp x29,800
         b.lt arbIzq
 
-        mov x15,50 //Y -> PY
-        mov x29,x15//val inicial de Y
+    mov x15,x5 //Y -> PY
+    mov x29,x15//val inicial de Y
     arbDer:
         mov x17,580 //X -> PX
         mov x15,x29
         bl arbol
         add x29,x29,110
-        cmp x29,SCREEN_HEIGH
+        cmp x29,800
         b.lt arbDer
     br x1
 
