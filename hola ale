@@ -1,0 +1,19 @@
+lecWArbol:
+    subs wzr, w10, 0b00010
+    b.eq resetX3B //Si la tecla 'w' no fue precionado leo de nuevo
+lecWPino:
+    subs wzr, w10, 0b00010
+    b.eq resteX3C //Si la tecla 'w' no fue precionado leo de nuevo
+lecWDesierto:
+    subs wzr, w10, 0b00010
+    b.eq resetX3 //Si la tecla 'w' no fue precionado leo de nuevo
+
+lecSArbol:
+    subs wzr, w10, 0b00010
+    b.eq resetX3C //Si la tecla 'w' no fue precionado leo de nuevo
+lecSPino:
+    subs wzr, w10, 0b00010
+    b.eq resetX3 //Si la tecla 'w' no fue precionado leo de nuevo
+lecSDesierto:
+    subs wzr, w10, 0b00010
+    b.eq resetX3B  //Si la tecla 'w' no fue precionado leo de nuevo
