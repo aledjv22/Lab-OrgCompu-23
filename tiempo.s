@@ -12,7 +12,9 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
-    mov x5,-9999
+resetX5:
+    mov x5,-300
+    //mov x5,-9999
 arbolecitos:
     bl asfalto
     bl autoAzul
@@ -26,6 +28,8 @@ arbolecitos:
     bl arbolada
     bl tiempo
     bl lectura
+    subs xzr,x5,-10
+    b.gt resetX5
     b arbolecitos
     bl leoW
 
