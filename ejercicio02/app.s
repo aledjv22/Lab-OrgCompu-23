@@ -105,37 +105,51 @@ pinitos:
     b.lt resetX7B
     b pinitos
 
+iniCactitus:
+    mov x3,500 //y de auto
+    mov x5,-300 //Y arboles
+resetX7C:
+    mov x7,500
+    subs xzr,x5,-10
+    b.gt resetX5
+    subs xzr,x3,-150
+    b.lt resetX3
+    b cactitus
 resetX3C:
-    //mov x4,lr
-    mov x3,500//y de auto
-    b desierto
+    mov x3,600 //y de camioneta
+    b cactitus
 resetX5C:
     mov x5,-300
-    //pinillos
-desierto:
+    //b arbolecitos
+cactitus:
     bl asfalto
-    bl autoGris
+    sub x7,x7,3
+    bl autoAzul
     sub x3,x3,5
+    bl caminetaBlanca
+    add x5,x5,3
+    sub x3,x3,120
     bl camineta777
-    add x5,x5,5
+    add x3,x3,120
     bl lineasRojas
     bl puntBlanco
     bl separador
-    movZ x10, 0xFF, lsl 16
-    movk x10, 0x0000, lsl 00
+    movz x10, 0xFF, lsl 16 //color lima parte 1
+    movk x10, 0xD500, lsl 00 //color lima parte 2
     bl fondo
     add x5,x5,7
-    bl pinar
+    bl arbolada
     bl tiempo
     bl lectura
-    bl lecWDesierto
-    bl lecSDesierto
+    bl lecWCactus
+    bl lecSCactus
     subs xzr,x5,-10
     b.gt resetX5C
     subs xzr,x3,-150
-    b.lt resetX3C   
-    b desierto
-
+    b.lt resetX3C
+    subs xzr,x7,-150
+    b.lt resetX7C
+    b cactitus
 
     b InfLoop
 
@@ -163,24 +177,24 @@ lecWArbol:
     br lr
 lecWPino:
     subs wzr, w10, 0b00010
-    b.eq resetX3C //Si la tecla 'w' no fue precionado leo de nuevo
+    b.eq cactitus //Si la tecla 'w' no fue precionado leo de nuevo
     br lr
-lecWDesierto:
+lecWCactus:
     subs wzr, w10, 0b00010
-    b.eq resetX3 //Si la tecla 'w' no fue precionado leo de nuevo
+    b.eq arbolecitos //Si la tecla 'w' no fue precionado leo de nuevo
     br lr
 lecSArbol:
     subs wzr, w10, 0b01000
-    b.eq resetX3C //Si la tecla 's' no fue precionado leo de nuevo
+    b.eq cactitus //Si la tecla 's' no fue precionado leo de nuevo
     br lr
 lecSPino:
     subs wzr, w10, 0b01000
     b.eq arbolecitos 
     //b.eq iniArbolecitos //Si la tecla 's' no fue precionado leo de nuevo
     br lr
-lecSDesierto:
+lecSCactus:
     subs wzr, w10, 0b01000
-    b.eq resetX3B //Si la tecla 's' no fue precionado leo de nuevo
+    b.eq pinitos //Si la tecla 's' no fue precionado leo de nuevo
     br lr
 
 // lecA1:
