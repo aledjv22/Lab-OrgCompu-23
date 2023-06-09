@@ -1,4 +1,4 @@
-	.equ SCREEN_WIDTH,   640
+    .equ SCREEN_WIDTH,   640
 	.equ SCREEN_HEIGH,   480
 	.equ BITS_PER_PIXEL, 32
 
@@ -12,19 +12,28 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
+    mov x3,500 //y de auto
+    mov x5,-300 //Y arboles
+resetX7:
+    mov x7,500
+    b arbolecitos
 resetX3:
     //mov x4,lr
-    mov x3,500//y de auto
+    mov x3,600//y de camioneta
     b arbolecitos
 resetX5:
     mov x5,-300
     //b arbolecitos
 arbolecitos:
     bl asfalto
+    sub x7,x7,3
     bl autoAzul
     sub x3,x3,5
     bl caminetaBlanca
-    add x5,x5,5
+    add x5,x5,3
+    sub x3,x3,120
+    bl camineta777
+    add x3,x3,120
     bl lineasRojas
     bl puntBlanco
     bl separador
@@ -41,6 +50,8 @@ arbolecitos:
     b.gt resetX5
     subs xzr,x3,-150
     b.lt resetX3
+    subs xzr,x7,-150
+    b.lt resetX7
     b arbolecitos
 
 
@@ -140,16 +151,47 @@ lecWDesierto:
     br lr
 lecSArbol:
     subs wzr, w10, 0b01000
-    b.eq resetX3C //Si la tecla 'w' no fue precionado leo de nuevo
+    b.eq resetX3C //Si la tecla 's' no fue precionado leo de nuevo
     br lr
 lecSPino:
     subs wzr, w10, 0b01000
-    b.eq resetX3 //Si la tecla 'a' no fue precionado leo de nuevo
+    b.eq resetX3 //Si la tecla 's' no fue precionado leo de nuevo
     br lr
 lecSDesierto:
     subs wzr, w10, 0b01000
-    b.eq resetX3B //Si la tecla 'a' no fue precionado leo de nuevo
+    b.eq resetX3B //Si la tecla 's' no fue precionado leo de nuevo
     br lr
+
+// lecA1:
+//     subs wzr, w10, 0b00100
+//     b.eq ----------------- //Si la tecla 'a' no fue precionado leo de nuevo
+//     br lr
+// lecA2:
+//     subs wzr, w10, 0b00100
+//     b.eq ----------------- //Si la tecla 'a' no fue precionado leo de nuevo
+//     br lr
+// lecA3:
+//     subs wzr, w10, 0b00100
+//     b.eq ----------------- //Si la tecla 'a' no fue precionado leo de nuevo
+//     br lr
+
+// lecD1:
+//     subs wzr, w10, 0b10000
+//     b.eq ----------------- //Si la tecla 'd' no fue precionado leo de nuevo
+//     br lr
+// lecD2:
+//     subs wzr, w10, 0b10000
+//     b.eq ----------------- //Si la tecla 'd' no fue precionado leo de nuevo
+//     br lr
+// lecD3:
+//     subs wzr, w10, 0b10000
+//     b.eq ----------------- //Si la tecla 'd' no fue precionado leo de nuevo
+//     br lr
+
+// lecSpace:
+//     subs wzr, w10, 0b100000
+//     b.eq -----------------
+//     br lr
 
 
 //Funcion encargada de dibujar el fondo (pasto)
@@ -468,7 +510,7 @@ autoGris:
 autoAzul:
     mov x1,lr //almaceno la dire de llamado
     mov x17,290 //valor de X
-    mov x15,320 //valor de Y
+    mov x15,x7 //valor de Y
     movz x14,0xFF,lsl 00 //Color base
     movz x9,0x03,lsl 16 //color sombra parte 1
     movk x9,0x039F,lsl 00 //color sombra parte 2
@@ -490,7 +532,7 @@ caminetaBlanca:
 //Funcion encargada de dibujar una camioneta morada:
 camineta777:
     mov x1,lr //almaceno la dire de llamado
-    mov x17,290 //valor de X
+    mov x17,425 //valor de X
     mov x15,x3 //valor de Y
     movz x14,0xA2,lsl 16 //Color base parte 1
     movk x14,0x00FF,lsl 00 //Color base parte 2
