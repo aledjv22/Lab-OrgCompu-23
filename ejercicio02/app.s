@@ -901,7 +901,7 @@ cactada:
     cacIzq:
         mov x17,60 //X -> PX
         mov x15,x29
-        bl cactuso
+        bl cacto
         add x29,x29,110
         cmp x29,800
         b.lt cacIzq
@@ -911,14 +911,12 @@ cactada:
     cacDer:
         mov x17,580 //X -> PX
         mov x15,x29
-        bl cactuso
+        bl cacto 
         add x29,x29,110
         cmp x29,800
         b.lt cacDer
     br x1
 //Funcion encargada de plasmar un cactus
-cactuso:
-    mov x15,x5
 cacto:
     mov x8,x15 //inicial y
     mov x28,x17 //inicial x
