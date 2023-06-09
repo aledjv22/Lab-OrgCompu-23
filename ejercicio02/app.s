@@ -12,58 +12,160 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
-arbolecitos:
-    bl fondo
-    bl asfalto
-    bl lineasRojas
-    bl puntBlanco
-    bl separador
-    bl arbolada
-    bl autoAzul
-    bl caminetaBlanca
-    bl leoW
-
-pinitos:
-    bl fondo
-    bl asfalto
-    bl lineasRojas
-    bl puntBlanco
-    bl separador
-    bl pinar
-    bl autoGris
-    bl camineta777
-    bl leoW
+resetX3:
+    //mov x4,lr
+    mov x3,500//y de auto
     b arbolecitos
+resetX5:
+    mov x5,-300
+    //b arbolecitos
+arbolecitos:
+    bl asfalto
+    bl autoAzul
+    sub x3,x3,5
+    bl caminetaBlanca
+    add x5,x5,5
+    bl lineasRojas
+    bl puntBlanco
+    bl separador
+    movz x10, 0x49, lsl 16 //color lima parte 1
+    movk x10, 0x8602, lsl 00 //color lima parte 2
+    bl fondo
+    add x5,x5,7
+    bl arbolada
+    bl tiempo
+    bl lectura
+    bl lecWArbol
+    bl lecSArbol
+    subs xzr,x5,-10
+    b.gt resetX5
+    subs xzr,x3,-150
+    b.lt resetX3
+    b arbolecitos
+
+
+resetX3B:
+    //mov x4,lr
+    mov x3,500//y de auto
+    b pinitos
+resetX5B:
+    mov x5,-300
+    //pinitos
+pinitos:
+    bl asfalto
+    bl autoGris
+    sub x3,x3,5
+    bl camineta777
+    add x5,x5,5
+    bl lineasRojas
+    bl puntBlanco
+    bl separador
+    movz x10, 0x49, lsl 16 //color lima parte 1
+    movk x10, 0x8602, lsl 00 //color lima parte 2
+    bl fondo
+    add x5,x5,7
+    bl pinar
+    bl tiempo
+    bl lectura
+    bl lecWPino
+    bl lecSPino
+    subs xzr,x5,-10
+    b.gt resetX5B
+    subs xzr,x3,-150
+    b.lt resetX3B
+    b pinitos
+
+resetX3C:
+    //mov x4,lr
+    mov x3,500//y de auto
+    b desierto
+resetX5C:
+    mov x5,-300
+    //pinillos
+desierto:
+    bl asfalto
+    bl autoGris
+    sub x3,x3,5
+    bl camineta777
+    add x5,x5,5
+    bl lineasRojas
+    bl puntBlanco
+    bl separador
+    movZ x10, 0xFF, lsl 16
+    movk x10, 0x0000, lsl 00
+    bl fondo
+    add x5,x5,7
+    bl pinar
+    bl tiempo
+    bl lectura
+    bl lecWDesierto
+    bl lecSDesierto
+    subs xzr,x5,-10
+    b.gt resetX5C
+    subs xzr,x3,-150
+    b.lt resetX3C   
+    b desierto
 
 
     b InfLoop
 
-leoW:
+tiempo:
+    //mov x6, #0x0EE6B280 = 250000000 //07735940
+    movz x6,0x0773,lsl 16 //tiempo de delay parte 1
+    movk x6,0x5940,lsl 00 //tiempo de delay parte 2
+    delay_loop:
+        sub x6, x6, #4
+        cbnz x6,delay_loop
+    br lr
+
+//Leo
+lectura:
     //Configuraciones generales del GPIO
     mov x2, GPIO_BASE //Almaceno la dirección base del GPIO en x2
     str wzr, [x2, GPIO_GPFSEL0] //Setea gpios 0 - 9 como lectura
-    leo:
-        ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
-        and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
-        sub w10, w10, 0b10
-        cbnz w10, leo //Si la tecla 'w' no fue precionado leo de nuevo
-    releo:
-        ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
-        and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
-        cbnz w10, releo //Si la tecla 'w' no fue precionado leo de nuevo
-        br lr
+    ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
+    and w10, w10, 0b0000111110 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
+    br lr
+lecWArbol:
+    subs wzr, w10, 0b00010
+    b.eq resetX3B //Si la tecla 'w' no fue precionado leo de nuevo
+    br lr
+lecWPino:
+    subs wzr, w10, 0b00010
+    b.eq resetX3C //Si la tecla 'w' no fue precionado leo de nuevo
+    br lr
+lecWDesierto:
+    subs wzr, w10, 0b00010
+    b.eq resetX3 //Si la tecla 'w' no fue precionado leo de nuevo
+    br lr
+lecSArbol:
+    subs wzr, w10, 0b01000
+    b.eq resetX3C //Si la tecla 'w' no fue precionado leo de nuevo
+    br lr
+lecSPino:
+    subs wzr, w10, 0b01000
+    b.eq resetX3 //Si la tecla 'a' no fue precionado leo de nuevo
+    br lr
+lecSDesierto:
+    subs wzr, w10, 0b01000
+    b.eq resetX3B //Si la tecla 'a' no fue precionado leo de nuevo
+    br lr
+
 
 //Funcion encargada de dibujar el fondo (pasto)
 fondo:
-    mov x1,lr
-    movz x10, 0x49, lsl 16 //color lima parte 1
-    movk x10, 0x8602, lsl 00 //color lima parte 2
+    mov x1,lr //Almaceno la direccion de llamada
     mov x15,0 //PY
-    mov x17,0 //PX
     mov x16,SCREEN_HEIGH //FY
+    mov x17,0 //PX
+    mov x18,120 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    mov x15,0 //PY
+    mov x16,SCREEN_HEIGH //FY
+    mov x17,520 //PX
     mov x18,SCREEN_WIDTH //FX
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
-    br x1
+    br x1 //Retorno a la direccion de llamada
 
 //Funcion encargada de dibujar el asfalto
 asfalto:
@@ -103,17 +205,17 @@ puntBlanco:
     movk x10, 0xE4E4, lsl 00 //color blanco parte 2 
     mov x17,120 //PX
     mov x18,125 //FX
-    mov x15,0 //PY
-    mov x16,15 //FY
+    mov x15,x5 //PY
+    add x16,x15,15 //FY
     mov x23,10 //sep del punteado
-    mov x24,SCREEN_HEIGH //tam de largo de todo
+    mov x24,700 //tam de largo de todo
     bl repRectanguloY
     mov x17,515 //PX
     mov x18,520 //FX
-    mov x15,0 //PY
-    mov x16,15 //FY
+    mov x15,x5 //PY
+    add x16,x15,15 //FY
     mov x23,10 //sep del punteado
-    mov x24,SCREEN_HEIGH //tam de largo de todo
+    mov x24,700 //tam de largo de todo
     bl repRectanguloY
     br x1
 
@@ -124,41 +226,41 @@ separador:
     movk x10, 0xFFFF, lsl 00 //color blanco parte 2 
     mov x17,253 //PX
     mov x18,256 //FX
-    mov x15,0 //PY
-    mov x16,30 //FY
+    mov x15,x5 //PY
+    add x16,x15,30 //FY
     mov x23,10 //sep del punteado
-    mov x24,SCREEN_HEIGH //tam de largo de todo
+    mov x24,700 //tam de largo de todo
     bl repRectanguloY
     mov x17,384 //PX
     mov x18,387 //FX
-    mov x15,0 //PY
-    mov x16,30 //FY
+    mov x15,x5 //PY
+    add x16,x15,30 //FY
     mov x23,10 //sep del punteado
-    mov x24,SCREEN_HEIGH //tam de largo de todo
+    mov x24,700 //tam de largo de todo
     bl repRectanguloY
     br x1
 
 //Funcion encargada de plasmar un pinar
 pinar:
     mov x1,lr
-    mov x15,80 //Y -> PY
+    mov x15,x5 //Y -> PY
     mov x29,x15//val inicial de Y
     pinoIzq:
         mov x17,60 //X -> PX
         mov x15,x29
         bl pino
         add x29,x29,160
-        cmp x29,SCREEN_HEIGH
+        cmp x29,800
         b.lt pinoIzq
 
-        mov x15,80 //Y -> PY
-        mov x29,x15//val inicial de Y
+    add x15,x5,20 //Y -> PY
+    mov x29,x15//val inicial de Y
     pinoDer:
         mov x17,580 //X -> PX
         mov x15,x29
         bl pino
         add x29,x29,160
-        cmp x29,SCREEN_HEIGH
+        cmp x29,800
         b.lt pinoDer
     br x1
 
@@ -191,7 +293,7 @@ repRectanguloY:
         bl rectangulo
         add x15,x16,x23 //PY += tamDeSeparación
         add x16,x15,x26 //FY 
-        subs xzr,x16,x24
+        cmp x16,x24
         b.lt loopRec
     br x25 //Retorno a la ubicación de la llamada 
 
@@ -329,24 +431,24 @@ pino:
 //Funcion encargada de plasmar una arbolada de copa circular
 arbolada:
     mov x1,lr
-    mov x15,50 //Y -> PY
+    mov x15,x5 //Y -> PY
     mov x29,x15//val inicial de Y
     arbIzq:
         mov x17,60 //X -> PX
         mov x15,x29
         bl arbol
         add x29,x29,110
-        cmp x29,SCREEN_HEIGH
+        cmp x29,800
         b.lt arbIzq
 
-        mov x15,50 //Y -> PY
-        mov x29,x15//val inicial de Y
+    mov x15,x5 //Y -> PY
+    mov x29,x15//val inicial de Y
     arbDer:
         mov x17,580 //X -> PX
         mov x15,x29
         bl arbol
         add x29,x29,110
-        cmp x29,SCREEN_HEIGH
+        cmp x29,800
         b.lt arbDer
     br x1
 
@@ -377,7 +479,7 @@ autoAzul:
 caminetaBlanca:
     mov x1,lr //almaceno la dire de llamado
     mov x17,159 //X
-    mov x15,295 //Y
+    mov x15,x3 //Y
     movz x14,0xFF,lsl 16 //Color base parte 1
     movk x14,0xFFFF,lsl 00 //Color base parte 2
     movz x9,0xBC,lsl 16 //color sombra parte 1
@@ -389,7 +491,7 @@ caminetaBlanca:
 camineta777:
     mov x1,lr //almaceno la dire de llamado
     mov x17,290 //valor de X
-    mov x15,300 //valor de Y
+    mov x15,x3 //valor de Y
     movz x14,0xA2,lsl 16 //Color base parte 1
     movk x14,0x00FF,lsl 00 //Color base parte 2
     movz x9,0x89,lsl 16 //color sombra parte 1
