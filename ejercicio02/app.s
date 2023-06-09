@@ -138,7 +138,7 @@ cactitus:
     movk x10, 0xD500, lsl 00 //color lima parte 2
     bl fondo
     add x5,x5,7
-    bl arbolada
+    bl cactada
     bl tiempo
     bl lectura
     bl lecWCactus
@@ -889,6 +889,96 @@ camioneta:
     bl rectangulo
 
     br x11 //retorno a la dire de llamado
+
+
+
+
+//arbolada de cactus
+cactada:
+    mov x1,lr
+    mov x15,x5 //Y -> PY
+    mov x29,x15//val inicial de Y
+    cacIzq:
+        mov x17,60 //X -> PX
+        mov x15,x29
+        bl cactuso
+        add x29,x29,110
+        cmp x29,800
+        b.lt cacIzq
+
+    mov x15,x5 //Y -> PY
+    mov x29,x15//val inicial de Y
+    cacDer:
+        mov x17,580 //X -> PX
+        mov x15,x29
+        bl cactuso
+        add x29,x29,110
+        cmp x29,800
+        b.lt cacDer
+    br x1
+//Funcion encargada de plasmar un cactus
+cactuso:
+    mov x15,x5
+cacto:
+    mov x8,x15 //inicial y
+    mov x28,x17 //inicial x
+    mov x26,lr //guardo la dire de partida
+
+
+    movz x10, 0x00, lsl 16 //color verde parte 1
+    movk x10, 0x4900, lsl 00 //color verde parte 2
+    //tronquitos
+    sub x17,x28,2 //PX
+    add x18,x28,8 //FX
+    add x15,x8,0 //PY
+    add x16,x8,60 //FY
+    bl rectangulo 
+    //leg izq
+    sub x17,x28,20 //PX
+    add x18,x28,5 //FX
+    add x15,x8,35 //PY
+    add x16,x8,45 //FY
+    bl rectangulo 
+    sub x17,x28,20 //PX
+    add x18,x28,-8 //FX
+    add x15,x8,12 //PY
+    add x16,x8,40 //FY
+    bl rectangulo
+
+    //leg rgt
+    sub x17,x28,0 //PX
+    add x18,x28,20 //FX
+    add x15,x8,28 //PY
+    add x16,x8,38 //FY
+    bl rectangulo 
+    sub x17,x28,-16//PX
+    add x18,x28,26//FX
+    add x15,x8,12 //PY
+    add x16,x8,38 //FY
+    bl rectangulo
+    
+    //crc medio
+    movz x10,0x00,lsl 16 //color verde oscuro parte 1
+    movk x10,0x4900, lsl 00 //color verde oscuro parte 2
+    add x15, x8, 3
+    add x17, x28, 3
+    mov x4,6
+    bl circulo 
+    //crc der
+    movz x10,0xFF,lsl 16 //color verde oscuro parte 1
+    movk x10,0x4900, lsl 00 //color verde oscuro parte 2
+    add x15, x8, 14
+    add x17, x28, 21
+    mov x4,6
+    bl circulo
+    // crc izq
+    movz x10,0xFF,lsl 16 //color verde oscuro parte 1
+    movk x10,0x7F50, lsl 00 //color verde oscuro parte 2
+    add x15, x8, 10  // Y
+    add x17, x28, -14 // X
+    mov x4,6
+    bl circulo
+    br x26 //regreso a la dire de llamada
 
 InfLoop:
 	b InfLoop
