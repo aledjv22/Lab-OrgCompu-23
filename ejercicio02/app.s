@@ -41,7 +41,6 @@ arbolecitos:
     add x3,x3,120
     bl lineasRojas
     bl puntBlanco
-    bl separador
     movz x10, 0x49, lsl 16 //color lima parte 1
     movk x10, 0x8602, lsl 00 //color lima parte 2
     bl fondo
@@ -51,6 +50,8 @@ arbolecitos:
     bl lectura
     bl lecWArbol
     bl lecSArbol
+    //bl separador
+    bl lineasAmarillas
     subs xzr,x5,-10
     b.gt resetX5
     subs xzr,x3,-150
@@ -197,10 +198,10 @@ lecSCactus:
     b.eq pinitos //Si la tecla 's' no fue precionado leo de nuevo
     br lr
 
-// lecA1:
-//     subs wzr, w10, 0b00100
-//     b.eq ----------------- //Si la tecla 'a' no fue precionado leo de nuevo
-//     br lr
+lecA1:
+    subs wzr, w10, 0b00100
+    //b.eq  //Si la tecla 'a' no fue precionado leo de nuevo
+    br lr
 // lecA2:
 //     subs wzr, w10, 0b00100
 //     b.eq ----------------- //Si la tecla 'a' no fue precionado leo de nuevo
@@ -275,6 +276,34 @@ lineasRojas:
     bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
     br x1
 
+//Funcion encargada de dibujar lineas amarillas
+lineasAmarillas:
+    mov x1,lr
+    movz x10, 0xFF, lsl 16 //color amarillo
+    movk x10, 0xE53D, lsl 0
+    mov x15,0 //PY
+    mov x17,250 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,253 //FX
+    bl rectangulo 
+    mov x15,0 //PY
+    mov x17,256 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,259 //FX
+    bl rectangulo 
+    movz x10, 0xFF, lsl 16 //color amarillo
+    movk x10, 0xE53D, lsl 0
+    mov x15,0 //PY
+    mov x17,381 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,384 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    mov x15,0 //PY
+    mov x17,387 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,390 //FX
+    bl rectangulo 
+    br x1
 //Funcion encargada de dibujar lineas separadas en el borde del asfalto
 puntBlanco:
     mov x1,lr
