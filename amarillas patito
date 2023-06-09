@@ -1,0 +1,27 @@
+lineasAmarillas:
+    mov x1,lr
+    movz x10, 0xFF, lsl 16 //color amarillo
+    movk x10, 0xE53D, lsl 0
+    mov x15,0 //PY
+    mov x17,250 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,253 //FX
+    bl rectangulo 
+    mov x15,0 //PY
+    mov x17,256 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,259 //FX
+    bl rectangulo 
+    movz x10, 0xFF, lsl 16 //color amarillo
+    movk x10, 0xE53D, lsl 0
+    mov x15,0 //PY
+    mov x17,381 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,384 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    mov x15,0 //PY
+    mov x17,387 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,390 //FX
+    bl rectangulo 
+    br x1
