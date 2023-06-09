@@ -17,7 +17,6 @@ arbolecitos:
     bl asfalto
     bl autoAzul
     bl caminetaBlanca
-tonto:
     add x5,x5,5
     bl lineasRojas
     bl puntBlanco
@@ -26,7 +25,7 @@ tonto:
     add x5,x5,7
     bl arbolada
     bl tiempo
-    b tonto
+    b arbolecitos
     bl leoW
 
 pinitos:
