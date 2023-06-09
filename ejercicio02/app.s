@@ -12,14 +12,19 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
+
+iniArbolecitos:
     mov x3,500 //y de auto
     mov x5,-300 //Y arboles
 resetX7:
     mov x7,500
+    subs xzr,x5,-10
+    b.gt resetX5
+    subs xzr,x3,-150
+    b.lt resetX3
     b arbolecitos
 resetX3:
-    //mov x4,lr
-    mov x3,600//y de camioneta
+    mov x3,600 //y de camioneta
     b arbolecitos
 resetX5:
     mov x5,-300
@@ -54,20 +59,32 @@ arbolecitos:
     b.lt resetX7
     b arbolecitos
 
-
+iniPinitos:
+    mov x3,500 //y de auto
+    mov x5,-300 //Y arboles
+resetX7B:
+    mov x7,500
+    subs xzr,x5,-10
+    b.gt resetX5B
+    subs xzr,x3,-150
+    b.lt resetX3B
+    b pinitos
 resetX3B:
-    //mov x4,lr
-    mov x3,500//y de auto
+    mov x3,600 //y de camioneta
     b pinitos
 resetX5B:
     mov x5,-300
     //pinitos
 pinitos:
     bl asfalto
-    bl autoGris
+    sub x7,x7,3
+    bl autoAzul
     sub x3,x3,5
+    bl caminetaBlanca
+    add x5,x5,3
+    sub x3,x3,120
     bl camineta777
-    add x5,x5,5
+    add x3,x3,120
     bl lineasRojas
     bl puntBlanco
     bl separador
@@ -84,6 +101,8 @@ pinitos:
     b.gt resetX5B
     subs xzr,x3,-150
     b.lt resetX3B
+    subs xzr,x7,-150
+    b.lt resetX7B
     b pinitos
 
 resetX3C:
@@ -139,7 +158,8 @@ lectura:
     br lr
 lecWArbol:
     subs wzr, w10, 0b00010
-    b.eq resetX3B //Si la tecla 'w' no fue precionado leo de nuevo
+    b.eq pinitos
+    //b.eq iniPinitos //Si la tecla 'w' no fue precionado leo de nuevo
     br lr
 lecWPino:
     subs wzr, w10, 0b00010
@@ -155,7 +175,8 @@ lecSArbol:
     br lr
 lecSPino:
     subs wzr, w10, 0b01000
-    b.eq resetX3 //Si la tecla 's' no fue precionado leo de nuevo
+    b.eq arbolecitos 
+    //b.eq iniArbolecitos //Si la tecla 's' no fue precionado leo de nuevo
     br lr
 lecSDesierto:
     subs wzr, w10, 0b01000
