@@ -12,12 +12,17 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
+resetX3:
+    //mov x4,lr
+    mov x3,500//y de auto
+    b arbolecitos
 resetX5:
     mov x5,-300
-    //mov x5,-9999
+    //b arbolecitos
 arbolecitos:
     bl asfalto
     bl autoAzul
+    sub x3,x3,5
     bl caminetaBlanca
     add x5,x5,5
     bl lineasRojas
@@ -30,20 +35,79 @@ arbolecitos:
     bl lectura
     subs xzr,x5,-10
     b.gt resetX5
+    subs xzr,x3,-150
+    b.lt resetX3
     b arbolecitos
-    bl leoW
 
+
+resetX3B:
+    //mov x4,lr
+    mov x3,500//y de auto
+    b pinitos
+resetX5B:
+    mov x5,-300
+    //pinitos
 pinitos:
-    bl fondo
     bl asfalto
+    bl autoGris
+    sub x3,x3,5
+    bl camineta777
+    add x5,x5,5
     bl lineasRojas
     bl puntBlanco
     bl separador
+    bl fondo
+    add x5,x5,7
     bl pinar
+    bl tiempo
+    bl lectura2
+    subs xzr,x5,-10
+    b.gt resetX5B
+    subs xzr,x3,-150
+    b.lt resetX3B
+    b pinitos
+
+resetX3C:
+    //mov x4,lr
+    mov x3,500//y de auto
+    b pinillos
+resetX5C:
+    mov x5,-300
+    //pinillos
+pinillos:
+    bl asfalto
     bl autoGris
+    sub x3,x3,5
     bl camineta777
-    bl leoW
-    b arbolecitos
+    add x5,x5,5
+    bl lineasRojas
+    bl puntBlanco
+    bl separador
+    movZ x10, 0xFF, lsl 16
+    movk x10, 0xC34A, lsl 00
+    bl fondo2
+    add x5,x5,7
+    bl pinar
+    bl tiempo
+    bl lectura2
+    subs xzr,x5,-10
+    b.gt resetX5C
+    subs xzr,x3,-150
+    b.lt resetX3C   
+    b pinillos
+
+
+//pinitos:
+//    bl fondo
+//    bl asfalto
+//    bl lineasRojas
+//    bl puntBlanco
+//    bl separador
+//    bl pinar
+//    bl autoGris
+//    bl camineta777
+    //bl leoW
+    //b arbolecitos
 
 
     b InfLoop
@@ -63,32 +127,27 @@ lectura:
     mov x2, GPIO_BASE //Almaceno la dirección base del GPIO en x2
     str wzr, [x2, GPIO_GPFSEL0] //Setea gpios 0 - 9 como lectura
     ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
-    and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
-    sub w10, w10, 0b10
-    cbz w10, pinitos //Si la tecla 'w' no fue precionado leo de nuevo
+    and w10, w10, 0b0000111110 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
+    br lr //regreso a la dire de llamado
+lectW:
+    subs wzr, w10, 0b00010
+    b.eq resetX3 //Si la tecla 'w' no fue precionado leo de nuevo
+lectA:
+    subs wzr, w10, 0b00100
+    b.eq resetX3 //Si la tecla 'a' no fue precionado leo de nuevo
     br lr
-
-leoW:
-    //Configuraciones generales del GPIO
-    mov x2, GPIO_BASE //Almaceno la dirección base del GPIO en x2
-    str wzr, [x2, GPIO_GPFSEL0] //Setea gpios 0 - 9 como lectura
-    leo:
-        ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
-        and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
-        sub w10, w10, 0b10
-        cbnz w10, leo //Si la tecla 'w' no fue precionado leo de nuevo
-    releo:
-        ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
-        and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
-        cbnz w10, releo //Si la tecla 'w' no fue precionado leo de nuevo
-        br lr
+lectD:
+    subs wzr, w10, 0b10000
+    b.eq resetX3C //Si la tecla 'd' no fue precionado leo de nuevo
+    br lr
 
 
 //Funcion encargada de dibujar el fondo (pasto)
 fondo:
-    mov x1,lr //Almaceno la direccion de llamada
     movz x10, 0x49, lsl 16 //color lima parte 1
     movk x10, 0x8602, lsl 00 //color lima parte 2
+fondo2:
+    mov x1,lr //Almaceno la direccion de llamada
     mov x15,0 //PY
     mov x16,SCREEN_HEIGH //FY
     mov x17,0 //PX
@@ -177,24 +236,24 @@ separador:
 //Funcion encargada de plasmar un pinar
 pinar:
     mov x1,lr
-    mov x15,80 //Y -> PY
+    mov x15,x5 //Y -> PY
     mov x29,x15//val inicial de Y
     pinoIzq:
         mov x17,60 //X -> PX
         mov x15,x29
         bl pino
         add x29,x29,160
-        cmp x29,SCREEN_HEIGH
+        cmp x29,800
         b.lt pinoIzq
 
-        mov x15,80 //Y -> PY
-        mov x29,x15//val inicial de Y
+    add x15,x5,20 //Y -> PY
+    mov x29,x15//val inicial de Y
     pinoDer:
         mov x17,580 //X -> PX
         mov x15,x29
         bl pino
         add x29,x29,160
-        cmp x29,SCREEN_HEIGH
+        cmp x29,800
         b.lt pinoDer
     br x1
 
@@ -413,7 +472,7 @@ autoAzul:
 caminetaBlanca:
     mov x1,lr //almaceno la dire de llamado
     mov x17,159 //X
-    mov x15,295 //Y
+    mov x15,x3 //Y
     movz x14,0xFF,lsl 16 //Color base parte 1
     movk x14,0xFFFF,lsl 00 //Color base parte 2
     movz x9,0xBC,lsl 16 //color sombra parte 1
@@ -425,7 +484,7 @@ caminetaBlanca:
 camineta777:
     mov x1,lr //almaceno la dire de llamado
     mov x17,290 //valor de X
-    mov x15,300 //valor de Y
+    mov x15,x3 //valor de Y
     movz x14,0xA2,lsl 16 //Color base parte 1
     movk x14,0x00FF,lsl 00 //Color base parte 2
     movz x9,0x89,lsl 16 //color sombra parte 1
