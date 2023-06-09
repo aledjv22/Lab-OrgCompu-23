@@ -1,19 +1,32 @@
-lecWArbol:
-    subs wzr, w10, 0b00010
-    b.eq resetX3B //Si la tecla 'w' no fue precionado leo de nuevo
-lecWPino:
-    subs wzr, w10, 0b00010
-    b.eq resteX3C //Si la tecla 'w' no fue precionado leo de nuevo
-lecWDesierto:
-    subs wzr, w10, 0b00010
-    b.eq resetX3 //Si la tecla 'w' no fue precionado leo de nuevo
 
-lecSArbol:
-    subs wzr, w10, 0b00010
-    b.eq resetX3C //Si la tecla 'w' no fue precionado leo de nuevo
-lecSPino:
-    subs wzr, w10, 0b00010
-    b.eq resetX3 //Si la tecla 'w' no fue precionado leo de nuevo
-lecSDesierto:
-    subs wzr, w10, 0b00010
-    b.eq resetX3B  //Si la tecla 'w' no fue precionado leo de nuevo
+
+
+
+resetX3C:
+    //mov x4,lr
+    mov x3,500//y de auto
+    b desierto
+resetX5C:
+    mov x5,-300
+    //pinillos
+desierto:
+    bl asfalto
+    bl autoGris
+    sub x3,x3,5
+    bl camineta777
+    add x5,x5,5
+    bl lineasRojas
+    bl puntBlanco
+    bl separador
+    movZ x10, 0xFF, lsl 16
+    movk x10, 0xC34A, lsl 00
+    bl fondo
+    add x5,x5,7
+    bl pinar
+    bl tiempo
+    bl lectura2
+    subs xzr,x5,-10
+    b.gt resetX5C
+    subs xzr,x3,-150
+    b.lt resetX3C   
+    b desierto
