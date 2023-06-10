@@ -16,6 +16,8 @@ main:
     mov x6,0xF //valor inicial del estado de las lineas de ruta
     mov x3,500 //Y de vehículos
     mov x5,-300 //Y arboles
+    b paisajeFinal //momentaneo
+//Inicio del paisaje de Arbolecitos
 resetX7:
     mov x7,500
     subs xzr,x5,-10
@@ -29,62 +31,64 @@ resetX3:
 resetX5:
     mov x5,-300
 arbolecitos:
-    bl asfalto
-    subs xzr,x6,0xF7
-    b.eq amariA
-    bl separador
-    b sigueA
-amariA:
-    bl lineasAmarillas
-sigueA:
-    sub x7,x7,3
-    bl autoAzul
-    sub x3,x3,5
-    subs xzr,x2,0xA
-    b.eq autosA 
-    subs xzr,x2,0xB
-    b.eq autosB
-    subs xzr,x2,0xC
-    b.eq autosC
-autosC:
-    add x5,x5,3
-    sub x3,x3,120
-    add x3,x3,120
-    b sigueD
-autosB:
-    bl caminetaBlanca
-    add x5,x5,3
-    sub x3,x3,120
-    add x3,x3,120
-    b sigueD
-autosA:
-    bl caminetaBlanca
-    add x5,x5,3
-    sub x3,x3,120
-    bl camineta777
-    add x3,x3,120
-sigueD:
-    bl lineasRojas
-    bl puntBlanco
-    movz x10, 0x49, lsl 16 //color lima parte 1
-    movk x10, 0x8602, lsl 00 //color lima parte 2
-    bl fondo
-    add x5,x5,7
-    bl arbolada
-    bl tiempo
-    bl lectura
-    bl lecD
-    bl lecA
-    bl lecWArbol
-    bl lecSArbol
-    subs xzr,x5,-10
-    b.gt resetX5
-    subs xzr,x3,-150
-    b.lt resetX3
-    subs xzr,x7,-150
-    b.lt resetX7
-    b arbolecitos
+        bl asfalto
+        subs xzr,x6,0xF7
+        b.eq amariA
+        bl separador
+        b sigueA
+    amariA:
+        bl lineasAmarillas
+    sigueA:
+        sub x7,x7,3
+        bl autoAzul
+        sub x3,x3,5
+        subs xzr,x2,0xA
+        b.eq autosA 
+        subs xzr,x2,0xB
+        b.eq autosB
+        subs xzr,x2,0xC
+        b.eq autosC
+    autosC:
+        add x5,x5,3
+        sub x3,x3,120
+        add x3,x3,120
+        b sigueD
+    autosB:
+        bl caminetaBlanca
+        add x5,x5,3
+        sub x3,x3,120
+        add x3,x3,120
+        b sigueD
+    autosA:
+        bl caminetaBlanca
+        add x5,x5,3
+        sub x3,x3,120
+        bl camineta777
+        add x3,x3,120
+    sigueD:
+        bl lineasRojas
+        bl puntBlanco
+        movz x10, 0x49, lsl 16 //color lima parte 1
+        movk x10, 0x8602, lsl 00 //color lima parte 2
+        bl fondo
+        add x5,x5,7
+        bl arbolada
+        bl tiempo
+        bl lectura
+        bl lecEspacio
+        bl lecD
+        bl lecA
+        bl lecWArbol
+        bl lecSArbol
+        subs xzr,x5,-10
+        b.gt resetX5
+        subs xzr,x3,-150
+        b.lt resetX3
+        subs xzr,x7,-150
+        b.lt resetX7
+        b arbolecitos
 
+//Inicio del paisaje pinitos
 resetX7B:
     mov x7,500
     subs xzr,x5,-10
@@ -97,65 +101,65 @@ resetX3B:
     b pinitos
 resetX5B:
     mov x5,-300
-    //pinitos
 pinitos:
-    bl asfalto
-    subs xzr,x6,0xF7
-    b.eq amariP
-    bl separador
-    b sigueP
-amariP:
-    bl lineasAmarillas
-sigueP:
-    sub x7,x7,3
-    bl autoAzul
-    sub x3,x3,5
-    subs xzr,x2,0xA
-    b.eq autosAp 
-    subs xzr,x2,0xB
-    b.eq autosBp
-    subs xzr,x2,0xC
-    b.eq autosCp
-autosCp:
-    add x5,x5,3
-    sub x3,x3,120
-    add x3,x3,120
-    b sigueDp
-autosBp:
-    bl caminetaBlanca
-    add x5,x5,3
-    sub x3,x3,120
-    add x3,x3,120
-    b sigueDp
-autosAp:
-    bl caminetaBlanca
-    add x5,x5,3
-    sub x3,x3,120
-    bl camineta777
-    add x3,x3,120
-sigueDp:
-    bl lineasRojas
-    bl puntBlanco
-    movz x10, 0x49, lsl 16 //color lima parte 1
-    movk x10, 0x8602, lsl 00 //color lima parte 2
-    bl fondo
-    add x5,x5,7
-    bl pinar
-    bl tiempo
-    bl lectura
-    bl lecD
-    bl lecA
-    bl lecWPino
-    bl lecSPino
-    subs xzr,x5,-10
-    b.gt resetX5B
-    subs xzr,x3,-150
-    b.lt resetX3B
-    subs xzr,x7,-150
-    b.lt resetX7B
-    b pinitos
+        bl asfalto
+        subs xzr,x6,0xF7
+        b.eq amariP
+        bl separador
+        b sigueP
+    amariP:
+        bl lineasAmarillas
+    sigueP:
+        sub x7,x7,3
+        bl autoAzul
+        sub x3,x3,5
+        subs xzr,x2,0xA
+        b.eq autosAp 
+        subs xzr,x2,0xB
+        b.eq autosBp
+        subs xzr,x2,0xC
+        b.eq autosCp
+    autosCp:
+        add x5,x5,3
+        sub x3,x3,120
+        add x3,x3,120
+        b sigueDp
+    autosBp:
+        bl caminetaBlanca
+        add x5,x5,3
+        sub x3,x3,120
+        add x3,x3,120
+        b sigueDp
+    autosAp:
+        bl caminetaBlanca
+        add x5,x5,3
+        sub x3,x3,120
+        bl camineta777
+        add x3,x3,120
+    sigueDp:
+        bl lineasRojas
+        bl puntBlanco
+        movz x10, 0x49, lsl 16 //color lima parte 1
+        movk x10, 0x8602, lsl 00 //color lima parte 2
+        bl fondo
+        add x5,x5,7
+        bl pinar
+        bl tiempo
+        bl lectura
+        bl lecEspacio
+        bl lecD
+        bl lecA
+        bl lecWPino
+        bl lecSPino
+        subs xzr,x5,-10
+        b.gt resetX5B
+        subs xzr,x3,-150
+        b.lt resetX3B
+        subs xzr,x7,-150
+        b.lt resetX7B
+        b pinitos
 
-
+//Inicio del paisaje cactitus
 resetX7C:
     mov x7,500
     subs xzr,x5,-10
@@ -168,67 +172,68 @@ resetX3C:
     b cactitus
 resetX5C:
     mov x5,-300
-    //b arbolecitos
 cactitus:
-    bl asfalto
-    subs xzr,x6,0xF7
-    b.eq amariC
-    bl separador
-    b sigueC
-amariC:
-    bl lineasAmarillas
-sigueC:
-    sub x7,x7,3
-    bl autoAzul
-    sub x3,x3,5
-    subs xzr,x2,0xA
-    b.eq autosAc 
-    subs xzr,x2,0xB
-    b.eq autosBc
-    subs xzr,x2,0xC
-    b.eq autosCc
-autosCc:
-    add x5,x5,3
-    sub x3,x3,120
-    add x3,x3,120
-    b sigueD_c
-autosBc:
-    bl caminetaBlanca
-    add x5,x5,3
-    sub x3,x3,120
-    add x3,x3,120
-    b sigueD_c
-autosAc:
-    bl caminetaBlanca
-    add x5,x5,3
-    sub x3,x3,120
-    bl camineta777
-    add x3,x3,120
-sigueD_c:
-    bl lineasRojas
-    bl puntBlanco
-    movz x10, 0xFF, lsl 16 //color lima parte 1
-    movk x10, 0xD500, lsl 00 //color lima parte 2
-    bl fondo
-    add x5,x5,7
-    bl cactada
-    bl tiempo
-    bl lectura
-    bl lecD
-    bl lecA
-    bl lecWCactus
-    bl lecSCactus
-    subs xzr,x5,-10
-    b.gt resetX5C
-    subs xzr,x3,-150
-    b.lt resetX3C
-    subs xzr,x7,-150
-    b.lt resetX7C
-    b cactitus
+        bl asfalto
+        subs xzr,x6,0xF7
+        b.eq amariC
+        bl separador
+        b sigueC
+    amariC:
+        bl lineasAmarillas
+    sigueC:
+        sub x7,x7,3
+        bl autoAzul
+        sub x3,x3,5
+        subs xzr,x2,0xA
+        b.eq autosAc 
+        subs xzr,x2,0xB
+        b.eq autosBc
+        subs xzr,x2,0xC
+        b.eq autosCc
+    autosCc:
+        add x5,x5,3
+        sub x3,x3,120
+        add x3,x3,120
+        b sigueD_c
+    autosBc:
+        bl caminetaBlanca
+        add x5,x5,3
+        sub x3,x3,120
+        add x3,x3,120
+        b sigueD_c
+    autosAc:
+        bl caminetaBlanca
+        add x5,x5,3
+        sub x3,x3,120
+        bl camineta777
+        add x3,x3,120
+    sigueD_c:
+        bl lineasRojas
+        bl puntBlanco
+        movz x10, 0xFF, lsl 16 //color amarillo parte 1
+        movk x10, 0xD500, lsl 00 //color amarillo parte 2
+        bl fondo
+        add x5,x5,7
+        bl cactada
+        bl tiempo
+        bl lectura
+        bl lecEspacio
+        bl lecD
+        bl lecA
+        bl lecWCactus
+        bl lecSCactus
+        subs xzr,x5,-10
+        b.gt resetX5C
+        subs xzr,x3,-150
+        b.lt resetX3C
+        subs xzr,x7,-150
+        b.lt resetX7C
+        b cactitus
 
 //Fin loop
     b InfLoop
 
+//"Delay"
 tiempo:
     //mov x10, #0x0EE6B280 = 250000000 //07735940
     movz x10,0x0773,lsl 16 //tiempo de delay parte 1
@@ -238,7 +243,7 @@ tiempo:
         cbnz x10,delay_loop
     br lr
 
-//Leo
+//Lectura de las GPIOs
 lectura:
     //Configuraciones generales del GPIO
     mov x10, GPIO_BASE //Almaceno la dirección base del GPIO en x10
@@ -305,6 +310,82 @@ lecD:
             mov x2,0xA
             br lr
 
+lecEspacio:
+    subs wzr, w10, 0b100000
+    b.eq paisajeFinal
+    br lr
+
+//Funcion encargada de dibujar el paisajeFinal del programa
+paisajeFinal:
+resetX7F:
+    mov x7,500
+    subs xzr,x5,-10
+    b.gt resetX5F
+    b final
+resetX5F:
+    mov x5,-300
+final:
+    movz x10, 0xDA, lsl 16 //color pasto nevado parte 1
+    movk x10, 0xDADA, lsl 00 //color pasto nevado parte 2
+    bl fondo
+    bl asfalto
+    sub x7,x7,3
+    bl autoAzul
+    add x5,x5,3
+    bl pinarNevado
+    bl lineasRojas
+    bl puntBlanco
+    bl separador
+    bl tiempo
+    subs xzr,x5,-10
+    b.gt resetX5F
+    subs xzr,x7,-150
+    b.lt resetX7F
+    b final
+    b InfLoop
+
+//Funcion encargada de dibujar un pinar nevado
+pinarNevado:
+    mov x2,lr //almaceno la dire de partida
+    bl pinar
+    bl copasNevadas
+    br x2 //retorno a la dire de partida
+
+//Funcion encargada de dibujar las copas nevadas de los pinos
+copasNevadas:
+    mov x1,lr //almaceno la dire de partida
+    mov x15,x5 //Y -> PY
+    mov x29,x15//val inicial de Y
+    pinoIzq2:
+        mov x17,60 //X -> PX
+        mov x15,x29
+        bl pino
+        movz x10,0xFF,lsl 16 //color blanco nieve parte 1
+        movk x10,0xFFFF,lsl 00 //color blanco nieve parte 2
+        mov x17,60 //X -> PX
+        sub x15,x29,70
+        mov x16,24
+        bl triangulo
+        add x29,x29,160
+        cmp x29,800
+        b.lt pinoIzq2
+
+    add x15,x5,20 //Y -> PY
+    mov x29,x15//val inicial de Y
+    pinoDer2:
+        mov x17,580 //X -> PX
+        mov x15,x29
+        bl pino
+        movz x10,0xFF,lsl 16 //color blanco nieve parte 1
+        movk x10,0xFFFF,lsl 00 //color blanco nieve parte 2
+        mov x17,580 //X -> PX
+        sub x15,x29,70
+        mov x16,24
+        bl triangulo
+        add x29,x29,160
+        cmp x29,800
+        b.lt pinoDer2
+    br x1 //almaceno la dire de partida
 //Funcion encargada de dibujar el fondo (pasto)
 fondo:
     mov x1,lr //Almaceno la direccion de llamada
@@ -444,7 +525,6 @@ pinar:
         cmp x29,800
         b.lt pinoDer
     br x1
-
 
 //Funcion encargada de dibujar un rectangulo
 rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=auxY;x22=auxDire
