@@ -12,8 +12,9 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
-iniArbolecitos:
+    
     mov x6,0xF
+iniArbolecitos:
     mov x3,500 //y de auto
     mov x5,-300 //Y arboles
 resetX7:
@@ -54,7 +55,7 @@ sigueA:
     bl arbolada
     bl tiempo
     bl lectura
-    bl lecA1
+    bl lecA
     bl lecWArbol
     bl lecSArbol
     subs xzr,x5,-10
@@ -66,7 +67,6 @@ sigueA:
     b arbolecitos
 
 iniPinitos:
-    mov x6,0xF
     mov x3,500 //y de auto
     mov x5,-300 //Y arboles
 resetX7B:
@@ -101,7 +101,6 @@ sigueP:
     add x3,x3,120
     bl lineasRojas
     bl puntBlanco
-    bl separador
     movz x10, 0x49, lsl 16 //color lima parte 1
     movk x10, 0x8602, lsl 00 //color lima parte 2
     bl fondo
@@ -109,7 +108,7 @@ sigueP:
     bl pinar
     bl tiempo
     bl lectura
-    bl lecA1
+    bl lecA
     bl lecWPino
     bl lecSPino
     subs xzr,x5,-10
@@ -121,7 +120,6 @@ sigueP:
     b pinitos
 
 iniCactitus:
-    mov x6,0xF
     mov x3,500 //y de auto
     mov x5,-300 //Y arboles
 resetX7C:
@@ -139,6 +137,13 @@ resetX5C:
     //b arbolecitos
 cactitus:
     bl asfalto
+    subs xzr,x6,0xF7
+    b.eq amariC
+    bl separador
+    b sigueC
+amariC:
+    bl lineasAmarillas
+sigueC:
     sub x7,x7,3
     bl autoAzul
     sub x3,x3,5
@@ -149,7 +154,6 @@ cactitus:
     add x3,x3,120
     bl lineasRojas
     bl puntBlanco
-    bl separador
     movz x10, 0xFF, lsl 16 //color lima parte 1
     movk x10, 0xD500, lsl 00 //color lima parte 2
     bl fondo
@@ -190,31 +194,29 @@ lectura:
 lecWArbol:
     subs wzr, w10, 0b00010
     b.eq pinitos
-    //b.eq iniPinitos //Si la tecla 'w' no fue precionado leo de nuevo
     br lr
 lecWPino:
     subs wzr, w10, 0b00010
-    b.eq cactitus //Si la tecla 'w' no fue precionado leo de nuevo
+    b.eq cactitus
     br lr
 lecWCactus:
     subs wzr, w10, 0b00010
-    b.eq arbolecitos //Si la tecla 'w' no fue precionado leo de nuevo
+    b.eq arbolecitos 
     br lr
 lecSArbol:
     subs wzr, w10, 0b01000
-    b.eq cactitus //Si la tecla 's' no fue precionado leo de nuevo
+    b.eq cactitus
     br lr
 lecSPino:
     subs wzr, w10, 0b01000
     b.eq arbolecitos 
-    //b.eq iniArbolecitos //Si la tecla 's' no fue precionado leo de nuevo
     br lr
 lecSCactus:
     subs wzr, w10, 0b01000
-    b.eq pinitos //Si la tecla 's' no fue precionado leo de nuevo
+    b.eq pinitos 
     br lr
 
-lecA1:
+lecA:
     subs wzr, w10, 0b00100
     b.eq estA1
     br lr
