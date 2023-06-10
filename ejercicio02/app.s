@@ -40,7 +40,6 @@ sigueA:
     sub x7,x7,3
     bl autoAzul
     sub x3,x3,5
-    //Nuevo code coches:
     subs xzr,x2,0xA
     b.eq autosA 
     subs xzr,x2,0xB
@@ -48,17 +47,14 @@ sigueA:
     subs xzr,x2,0xC
     b.eq autosC
 autosC:
-    //bl caminetaBlanca
     add x5,x5,3
     sub x3,x3,120
-    //bl camineta777
     add x3,x3,120
     b sigueD
 autosB:
     bl caminetaBlanca
     add x5,x5,3
     sub x3,x3,120
-    //bl camineta777
     add x3,x3,120
     b sigueD
 autosA:
@@ -114,11 +110,30 @@ sigueP:
     sub x7,x7,3
     bl autoAzul
     sub x3,x3,5
+    subs xzr,x2,0xA
+    b.eq autosAp 
+    subs xzr,x2,0xB
+    b.eq autosBp
+    subs xzr,x2,0xC
+    b.eq autosCp
+autosCp:
+    add x5,x5,3
+    sub x3,x3,120
+    add x3,x3,120
+    b sigueDp
+autosBp:
+    bl caminetaBlanca
+    add x5,x5,3
+    sub x3,x3,120
+    add x3,x3,120
+    b sigueDp
+autosAp:
     bl caminetaBlanca
     add x5,x5,3
     sub x3,x3,120
     bl camineta777
     add x3,x3,120
+sigueDp:
     bl lineasRojas
     bl puntBlanco
     movz x10, 0x49, lsl 16 //color lima parte 1
@@ -128,6 +143,7 @@ sigueP:
     bl pinar
     bl tiempo
     bl lectura
+    bl lecD
     bl lecA
     bl lecWPino
     bl lecSPino
@@ -165,11 +181,30 @@ sigueC:
     sub x7,x7,3
     bl autoAzul
     sub x3,x3,5
+    subs xzr,x2,0xA
+    b.eq autosAc 
+    subs xzr,x2,0xB
+    b.eq autosBc
+    subs xzr,x2,0xC
+    b.eq autosCc
+autosCc:
+    add x5,x5,3
+    sub x3,x3,120
+    add x3,x3,120
+    b sigueD_c
+autosBc:
+    bl caminetaBlanca
+    add x5,x5,3
+    sub x3,x3,120
+    add x3,x3,120
+    b sigueD_c
+autosAc:
     bl caminetaBlanca
     add x5,x5,3
     sub x3,x3,120
     bl camineta777
     add x3,x3,120
+sigueD_c:
     bl lineasRojas
     bl puntBlanco
     movz x10, 0xFF, lsl 16 //color lima parte 1
@@ -179,6 +214,7 @@ sigueC:
     bl cactada
     bl tiempo
     bl lectura
+    bl lecD
     bl lecA
     bl lecWCactus
     bl lecSCactus
