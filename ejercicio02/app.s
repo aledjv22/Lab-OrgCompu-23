@@ -249,17 +249,25 @@ lecA:
         br lr
 
 lecD:
-    subs wzr, w10, 0b100000
+    subs wzr, w10, 0b10000
     b.eq estD
     br lr
     estD:
-        subs xzr,x6,0xA
+        subs xzr,x2,0xA
         b.eq sigueDb
-        mov x2,0xA
-        br lr
-    sigueDb:
-        mov x2,0xB
-        br lr
+        subs xzr,x2,0xB
+        b.eq sigueDc
+        subs xzr,x2,0xC
+        b.eq sigueDa
+        sigueDc:
+            mov x2,0xC
+            br lr
+        sigueDb:
+            mov x2,0xB
+            br lr
+        sigueDa:
+            mov x2,0xA
+            br lr
 
 //Funcion encargada de dibujar el fondo (pasto)
 fondo:
