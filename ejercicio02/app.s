@@ -12,7 +12,7 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
-
+    mov x6,0xF
 iniArbolecitos:
     mov x3,500 //y de auto
     mov x5,-300 //Y arboles
@@ -28,11 +28,16 @@ resetX3:
     b arbolecitos
 resetX5:
     mov x5,-300
-    //b arbolecitos
 arbolecitos:
     bl asfalto
-    //bl separador
+//leo los estados
+    subs xzr,x6,0xF7
+    b.eq amari
+    bl separador
+    b sigue
+    amari:
     bl lineasAmarillas
+sigue:
     sub x7,x7,3
     bl autoAzul
     sub x3,x3,5
@@ -50,6 +55,7 @@ arbolecitos:
     bl arbolada
     bl tiempo
     bl lectura
+    bl lecA1
     bl lecWArbol
     bl lecSArbol
     subs xzr,x5,-10
@@ -152,6 +158,7 @@ cactitus:
     b.lt resetX7C
     b cactitus
 
+//Fin loop
     b InfLoop
 
 tiempo:
@@ -200,8 +207,16 @@ lecSCactus:
 
 lecA1:
     subs wzr, w10, 0b00100
-    //b.eq  //Si la tecla 'a' no fue precionado leo de nuevo
+    b.eq estA1
     br lr
+    estA1:
+        subs xzr,x6,0xF7
+        b.eq sigueA1
+        mov x6,0xF7
+        br lr
+    sigueA1:
+        mov x6,0xF
+        br lr
 
 
 //Funcion encargada de dibujar el fondo (pasto)
