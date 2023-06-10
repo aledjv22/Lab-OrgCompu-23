@@ -31,6 +31,8 @@ resetX5:
     //b arbolecitos
 arbolecitos:
     bl asfalto
+    //bl separador
+    bl lineasAmarillas
     sub x7,x7,3
     bl autoAzul
     sub x3,x3,5
@@ -50,8 +52,6 @@ arbolecitos:
     bl lectura
     bl lecWArbol
     bl lecSArbol
-    //bl separador
-    bl lineasAmarillas
     subs xzr,x5,-10
     b.gt resetX5
     subs xzr,x3,-150
@@ -155,12 +155,12 @@ cactitus:
     b InfLoop
 
 tiempo:
-    //mov x6, #0x0EE6B280 = 250000000 //07735940
-    movz x6,0x0773,lsl 16 //tiempo de delay parte 1
-    movk x6,0x5940,lsl 00 //tiempo de delay parte 2
+    //mov x10, #0x0EE6B280 = 250000000 //07735940
+    movz x10,0x0773,lsl 16 //tiempo de delay parte 1
+    movk x10,0x5940,lsl 00 //tiempo de delay parte 2
     delay_loop:
-        sub x6, x6, #4
-        cbnz x6,delay_loop
+        sub x10, x10, #4
+        cbnz x10,delay_loop
     br lr
 
 //Leo
