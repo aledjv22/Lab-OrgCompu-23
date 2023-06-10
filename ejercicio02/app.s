@@ -12,9 +12,9 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
-    
-    mov x6,0xF
-    mov x3,500 //y de auto
+    mov x2,0xA //Estado inicial del estado de los vehículos.
+    mov x6,0xF //valor inicial del estado de las lineas de ruta
+    mov x3,500 //Y de vehículos
     mov x5,-300 //Y arboles
 resetX7:
     mov x7,500
@@ -40,11 +40,34 @@ sigueA:
     sub x7,x7,3
     bl autoAzul
     sub x3,x3,5
+    //Nuevo code coches:
+    subs xzr,x2,0xA
+    b.eq autosA 
+    subs xzr,x2,0xB
+    b.eq autosB
+    subs xzr,x2,0xC
+    b.eq autosC
+autosC:
+    //bl caminetaBlanca
+    add x5,x5,3
+    sub x3,x3,120
+    //bl camineta777
+    add x3,x3,120
+    b sigueD
+autosB:
+    bl caminetaBlanca
+    add x5,x5,3
+    sub x3,x3,120
+    //bl camineta777
+    add x3,x3,120
+    b sigueD
+autosA:
     bl caminetaBlanca
     add x5,x5,3
     sub x3,x3,120
     bl camineta777
     add x3,x3,120
+sigueD:
     bl lineasRojas
     bl puntBlanco
     movz x10, 0x49, lsl 16 //color lima parte 1
@@ -54,6 +77,7 @@ sigueA:
     bl arbolada
     bl tiempo
     bl lectura
+    bl lecD
     bl lecA
     bl lecWArbol
     bl lecSArbol
@@ -213,17 +237,29 @@ lecSCactus:
 
 lecA:
     subs wzr, w10, 0b00100
-    b.eq estA1
+    b.eq est
     br lr
-    estA1:
+    est:
         subs xzr,x6,0xF7
-        b.eq sigueA1
+        b.eq sigue
         mov x6,0xF7
         br lr
-    sigueA1:
+    sigue:
         mov x6,0xF
         br lr
 
+lecD:
+    subs wzr, w10, 0b100000
+    b.eq estD
+    br lr
+    estD:
+        subs xzr,x6,0xA
+        b.eq sigueDb
+        mov x2,0xA
+        br lr
+    sigueDb:
+        mov x2,0xB
+        br lr
 
 //Funcion encargada de dibujar el fondo (pasto)
 fondo:
