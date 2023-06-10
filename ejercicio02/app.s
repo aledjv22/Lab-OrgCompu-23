@@ -558,18 +558,6 @@ arbolada:
         b.lt arbDer
     br x1
 
-//Funcion encargada de dibujar un auto gris
-autoGris:
-    mov x1,lr //almaceno la dire de llamado
-    mov x17,159 //valor de X
-    mov x15,320 //valor de Y
-    movz x14,0x69,lsl 16 //Color base parte 1
-    movk x14,0x6969,lsl 00 //color base parte 2
-    movz x9,0x48,lsl 16 //color sombra parte 1
-    movk x9,0x4848,lsl 00 //color sombra parte 2
-    bl auto1
-    br x1
-
 //Funcion encargada de dibujar un auto azul 
 autoAzul:
     mov x1,lr //almaceno la dire de llamado
