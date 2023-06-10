@@ -567,7 +567,7 @@ autoAzul:
     movz x14,0xFF,lsl 00 //Color base
     movz x9,0x03,lsl 16 //color sombra parte 1
     movk x9,0x039F,lsl 00 //color sombra parte 2
-    bl auto1
+    bl auto
     br x1
 
 //Funcion encargada de dibujar una camioneta blanca:
@@ -593,7 +593,7 @@ camineta777:
     movk x9,0x04D7,lsl 00 //color sombra parte 2
     bl camioneta
     br x1 //retorno a la dire de llamado
-auto1:
+auto:
     mov x11,lr //almaceno la dire de llamado
     
     //guardado de valores iniciales X e Y
