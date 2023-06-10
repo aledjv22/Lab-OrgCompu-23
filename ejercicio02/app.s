@@ -14,7 +14,6 @@ main:
     //---------------- CODE HERE ------------------------------------
     
     mov x6,0xF
-iniArbolecitos:
     mov x3,500 //y de auto
     mov x5,-300 //Y arboles
 resetX7:
@@ -66,9 +65,6 @@ sigueA:
     b.lt resetX7
     b arbolecitos
 
-iniPinitos:
-    mov x3,500 //y de auto
-    mov x5,-300 //Y arboles
 resetX7B:
     mov x7,500
     subs xzr,x5,-10
@@ -119,9 +115,7 @@ sigueP:
     b.lt resetX7B
     b pinitos
 
-iniCactitus:
-    mov x3,500 //y de auto
-    mov x5,-300 //Y arboles
+
 resetX7C:
     mov x7,500
     subs xzr,x5,-10
