@@ -166,9 +166,9 @@ tiempo:
 //Leo
 lectura:
     //Configuraciones generales del GPIO
-    mov x2, GPIO_BASE //Almaceno la dirección base del GPIO en x2
-    str wzr, [x2, GPIO_GPFSEL0] //Setea gpios 0 - 9 como lectura
-    ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
+    mov x10, GPIO_BASE //Almaceno la dirección base del GPIO en x10
+    str wzr, [x10, GPIO_GPFSEL0] //Setea gpios 0 - 9 como lectura
+    ldr w10, [x10, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
     and w10, w10, 0b0000111110 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
     br lr
 lecWArbol:
@@ -202,32 +202,6 @@ lecA1:
     subs wzr, w10, 0b00100
     //b.eq  //Si la tecla 'a' no fue precionado leo de nuevo
     br lr
-// lecA2:
-//     subs wzr, w10, 0b00100
-//     b.eq ----------------- //Si la tecla 'a' no fue precionado leo de nuevo
-//     br lr
-// lecA3:
-//     subs wzr, w10, 0b00100
-//     b.eq ----------------- //Si la tecla 'a' no fue precionado leo de nuevo
-//     br lr
-
-// lecD1:
-//     subs wzr, w10, 0b10000
-//     b.eq ----------------- //Si la tecla 'd' no fue precionado leo de nuevo
-//     br lr
-// lecD2:
-//     subs wzr, w10, 0b10000
-//     b.eq ----------------- //Si la tecla 'd' no fue precionado leo de nuevo
-//     br lr
-// lecD3:
-//     subs wzr, w10, 0b10000
-//     b.eq ----------------- //Si la tecla 'd' no fue precionado leo de nuevo
-//     br lr
-
-// lecSpace:
-//     subs wzr, w10, 0b100000
-//     b.eq -----------------
-//     br lr
 
 
 //Funcion encargada de dibujar el fondo (pasto)
