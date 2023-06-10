@@ -12,8 +12,8 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
-    mov x6,0xF
 iniArbolecitos:
+    mov x6,0xF
     mov x3,500 //y de auto
     mov x5,-300 //Y arboles
 resetX7:
@@ -30,14 +30,13 @@ resetX5:
     mov x5,-300
 arbolecitos:
     bl asfalto
-//leo los estados
     subs xzr,x6,0xF7
-    b.eq amari
+    b.eq amariA
     bl separador
-    b sigue
-    amari:
+    b sigueA
+amariA:
     bl lineasAmarillas
-sigue:
+sigueA:
     sub x7,x7,3
     bl autoAzul
     sub x3,x3,5
@@ -67,6 +66,7 @@ sigue:
     b arbolecitos
 
 iniPinitos:
+    mov x6,0xF
     mov x3,500 //y de auto
     mov x5,-300 //Y arboles
 resetX7B:
@@ -84,6 +84,13 @@ resetX5B:
     //pinitos
 pinitos:
     bl asfalto
+    subs xzr,x6,0xF7
+    b.eq amariP
+    bl separador
+    b sigueP
+amariP:
+    bl lineasAmarillas
+sigueP:
     sub x7,x7,3
     bl autoAzul
     sub x3,x3,5
@@ -102,6 +109,7 @@ pinitos:
     bl pinar
     bl tiempo
     bl lectura
+    bl lecA1
     bl lecWPino
     bl lecSPino
     subs xzr,x5,-10
@@ -113,6 +121,7 @@ pinitos:
     b pinitos
 
 iniCactitus:
+    mov x6,0xF
     mov x3,500 //y de auto
     mov x5,-300 //Y arboles
 resetX7C:
