@@ -161,6 +161,7 @@ sigueC:
     bl cactada
     bl tiempo
     bl lectura
+    bl lecA
     bl lecWCactus
     bl lecSCactus
     subs xzr,x5,-10
