@@ -229,7 +229,7 @@ cactitus: //plasmado del paisaje de tematica desierto
         b.lt resetX7C
         b cactitus //realizo un salto para simular el bucle infinito de este paisaje
 
-//procedimiento encargada de dibujar el paisajeFinal del programa
+//procedimiento encargado de dibujar el paisajeFinal del programa
 paisajeFinal:
     mov x7,500 //Y del auto
     mov x6,217 //X del auto
@@ -381,7 +381,7 @@ lecEspacio: //De ser estado ALTO ejecuta una cinematica antes de habilitar nueva
     b.eq paisajeFinal
     br lr
 
-//procedimiento encargada de plasmar una avioneta
+//procedimiento encargado de plasmar una avioneta
 avioneta:
     mov x1,lr
     // x13 = Y, x12 = X
@@ -389,8 +389,8 @@ avioneta:
     //boomb derecha
     subs xzr,x3,0xA
     b.eq bomIzq
-    movz x10, 0x64, lsl 16 //color 
-    movk x10, 0x5454, lsl 00
+    movz x10, 0x64, lsl 16 //color gris parte 1
+    movk x10, 0x5454, lsl 00 //color gris parte 2
     add x17,x12,114 ///x
     add x15,x13,20 //y
     mov x4,12
@@ -406,8 +406,8 @@ avioneta:
     bl triangulo
     //boomb izq
     bomIzq:
-        movz x10, 0x64, lsl 16 //color 
-        movk x10, 0x5454, lsl 00
+        movz x10, 0x64, lsl 16 //color gris parte 1
+        movk x10, 0x5454, lsl 00 //color gris parte 2
         add x17,x12,28 //x
         add x15,x13,20 //y
         mov x4,12
@@ -451,20 +451,20 @@ avioneta:
     bl rectangulo
 
     //helise
-    movz x10, 0x70, lsl 16 //color hg
-    movk x10, 0x7070, lsl 0 //color hg
+    movz x10, 0x70, lsl 16 //color gris parte 1
+    movk x10, 0x7070, lsl 0 //color gris parte 2
     add x15,x13,-5 //PY arriba abajo
     add x16,x15,2//FY
     sub x17,x12,-55 //PX ancho hacia izq
     add x18,x12,88 //FX ancho
     bl rectangulo
     //tronk
-    movz x10,0x8A,lsl 16 //color 
+    movz x10,0x8A,lsl 16 //color rojo sangre
     add x17,x12,70
     sub x15,x27,36
     mov x16,12
     bl triangulo
-    movz x10, 0x70, lsl 16 //color oscuro rojo
+    movz x10, 0x70, lsl 16 //color rojo oscuro
     add x15,x13,20 //PY arriba abajo
     add x16,x15,105//FY
     sub x17,x12,-55 //PX ancho hacia izq
@@ -512,7 +512,7 @@ avioneta:
     add x18,x12,91 //FX ancho
     bl rectangulo
     //centro tronk
-        movz x10, 0xE9, lsl 16 //color rojo
+    movz x10, 0xE9, lsl 16 //color rojo
     add x15,x13,23 //PY arriba abajo
     add x16,x15,135//FY
     sub x17,x12,-63 //PX ancho hacia izq
@@ -550,7 +550,7 @@ avioneta:
     bl rectangulo
     br x1
 
-//procedimiento encargada de plasmar una bomba en la ruta
+//procedimiento encargado de plasmar una bomba en la ruta
 bomba:
     mov x1,lr //almaceno la direccion de llamado
     movz x10, 0xD7, lsl 16 //color rojo parte 1
@@ -569,7 +569,7 @@ bomba:
     bl circulo
     br x1 //regreso a la dire de llamada
     
-//procedimiento encargada de dibujar la calle de barro
+//procedimiento encargado de dibujar la calle de barro
 caminoB: //Es el fondo personalizado para el paisajeFinal
     mov x1,lr //Almaceno la direccion de llamada
     movz x10, 0x79, lsl 16 //color barro parte 1
@@ -595,7 +595,7 @@ caminoB: //Es el fondo personalizado para el paisajeFinal
     bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x1 //Retorno a la direccion de llamada
 
-//procedimiento encargada de dibujar el suelo 
+//procedimiento encargado de dibujar el suelo 
 suelo:
     mov x1,lr //Almaceno la direccion de llamada
     mov x15,0 //PY
@@ -610,7 +610,7 @@ suelo:
     bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x1 //Retorno a la direccion de llamada
 
-//procedimiento encargada de dibujar el asfalto
+//procedimiento encargado de dibujar el asfalto
 asfalto:
     mov x1,lr
     movz x10, 0xC0, lsl 16 //color gris parte 1
@@ -624,7 +624,7 @@ asfalto:
     bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x1
 
-//procedimiento encargada de plasmar las lineas rojas del borde del asfalto
+//procedimiento encargado de plasmar las lineas rojas del borde del asfalto
 lineasRojas:
     mov x1,lr
     movz x10, 0xFF, lsl 16 //color rojo
@@ -641,7 +641,7 @@ lineasRojas:
     bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x1
 
-//procedimiento encargada de dibujar lineas amarillas
+//procedimiento encargado de dibujar lineas amarillas
 lineasAmarillas:
     mov x1,lr
     movz x10, 0xFF, lsl 16 //color amarillo
@@ -669,7 +669,7 @@ lineasAmarillas:
     mov x18,390 //FX
     bl rectangulo 
     br x1
-//procedimiento encargada de dibujar lineas separadas en el borde del asfalto
+//procedimiento encargado de dibujar lineas separadas en el borde del asfalto
 puntBlanco:
     mov x1,lr
     movz x10, 0xE5, lsl 16 //color blanco parte 1
@@ -690,7 +690,7 @@ puntBlanco:
     bl repRectanguloY
     br x1
 
-//procedimiento encargada de plasmar las lineas que separan las carreteras
+//procedimiento encargado de plasmar las lineas que separan las carreteras
 separador:
     mov x1,lr
     movz x10, 0xFF, lsl 16 //color blanco parte 1
@@ -711,11 +711,11 @@ separador:
     bl repRectanguloY
     br x1
 
-//procedimiento encargada de plasmar lineas separadas en camino de tierra
+//procedimiento encargado de plasmar lineas separadas en camino de tierra
 separadorB:
     mov x1,lr
-    movz x10, 0xE8, lsl 16 //color blanco parte 1
-    movk x10, 0xC9A6, lsl 00 //color blanco parte 2 
+    movz x10, 0xE8, lsl 16 //color blanco amarronado parte 1
+    movk x10, 0xC9A6, lsl 00 //color blanco amarronado parte 2 
     mov x17,318 //PX
     mov x18,322 //FX
     mov x15,x5 //PY
@@ -725,7 +725,7 @@ separadorB:
     bl repRectanguloY
     br x1
 
-//procedimiento encargada de plasmar un pinar
+//procedimiento encargado de plasmar un pinar
 pinar:
     mov x1,lr
     mov x15,x5 //Y -> PY
@@ -749,7 +749,7 @@ pinar:
         b.lt pinoDer
     br x1
 
-//procedimiento encargada de dibujar un rectangulo
+//procedimiento encargado de dibujar un rectangulo
 rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=auxY;x22=auxDire
     mov x22,lr //guardo dire de partida
     mov x19,x17 //almaceno el valor inicial de X
@@ -769,7 +769,7 @@ rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=auxY;x22=auxDire
         br x22 //Retorno a la ubicación de la llamada 
 
 
-//procedimiento encargada de dibujar rectangulos repetidos en Y
+//procedimiento encargado de dibujar rectangulos repetidos en Y
 repRectanguloY:
     mov x25,lr //Almaceno la direccion de llamada
     sub x26,x16,x15 //tam y
@@ -783,7 +783,7 @@ repRectanguloY:
 
 
 
-//procedimiento encargada de dibujar un circulo
+//procedimiento encargado de dibujar un circulo
 circulo:
 	// Draws a circle given a (x0, y0) center coords (x17, x15) a radius (x4) and a color (x10)
 	mov x16,lr //guardo el valor del lr(x30)
@@ -825,7 +825,7 @@ pintar_pixel:
     stur w10,[x21] //pinto el pixel
     br lr
 
-//procedimiento encargada de dibujar un triangulo   
+//procedimiento encargado de dibujar un triangulo   
 triangulo:
     //coordenadas (x,y) son (x17,x15), color x10, dire x27,alto x16
     mov x23,lr //almaceno la dire de llamada
@@ -843,7 +843,7 @@ triangulo:
         b.lt loopTriangulo
         br x23
 
-//procedimiento encargada de pintar una fila
+//procedimiento encargado de pintar una fila
 pintarFila:
     //Pinta una fila horizontal dadas unas (x,y) coords (x17,x15) una longitud (x4) y un color (x10)
     mov x24,lr //almaceno la dire de llamada
@@ -857,7 +857,7 @@ pintarFila:
         sub x17,x17,x4 //Reseteo X
         br x24
 
-//procedimiento encargada de dibujar un arbol normal (copa circular)
+//procedimiento encargado de dibujar un arbol normal (copa circular)
 arbol:
     //tronco
     mov x27,x15 //inicial y
@@ -879,7 +879,7 @@ arbol:
     bl circulo
     br x26 //regreso a la dire de llamada
 
-//procedimiento encargada de dibujar un pino
+//procedimiento encargado de dibujar un pino
 pino:
     //tronco
     mov x27,x15 //inicial y
@@ -913,7 +913,7 @@ pino:
     bl triangulo
     br x26 //regreso a la dire de llamada
 
-//procedimiento encargada de plasmar una arbolada de copa circular
+//procedimiento encargado de plasmar una arbolada de copa circular
 arbolada:
     mov x1,lr
     mov x15,x5 //Y -> PY
@@ -937,50 +937,50 @@ arbolada:
         b.lt arbDer
     br x1
 
-//procedimiento encargada de dibujar un auto azul 
+//procedimiento encargado de dibujar un auto azul 
 autoAzul:
     mov x1,lr //almaceno la dire de llamado
     mov x17,290 //valor de X
     mov x15,x7 //valor de Y
-    movz x14,0xFF,lsl 00 //Color base
-    movz x9,0x03,lsl 16 //color sombra parte 1
-    movk x9,0x039F,lsl 00 //color sombra parte 2
+    movz x14,0xFF,lsl 00 //Color base azul
+    movz x9,0x03,lsl 16 //color azul oscuro sombra parte 1
+    movk x9,0x039F,lsl 00 //color azul oscuro sombra parte 2
     bl auto
     br x1
 
-//procedimiento encargada de dibujar un auto gris
+//procedimiento encargado de dibujar un auto gris
 autoGris:
     mov x1,lr //almaceno la dire de llamado
     mov x17,x6 //valor de X
     mov x15,x7 //valor de Y
-    movz x14,0x69,lsl 16 //Color base parte 1
-    movk x14,0x6969,lsl 00 //color base parte 2
-    movz x9,0x48,lsl 16 //color sombra parte 1
-    movk x9,0x4848,lsl 00 //color sombra parte 2
+    movz x14,0x69,lsl 16 //Color gris base parte 1
+    movk x14,0x6969,lsl 00 //color gris base parte 2
+    movz x9,0x48,lsl 16 //color gris oscuro sombra parte 1
+    movk x9,0x4848,lsl 00 //color gris oscuro sombra parte 2
     bl auto
     br x1
 
-//procedimiento encargada de dibujar una camioneta blanca:
+//procedimiento encargado de dibujar una camioneta blanca:
 caminetaBlanca:
     mov x1,lr //almaceno la dire de llamado
     mov x17,159 //X
     mov x15,x3 //Y
-    movz x14,0xFF,lsl 16 //Color base parte 1
-    movk x14,0xFFFF,lsl 00 //Color base parte 2
-    movz x9,0xBC,lsl 16 //color sombra parte 1
-    movk x9,0xBCBC,lsl 00 //color sombra parte 2
+    movz x14,0xFF,lsl 16 //Color blanco base parte 1
+    movk x14,0xFFFF,lsl 00 //Color blanco base parte 2
+    movz x9,0xBC,lsl 16 //color gris claro sombra parte 1
+    movk x9,0xBCBC,lsl 00 //color gris claro sombra parte 2
     bl camioneta
     br x1 //retorno a la dire de llamado
 
-//procedimiento encargada de dibujar una camioneta morada:
+//procedimiento encargado de dibujar una camioneta morada:
 camineta777:
     mov x1,lr //almaceno la dire de llamado
     mov x17,425 //valor de X
     mov x15,x3 //valor de Y
-    movz x14,0xA2,lsl 16 //Color base parte 1
-    movk x14,0x00FF,lsl 00 //Color base parte 2
-    movz x9,0x89,lsl 16 //color sombra parte 1
-    movk x9,0x04D7,lsl 00 //color sombra parte 2
+    movz x14,0xA2,lsl 16 //Color violeta base parte 1
+    movk x14,0x00FF,lsl 00 //Color violeta base parte 2
+    movz x9,0x89,lsl 16 //color violeta oscuro sombra parte 1
+    movk x9,0x04D7,lsl 00 //color violeta oscuro sombra parte 2
     bl camioneta
     br x1 //retorno a la dire de llamado
 auto:
@@ -1079,7 +1079,7 @@ auto:
     bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //ventana izquierda
-    movz x10,0x00,lsl 16 //color negro parte
+    movz x10,0x00,lsl 16 //color negro
     add x15,x13,40 //PY
     add x16,x15,25 //FY
     add x17,x12,10 //PX
@@ -1092,7 +1092,7 @@ auto:
     bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //ventana derecha
-    movz x10,0x00,lsl 16 //color negro parte
+    movz x10,0x00,lsl 16 //color negro 
     add x15,x13,40 //PY
     add x16,x15,25 //FY
     add x17,x12,47 //PX
@@ -1110,16 +1110,16 @@ auto:
     add x17,x12,16 //PX
     add x18,x17,28 //FX
     bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
-    br x11
+    br x11 //regreso a la direccion de llamada
 
-//procedimiento encargada de dibujar una camioneta
+//procedimiento encargado de dibujar una camioneta
 camioneta:
     mov x11, lr //almaceno la dire de llamado
     mov x12,x17 //x12 almacena el valor inicial de X
     mov x13,x15 //x13 almacena el valor inicial de Y
 
     //Ruedas de arriba del auto
-    movz x10, 0x00, lsl 16 // Color negro parte 1
+    movz x10, 0x00, lsl 16 // Color negro
     add x15,x13,34 // PY (posición Y)
     add x16,x15,29 // FY (fin Y)
     sub x17,x12,11 // PX (posición X)
@@ -1196,8 +1196,8 @@ camioneta:
     add x18,x17,57 // FX (fin X)
     bl rectangulo
     //detalles baul
-    movz x10, 0x40, lsl 16 // Color negro parte 1
-    movk x10, 0x4040, lsl 00 // Color negro parte 2
+    movz x10, 0x40, lsl 16 // Color gris parte 1
+    movk x10, 0x4040, lsl 00 // Color gris parte 2
     add x15,x13,103 // PY (posición Y)
     add x16,x15,24 // FY (fin Y)
     add x17,x12,9 // PX (posición X)
@@ -1231,7 +1231,7 @@ camioneta:
     add x17,x12,6 // PX (posición X)
     add x18,x17,52 // FX (fin X)
     bl rectangulo
-    movk x10, 0x2828, lsl 00 // Color
+    movk x10, 0x2828, lsl 00 // Color verde oscuro noche
     add x15,x13,52 // PY (posición Y)
     add x16,x15,6 // FY (fin Y
     add x17,x12,16 // PX (posición X)
@@ -1247,7 +1247,7 @@ camioneta:
     bl rectangulo
 
     //contorno de luces
-    movz x10, 0x00, lsl 16 //negro sombra
+    movz x10, 0x00, lsl 16 //color negro
     add x15,x13,20 //PY  arriba abajo
     add x16,x15,10 //FY
     sub x17,x12,4 //PX ancho hacia izq
@@ -1270,8 +1270,8 @@ camioneta:
     bl rectangulo
     
     //Luces amarillas
-    movz x10, 0xFF, lsl 16 //amarillo
-    movk x10, 0xF500, lsl 00
+    movz x10, 0xFF, lsl 16 // color amarillo parte 1
+    movk x10, 0xF500, lsl 00 //color amarillo parte 2
     add x15,x13,23 //PY  arriba abajo
     add x16,x15,4  //FY
     mov x17,x12 //PX ancho hacia izq
@@ -1320,7 +1320,7 @@ cactada:
         cmp x29,800
         b.lt cacDer
     br x1
-//procedimiento encargada de plasmar un cactus
+//procedimiento encargado de plasmar un cactus
 cacto:
     mov x8,x15 //inicial y
     mov x28,x17 //inicial x
@@ -1367,15 +1367,15 @@ cacto:
     mov x4,6
     bl circulo 
     //crc der
-    movz x10,0xFF,lsl 16 //color verde oscuro parte 1
-    movk x10,0x4900, lsl 00 //color verde oscuro parte 2
+    movz x10,0xFF,lsl 16 //color naranja parte 1
+    movk x10,0x4900, lsl 00 //color naranja parte 2
     add x15, x8, 14
     add x17, x28, 21
     mov x4,6
     bl circulo
     // crc izq
-    movz x10,0xFF,lsl 16 //color verde oscuro parte 1
-    movk x10,0x7F50, lsl 00 //color verde oscuro parte 2
+    movz x10,0xFF,lsl 16 //color naranja claro parte 1
+    movk x10,0x7F50, lsl 00 //color naranja claro parte 2
     add x15, x8, 10  // Y
     add x17, x28, -14 // X
     mov x4,6
