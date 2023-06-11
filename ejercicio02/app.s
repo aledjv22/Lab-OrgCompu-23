@@ -16,7 +16,6 @@ main:
     mov x6,0xF //valor inicial del estado de las lineas de ruta
     mov x3,500 //Y de vehículos
     mov x5,-300 //Y arboles
-    b paisajeFinal //momentaneo
 //Inicio del paisaje de Arbolecitos
 resetX7:
     mov x7,500
