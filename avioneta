@@ -1,0 +1,163 @@
+avioneta:
+    mov x13, 200 // Y
+    mov x12, 300 // X
+
+    //boombs
+    movz x10, 0x64, lsl 16 //color 
+    movk x10, 0x5454, lsl 00
+    mov x17, 414 ///x
+    mov x15, 220 //y
+    mov x4, 12
+    bl circulo
+    mov x17, 328     ///x
+    mov x15, 220 //y
+    mov x4, 12
+    bl circulo
+    add x15,x13, 26//PY arriba abajo
+    add x16,x15,75//FY
+    sub x17,x12,-20 //PX ancho hacia izq
+    add x18,x12,36 //FX ancho
+    bl rectangulo
+    add x15,x13,26//PY arriba abajo
+    add x16,x15,75//FY
+    sub x17,x12,-106//PX ancho hacia izq
+    add x18,x12,123 //FX ancho
+    bl rectangulo   
+    mov x17,328
+    sub x15,x27,-49//y 
+    mov x16,12
+    bl triangulo
+    mov x17,414
+    sub x15,x27,-49//y 
+    mov x16,12
+    bl triangulo
+    //finbombs
+    
+
+
+    //aletabaja
+    movz x10, 0x80, lsl 16 //color rojo
+    add x15,x13,38 //PY arriba abajo
+    add x16,x15,40 //FY
+    sub x17,x12,-1 //PX ancho hacia izq
+    add x18,x12,140 //FX ancho
+    bl rectangulo
+    movz x10, 0xA0, lsl 16 //color rojo
+    add x15,x13,38 //PY arriba abajo
+    add x16,x15,35 //FY
+    sub x17,x12,-1 //PX ancho hacia izq
+    add x18,x12,140 //FX ancho
+    bl rectangulo
+    //uniones negras de aletas
+    movz x10,00, lsl 16 //color negro
+    add x15,x13,55//PY arriba abajo
+    add x16,x15,25//FY
+    sub x17,x12,-30 //PX ancho hacia izq
+    add x18,x12,35 //FX ancho
+    bl rectangulo
+    movz x10,00, lsl 16 //color negro
+    add x15,x13,55//PY arriba abajo
+    add x16,x15,25//FY
+    sub x17,x12,-108 //PX ancho hacia izq
+    add x18,x12,113 //FX ancho
+    bl rectangulo
+
+    //helise
+    movz x10, 0x70, lsl 16 //color hg
+    movk x10, 0x7070, lsl 0 //color hg
+    add x15,x13,-5 //PY arriba abajo
+    add x16,x15,2//FY
+    sub x17,x12,-55 //PX ancho hacia izq
+    add x18,x12,88 //FX ancho
+    bl rectangulo
+    //tronk
+    movz x10,0x8A,lsl 16 //color 
+    mov x17,370
+    sub x15,x27,36
+    mov x16,12
+    bl triangulo
+    movz x10, 0x70, lsl 16 //color oscuro rojo
+    add x15,x13,20 //PY arriba abajo
+    add x16,x15,105//FY
+    sub x17,x12,-55 //PX ancho hacia izq
+    add x18,x12,85 //FX ancho
+    bl rectangulo
+    movz x10, 0xAA, lsl 16 //color rojo
+    add x15,x13,10 //PY arriba abajo
+    add x16,x15,145//FY
+    sub x17,x12,-60 //PX ancho hacia izq
+    add x18,x12,80 //FX ancho
+    bl rectangulo
+
+    movz x10, 0x70, lsl 16 //color oscuro rojo
+    add x15,x13,155 //PY arriba abajo
+    add x16,x15,20//FY
+    sub x17,x12,-67 //PX ancho hacia izq
+    add x18,x12,72 //FX ancho
+    bl rectangulo
+ 
+    //cola
+    movz x10, 0x70, lsl 16 //color rojo
+    mov x17, 385 ///x
+    mov x15, 355 //y
+    mov x4, 12
+    bl circulo
+    mov x17, 355 ///x
+    mov x15, 355 //y
+    mov x4, 12
+    bl circulo
+
+
+    movz x10, 0x70, lsl 16 //color rojo
+
+    add x15,x13,150 //PY arriba abajo
+    add x16,x15,12//FY
+    sub x17,x12,-49 //PX ancho hacia izq
+    add x18,x12,91 //FX ancho
+
+    bl rectangulo
+    movz x10, 0xAA, lsl 16 //color rojo
+
+    
+    add x15,x13,148 //PY arriba abajo
+    add x16,x15,10//FY
+    sub x17,x12,-49 //PX ancho hacia izq
+    add x18,x12,91 //FX ancho
+    bl rectangulo
+    //centro tronk
+        movz x10, 0xE9, lsl 16 //color rojo
+    add x15,x13,23 //PY arriba abajo
+    add x16,x15,135//FY
+    sub x17,x12,-63 //PX ancho hacia izq
+    add x18,x12,78 //FX ancho
+    bl rectangulo
+    // --------
+    mov x17, 385 ///x
+    mov x15, 355 //y
+    mov x4, 8
+    bl circulo
+    mov x17, 355 ///x
+    mov x15, 355 //y
+    mov x4, 8
+    bl circulo
+    //aleta sup
+    movz x10, 0x80, lsl 16 //color rojo
+    add x15,x13,23 //PY arriba abajo
+    add x16,x15,36 //FY
+    sub x17,x12,2 //PX ancho hacia izq
+    add x18,x12,143 //FX ancho
+    bl rectangulo
+    
+    movz x10, 0xD0, lsl 16 //color rojo
+    add x15,x13,25 //PY arriba abajo
+    add x16,x15,29 //FY
+    sub x17,x12,0 //PX ancho hacia izq
+    add x18,x12,141 //FX ancho
+    bl rectangulo
+    //detalle aleta sup
+    movz x10, 0xF0, lsl 16 //color rojo
+    add x15,x13,30 //PY arriba abajo
+    add x16,x15,14 //FY
+    sub x17,x12,0 //PX ancho hacia izq
+    add x18,x12,141 //FX ancho
+    bl rectangulo
