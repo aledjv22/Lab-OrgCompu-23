@@ -320,25 +320,32 @@ paisajeFinal:
     mov x7,500 //Y del auto
     mov x6,217 //X del auto
     mov x5,-900 //Y de separadorB
-    b final
-resetX5F:
-    mov x5,-500
-    b final
-restarX7:
-    sub x7,x7,3
-final:
-    bl caminoB
-    bl separadorB
-    bl autoGris
-    add x5,x5,7
-    bl tiempo
-    subs xzr,x7,300
-    b.gt restarX7
-    subs xzr,x5,-10
-    b.gt resetX5F
-    b final
-    b InfLoop
+    final:
+        bl caminoB
+        bl separadorB
+        bl autoGris
+        add x5,x5,7
+        bl tiempo
+        subs xzr,x5,-10
+        b.lt sigueF1
+        mov x5,-500
+    sigueF1:
+        subs xzr,x7,380
+        b.lt sigueF3
+        sub x7,x7,3
+        b final
+    sigueF2:
+        sub x7,x7,3
+        subs xzr,x6,360
+        b.gt final
+        add x6,x6,3
+        b final
+    sigueF3:
+        subs xzr,x7,180
+        b.gt sigueF2
+        b final
 
+ 
 //Funcion encargada de dibujar la calle de barro
 caminoB:
     mov x1,lr //Almaceno la direccion de llamada
