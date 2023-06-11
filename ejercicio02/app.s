@@ -326,7 +326,7 @@ paisajeFinal:
         bl separadorB
         subs xzr,x3,0xD
         b.eq sigueF0
-        mov x3,x7
+        mov x20,x7
         b fin
     sigueF0:
         bl autoGris
@@ -357,13 +357,16 @@ paisajeFinal:
     fin:
         bl autoGris
         bl bomba
+        add x13,x20,100
+        sub x12,x6,100
+        bl avioneta
         bl tiempo
         bl tiempo
         bl tiempo
         bl caminoB
         bl separadorB
         bl bomba
-        add x13,x3,100
+        add x13,x20,100
         sub x12,x6,100
         bl avioneta
     regreso:
@@ -377,36 +380,42 @@ avioneta:
     mov x1,lr
     // x13 = Y, x12 = X
 
-    //boombs
+    //boomb derecha
+    subs xzr,x3,0xA
+    b.eq bomIzq
     movz x10, 0x64, lsl 16 //color 
     movk x10, 0x5454, lsl 00
     add x17,x12,114 ///x
     add x15,x13,20 //y
     mov x4,12
     bl circulo
-    add x17,x12,28 //x
-    add x15,x13,20 //y
-    mov x4,12
-    bl circulo
-    add x15,x13,26//PY arriba abajo
-    add x16,x15,75//FY
-    sub x17,x12,-20 //PX ancho hacia izq
-    add x18,x12,36 //FX ancho
-    bl rectangulo
     add x15,x13,26//PY arriba abajo
     add x16,x15,75//FY
     sub x17,x12,-106//PX ancho hacia izq
     add x18,x12,123 //FX ancho
-    bl rectangulo   
-    add x17,x12,28
-    sub x15,x13,5//y 
-    mov x16,12
-    bl triangulo
+    bl rectangulo  
     add x17,x12,114
     sub x15,x13,5//y 
     mov x16,12
     bl triangulo
-    //finbombs
+    //boomb izq
+    bomIzq:
+        movz x10, 0x64, lsl 16 //color 
+        movk x10, 0x5454, lsl 00
+        add x17,x12,28 //x
+        add x15,x13,20 //y
+        mov x4,12
+        bl circulo
+        add x15,x13,26//PY arriba abajo
+        add x16,x15,75//FY
+        sub x17,x12,-20 //PX ancho hacia izq
+        add x18,x12,36 //FX ancho
+        bl rectangulo 
+        add x17,x12,28
+        sub x15,x13,5//y 
+        mov x16,12
+        bl triangulo
+        //finbombs
     
     //aletabaja
     movz x10, 0x80, lsl 16 //color rojo
