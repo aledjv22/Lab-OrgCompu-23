@@ -357,18 +357,27 @@ paisajeFinal:
     fin:
         bl autoGris
         bl bomba
-        add x13,x20,100
+        add x13,x7,100
         sub x12,x6,100
         bl avioneta
         bl tiempo
         bl tiempo
         bl tiempo
+        bl tiempo
+        bl tiempo
+        mov x5,-900 //Y de separadorB
+    resetAvionetita:
+        subs xzr,x13,-300
+        b.lt regreso
+        sub x13,x13,5
+        add x5,x5,7
         bl caminoB
         bl separadorB
-        bl bomba
-        add x13,x20,100
         sub x12,x6,100
+        mov x20,x13
         bl avioneta
+        bl tiempo
+        b resetAvionetita
     regreso:
         bl lectura
         bl lecWArbol
