@@ -12,6 +12,7 @@ main:
     //x0 contiene la dirección base del framebuffer
     mov x20, x0 //Guarda la dirección base del framebuffer en x20
     //---------------- CODE HERE ------------------------------------
+//Procedimiento encargado de plasmar el paisaje arbolecito usando el llamado de otros procedimientos
 arbolecitos:
     bl fondo
     bl asfalto
@@ -23,6 +24,7 @@ arbolecitos:
     bl caminetaBlanca
     bl leoW
 
+//Procedimiento encargado de plasmar el paisaje pinitos usando el llamado de otros procedimientos
 pinitos:
     bl fondo
     bl asfalto
@@ -35,9 +37,10 @@ pinitos:
     bl leoW
     b arbolecitos
 
-
+//"Fin" loop
     b InfLoop
 
+//Procedimiento encargado de la lectura de la tecla W
 leoW:
     //Configuraciones generales del GPIO
     mov x2, GPIO_BASE //Almaceno la dirección base del GPIO en x2
@@ -46,14 +49,14 @@ leoW:
         ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
         and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
         sub w10, w10, 0b10
-        cbnz w10, leo //Si la tecla 'w' no fue precionado leo de nuevo
+        cbnz w10, leo //Si la tecla 'w' no fue presionado leo de nuevo
     releo:
         ldr w10, [x2, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
         and w10, w10, 0b0000000010 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
-        cbnz w10, releo //Si la tecla 'w' no fue precionado leo de nuevo
+        cbnz w10, releo //Si la tecla 'w' no dejo de ser presionada leo de nuevo
         br lr
 
-//Funcion encargada de dibujar el fondo (pasto)
+//procedimiento encargado de dibujar el fondo (pasto)
 fondo:
     mov x1,lr
     movz x10, 0x49, lsl 16 //color lima parte 1
@@ -62,10 +65,10 @@ fondo:
     mov x17,0 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,SCREEN_WIDTH //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x1
 
-//Funcion encargada de dibujar el asfalto
+//procedimiento encargado de dibujar el asfalto
 asfalto:
     mov x1,lr
     movz x10, 0xC0, lsl 16 //color gris parte 1
@@ -76,10 +79,10 @@ asfalto:
     mov x18,520 //FX
     mov x22,SCREEN_HEIGH //tam de largo de lineas
     mov x23,0 //sep del punteado
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x1
 
-//Funcion encargada de plasmar las lineas rojas del borde del asfalto
+//procedimiento encargado de plasmar las lineas rojas del borde del asfalto
 lineasRojas:
     mov x1,lr
     movz x10, 0xFF, lsl 16 //color rojo
@@ -87,16 +90,16 @@ lineasRojas:
     mov x17,120 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,125 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     movz x10, 0xFF, lsl 16 //color rojo
     mov x15,0 //PY
     mov x17,515 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,520 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x1
 
-//Funcion encargada de dibujar lineas separadas en el borde del asfalto
+//procedimiento encargado de dibujar lineas separadas en el borde del asfalto
 puntBlanco:
     mov x1,lr
     movz x10, 0xE5, lsl 16 //color blanco parte 1
@@ -117,7 +120,7 @@ puntBlanco:
     bl repRectanguloY
     br x1
 
-//Funcion encargada de plasmar las lineas que separan las carreteras
+//procedimiento encargado de plasmar las lineas que separan las carreteras
 separador:
     mov x1,lr
     movz x10, 0xFF, lsl 16 //color blanco parte 1
@@ -138,7 +141,7 @@ separador:
     bl repRectanguloY
     br x1
 
-//Funcion encargada de plasmar un pinar
+//procedimiento encargado de plasmar un pinar
 pinar:
     mov x1,lr
     mov x15,80 //Y -> PY
@@ -163,7 +166,7 @@ pinar:
     br x1
 
 
-//Funcion encargada de dibujar un rectangulo
+//procedimiento encargado de dibujar un rectangulo
 rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=auxY;x22=auxDire
     mov x22,lr //guardo dire de partida
     mov x19,x17 //almaceno el valor inicial de X
@@ -183,7 +186,7 @@ rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=auxY;x22=auxDire
         br x22 //Retorno a la ubicación de la llamada 
 
 
-//Funcion encargada de dibujar rectangulos repetidos en Y
+//procedimiento encargado de dibujar rectangulos repetidos en Y
 repRectanguloY:
     mov x25,lr //Almaceno la direccion de llamada
     sub x26,x16,x15 //tam y
@@ -197,7 +200,7 @@ repRectanguloY:
 
 
 
-//Funcion encargada de dibujar un circulo
+//procedimiento encargado de dibujar un circulo
 circulo:
 	// Draws a circle given a (x0, y0) center coords (x17, x15) a radius (x4) and a color (x10)
 	mov x16,lr //guardo el valor del lr(x30)
@@ -238,7 +241,7 @@ pintar_pixel:
     mov x0,x20
     br lr
 
-//Funcion encargada de dibujar un triangulo   
+//procedimiento encargado de dibujar un triangulo   
 triangulo:
     //coordenadas (x,y) son (x17,x15), color x10, dire x27,alto x16
     mov x23,lr //almaceno la dire de llamada
@@ -256,7 +259,7 @@ triangulo:
         b.lt loopTriangulo
         br x23
 
-//Funcion encargada de pintar una fila
+//procedimiento encargado de pintar una fila
 pintarFila:
     //Pinta una fila horizontal dadas unas (x,y) coords (x17,x15) una longitud (x4) y un color (x10)
     mov x24,lr //almaceno la dire de llamada
@@ -270,7 +273,7 @@ pintarFila:
         sub x17,x17,x4 //Reseteo X
         br x24
 
-//Funcion encargada de dibujar un arbol normal (copa circular)
+//procedimiento encargado de dibujar un arbol normal (copa circular)
 arbol:
     //tronco
     mov x27,x15 //inicial y
@@ -282,7 +285,7 @@ arbol:
     add x18,x28,3 //FX
     add x15,xzr,x15 //PY
     add x16,x15,60 //FY
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion
     //Hojas
     movz x10,0x15,lsl 16 //color verde oscuro parte 1
     movk x10,0x7705, lsl 00 //color verde oscuro parte 2
@@ -292,7 +295,7 @@ arbol:
     bl circulo
     br x26 //regreso a la dire de llamada
 
-//Funcion encargada de dibujar un pino
+//procedimiento encargado de dibujar un pino
 pino:
     //tronco
     mov x27,x15 //inicial y
@@ -304,7 +307,7 @@ pino:
     add x18,x28,3 //FX
     add x15,xzr,x15 //PY
     add x16,x15,60 //FY
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion
     //Hojas
     movz x10,0x0F,lsl 16 //color verde oscuro parte 1
     movk x10,0x6C41, lsl 00 //color verde oscuro parte 2
@@ -326,7 +329,7 @@ pino:
     bl triangulo
     br x26 //regreso a la dire de llamada
 
-//Funcion encargada de plasmar una arbolada de copa circular
+//procedimiento encargado de plasmar una arbolada de copa circular
 arbolada:
     mov x1,lr
     mov x15,50 //Y -> PY
@@ -350,52 +353,54 @@ arbolada:
         b.lt arbDer
     br x1
 
-//Funcion encargada de dibujar un auto gris
+//procedimiento encargado de dibujar un auto gris
 autoGris:
     mov x1,lr //almaceno la dire de llamado
     mov x17,159 //valor de X
     mov x15,320 //valor de Y
-    movz x14,0x69,lsl 16 //Color base parte 1
-    movk x14,0x6969,lsl 00 //color base parte 2
-    movz x9,0x48,lsl 16 //color sombra parte 1
-    movk x9,0x4848,lsl 00 //color sombra parte 2
+    movz x14,0x69,lsl 16 //Color gris claro base parte 1
+    movk x14,0x6969,lsl 00 //color gris claro base parte 2
+    movz x9,0x48,lsl 16 //color gris oscuro sombra parte 1
+    movk x9,0x4848,lsl 00 //color gris oscuro sombra parte 2
     bl auto1
     br x1
 
-//Funcion encargada de dibujar un auto azul 
+//procedimiento encargado de dibujar un auto azul 
 autoAzul:
     mov x1,lr //almaceno la dire de llamado
     mov x17,290 //valor de X
     mov x15,320 //valor de Y
-    movz x14,0xFF,lsl 00 //Color base
-    movz x9,0x03,lsl 16 //color sombra parte 1
-    movk x9,0x039F,lsl 00 //color sombra parte 2
+    movz x14,0xFF,lsl 00 //Color azul base
+    movz x9,0x03,lsl 16 //color azul oscuro sombra parte 1
+    movk x9,0x039F,lsl 00 //color azul oscuro sombra parte 2
     bl auto1
     br x1
 
-//Funcion encargada de dibujar una camioneta blanca:
+//procedimiento encargado de dibujar una camioneta blanca:
 caminetaBlanca:
     mov x1,lr //almaceno la dire de llamado
     mov x17,159 //X
     mov x15,295 //Y
-    movz x14,0xFF,lsl 16 //Color base parte 1
-    movk x14,0xFFFF,lsl 00 //Color base parte 2
-    movz x9,0xBC,lsl 16 //color sombra parte 1
-    movk x9,0xBCBC,lsl 00 //color sombra parte 2
+    movz x14,0xFF,lsl 16 //Color blanco base parte 1
+    movk x14,0xFFFF,lsl 00 //Color blanco base parte 2
+    movz x9,0xBC,lsl 16 //color gris claro sombra parte 1
+    movk x9,0xBCBC,lsl 00 //color gris claro sombra parte 2
     bl camioneta
     br x1 //retorno a la dire de llamado
 
-//Funcion encargada de dibujar una camioneta morada:
+//procedimiento encargado de dibujar una camioneta morada:
 camineta777:
     mov x1,lr //almaceno la dire de llamado
     mov x17,290 //valor de X
     mov x15,300 //valor de Y
-    movz x14,0xA2,lsl 16 //Color base parte 1
-    movk x14,0x00FF,lsl 00 //Color base parte 2
-    movz x9,0x89,lsl 16 //color sombra parte 1
-    movk x9,0x04D7,lsl 00 //color sombra parte 2
+    movz x14,0xA2,lsl 16 //Color violeta base parte 1
+    movk x14,0x00FF,lsl 00 //Color violeta base parte 2
+    movz x9,0x89,lsl 16 //color violeta oscuro sombra parte 1
+    movk x9,0x04D7,lsl 00 //color violeta oscuro sombra parte 2
     bl camioneta
     br x1 //retorno a la dire de llamado
+
+//Procedimiento encargado de plasmar un auto cuyo
 auto1:
     mov x11,lr //almaceno la dire de llamado
     
@@ -409,14 +414,14 @@ auto1:
     add x16,x15,22 //FY
     sub x17,x12,5 //PX
     add x18,x12,65 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //ruedas inferiores 
     add x15,x13,68 //PY
     add x16,x15,22 //FY
     sub x17,x12,5 //PX
     add x18,x12,65 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //base del auto
     mov x10,x14 //color base
@@ -424,7 +429,7 @@ auto1:
     add x16,x15,105 //FY
     mov x17,x12 //PX
     add x18,x17,60 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //luces amarillas 
     movz x10,0xFF,lsl 16 //color amarillo parte 1
@@ -433,12 +438,12 @@ auto1:
     mov x16,x13 //FY
     add x17,x12,4 //PX
     add x18,x17,10 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     sub x15,x13,4 //PY
     mov x16,x13 //FY
     add x17,x12,46 //PX
     add x18,x17,10 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //luces rojas
     movz x10,0xFF,lsl 16 //color rojo
@@ -446,12 +451,12 @@ auto1:
     add x16,x15,4 //FY
     add x17,x12,4 //PX
     add x18,x17,12 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     add x15,x13,105 //PY
     add x16,x15,4 //FY
     add x17,x12,44 //PX
     add x18,x17,12 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //linea blanca de arriba
     movz x10,0xFF,lsl 16 //color blanco parte 1
@@ -460,7 +465,7 @@ auto1:
     add x16,x15,20 //FY
     add x17,x12,26 //PX
     add x18,x17,8 //FX 
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //vidrio delantero
     movz x10,0x00,lsl 16 //color negro
@@ -474,13 +479,13 @@ auto1:
     add x16,x15,15 //FY
     mov x17,x12 //PX
     add x18,x17,60 //FX 
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     mov x10,x9 //color sombra
     add x15,x13,40 //PY
     add x16,x15,29 //FY
     add x17,x12,19 //PX
     add x18,x17,22 //FX 
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //linea blanca de baja
     movz x10,0xFF,lsl 16 //color blanco parte 1
@@ -489,50 +494,50 @@ auto1:
     add x16,x15,68 //FY
     add x17,x12,26 //PX
     add x18,x17,8 //FX 
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //ventana izquierda
-    movz x10,0x00,lsl 16 //color negro parte
+    movz x10,0x00,lsl 16 //color negro
     add x15,x13,40 //PY
     add x16,x15,25 //FY
     add x17,x12,10 //PX
     add x18,x17,3 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     add x15,x13,44 //PY
     add x16,x15,25 //FY
     add x17,x12,13 //PX
     add x18,x17,3 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //ventana derecha
-    movz x10,0x00,lsl 16 //color negro parte
+    movz x10,0x00,lsl 16 //color negro
     add x15,x13,40 //PY
     add x16,x15,25 //FY
     add x17,x12,47 //PX
     add x18,x17,3 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     add x15,x13,44 //PY
     add x16,x15,25 //FY
     add x17,x12,44 //PX
     add x18,x17,3 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //ventana trasera
     add x15,x13,72 //PY
     add x16,x15,25 //FY
     add x17,x12,16 //PX
     add x18,x17,28 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x11
 
-//Funcion encargada de dibujar una camioneta
+//procedimiento encargado de dibujar una camioneta
 camioneta:
     mov x11, lr //almaceno la dire de llamado
     mov x12,x17 //x12 almacena el valor inicial de X
     mov x13,x15 //x13 almacena el valor inicial de Y
 
     //Ruedas de arriba del auto
-    movz x10, 0x00, lsl 16 // Color negro parte 1
+    movz x10, 0x00, lsl 16 // Color negro 
     add x15,x13,34 // PY (posición Y)
     add x16,x15,29 // FY (fin Y)
     sub x17,x12,11 // PX (posición X)
@@ -609,8 +614,8 @@ camioneta:
     add x18,x17,57 // FX (fin X)
     bl rectangulo
     //detalles baul
-    movz x10, 0x40, lsl 16 // Color negro parte 1
-    movk x10, 0x4040, lsl 00 // Color negro parte 2
+    movz x10, 0x40, lsl 16 // Color gris claro parte 1
+    movk x10, 0x4040, lsl 00 // Color gris claro parte 2
     add x15,x13,103 // PY (posición Y)
     add x16,x15,24 // FY (fin Y)
     add x17,x12,9 // PX (posición X)
@@ -644,7 +649,7 @@ camioneta:
     add x17,x12,6 // PX (posición X)
     add x18,x17,52 // FX (fin X)
     bl rectangulo
-    movk x10, 0x2828, lsl 00 // Color
+    movk x10, 0x2828, lsl 00 // Color verde oscuro
     add x15,x13,52 // PY (posición Y)
     add x16,x15,6 // FY (fin Y
     add x17,x12,16 // PX (posición X)
@@ -660,7 +665,7 @@ camioneta:
     bl rectangulo
 
     //contorno de luces
-    movz x10, 0x00, lsl 16 //negro sombra
+    movz x10, 0x00, lsl 16 //color negro sombra
     add x15,x13,20 //PY  arriba abajo
     add x16,x15,10 //FY
     sub x17,x12,4 //PX ancho hacia izq
@@ -683,8 +688,8 @@ camioneta:
     bl rectangulo
     
     //Luces amarillas
-    movz x10, 0xFF, lsl 16 //amarillo
-    movk x10, 0xF500, lsl 00
+    movz x10, 0xFF, lsl 16 //color amarillo parte 1
+    movk x10, 0xF500, lsl 00 //color amarillo parte 2
     add x15,x13,23 //PY  arriba abajo
     add x16,x15,4  //FY
     mov x17,x12 //PX ancho hacia izq
