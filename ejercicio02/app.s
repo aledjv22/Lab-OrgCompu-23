@@ -230,12 +230,78 @@ cactitus:
         b.lt resetX7C
         b cactitus
 
+//Funcion encargada de dibujar el paisajeFinal del programa
+paisajeFinal:
+    mov x7,500 //Y del auto
+    mov x6,217 //X del auto
+    mov x5,-900 //Y de separadorB
+    mov x3,0xD //bomba desactivada
+    final:
+        bl caminoB
+        bl separadorB
+        subs xzr,x3,0xD
+        b.eq sigueF0
+        b fin
+    sigueF0:
+        bl autoGris
+        add x5,x5,7
+        add x13,x7,100
+        sub x12,x6,100
+        bl avioneta
+        bl tiempo
+        subs xzr,x5,-10
+        b.lt sigueF1
+        mov x5,-500
+    sigueF1:
+        subs xzr,x7,380
+        b.lt sigueF3
+        sub x7,x7,3
+        b final
+    sigueF2:
+        sub x7,x7,3
+        subs xzr,x6,360
+        b.gt final
+        add x6,x6,3
+        b final
+    sigueF3:
+        subs xzr,x7,180
+        b.gt sigueF2
+        mov x3,0xA //bomba activada
+        b final
+    fin:
+        bl autoGris
+        bl bomba
+        add x13,x7,100
+        sub x12,x6,100
+        bl avioneta
+        bl tiempo
+        bl tiempo
+        bl tiempo
+        bl tiempo
+        bl tiempo
+        mov x5,-900 //Y de separadorB
+    resetAvionetita:
+        subs xzr,x13,-300
+        b.lt regreso
+        sub x13,x13,5
+        add x5,x5,7
+        bl caminoB
+        bl separadorB
+        sub x12,x6,100
+        bl avioneta
+        bl tiempo
+        b resetAvionetita
+    regreso:
+        bl lectura
+        bl lecWArbol
+        bl lecSArbol
+        b regreso
+        
 //Fin loop
     b InfLoop
 
 //"Delay"
 tiempo:
-    //mov x10, #0x0EE6B280 = 250000000 //07735940
     movz x10,0x0773,lsl 16 //tiempo de delay parte 1
     movk x10,0x5940,lsl 00 //tiempo de delay parte 2
     delay_loop:
@@ -314,75 +380,6 @@ lecEspacio:
     subs wzr, w10, 0b100000
     b.eq paisajeFinal
     br lr
-
-//Funcion encargada de dibujar el paisajeFinal del programa
-paisajeFinal:
-    mov x7,500 //Y del auto
-    mov x6,217 //X del auto
-    mov x5,-900 //Y de separadorB
-    mov x3,0xD //bomba desactivada
-    final:
-        bl caminoB
-        bl separadorB
-        subs xzr,x3,0xD
-        b.eq sigueF0
-        mov x20,x7
-        b fin
-    sigueF0:
-        bl autoGris
-        add x5,x5,7
-        add x13,x7,100
-        sub x12,x6,100
-        bl avioneta
-        bl tiempo
-        subs xzr,x5,-10
-        b.lt sigueF1
-        mov x5,-500
-    sigueF1:
-        subs xzr,x7,380
-        b.lt sigueF3
-        sub x7,x7,3
-        b final
-    sigueF2:
-        sub x7,x7,3
-        subs xzr,x6,360
-        b.gt final
-        add x6,x6,3
-        b final
-    sigueF3:
-        subs xzr,x7,180
-        b.gt sigueF2
-        mov x3,0xA //bomba activada
-        b final
-    fin:
-        bl autoGris
-        bl bomba
-        add x13,x7,100
-        sub x12,x6,100
-        bl avioneta
-        bl tiempo
-        bl tiempo
-        bl tiempo
-        bl tiempo
-        bl tiempo
-        mov x5,-900 //Y de separadorB
-    resetAvionetita:
-        subs xzr,x13,-300
-        b.lt regreso
-        sub x13,x13,5
-        add x5,x5,7
-        bl caminoB
-        bl separadorB
-        sub x12,x6,100
-        mov x20,x13
-        bl avioneta
-        bl tiempo
-        b resetAvionetita
-    regreso:
-        bl lectura
-        bl lecWArbol
-        bl lecSArbol
-        b regreso
 
 //Funcion encargada de plasmar una avioneta
 avioneta:
