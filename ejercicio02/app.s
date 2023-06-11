@@ -16,80 +16,79 @@ main:
     mov x6,0xF //valor inicial del estado de las lineas de ruta
     mov x3,500 //Y de vehículos
     mov x5,-300 //Y arboles
-    b paisajeFinal //momentaneo
 //Inicio del paisaje de Arbolecitos
-resetX7:
+resetX7: //reseteo del registro x7 encargado del valor Y del auto azul para simular un retorno de posición
     mov x7,500
     subs xzr,x5,-10
     b.gt resetX5
     subs xzr,x3,-150
     b.lt resetX3
     b arbolecitos
-resetX3:
+resetX3: //reseteo del registro x3 encargado del valor Y de las camionetas para simular un retorno de posición
     mov x3,600 //y de camioneta
     b arbolecitos
-resetX5:
+resetX5:  //reseteo del registro x5 encargado del valor Y de los arboles, lineas que separan la ruta y bordes de la misma, simulando su infinidad
     mov x5,-300
 arbolecitos:
-        bl asfalto
+        bl asfalto //llamado al procedimiento asfalto guardando su dirección
         subs xzr,x6,0xF7
-        b.eq amariA
-        bl separador
+        b.eq amariA //se consulta el valor del registro x6 para saber si se plasma las lineas amarillas o blancas en la ruta
+        bl separador //llamado al procedimiento  encargado de plasmar las lineas blancas separadoras de la ruta
         b sigueA
     amariA:
-        bl lineasAmarillas
-    sigueA:
-        sub x7,x7,3
+        bl lineasAmarillas //Proc ejecutado dependiendo del estado de x6
+    sigueA: //etiqueta a la que se recurre si no se ejecuta el proc lineasAmarillas
+        sub x7,x7,3 //modificacion del x7 para simular el desplazamiento de autoAzul en el siguiente pasar
         bl autoAzul
         sub x3,x3,5
-        subs xzr,x2,0xA
-        b.eq autosA 
+        subs xzr,x2,0xA //Inicia la consulta por el estado del x2 para saber si se recurrira al plasmado de 2,1 o 0 camionetas
+        b.eq autosA
         subs xzr,x2,0xB
         b.eq autosB
         subs xzr,x2,0xC
         b.eq autosC
-    autosC:
+    autosC: //encargado de modificar los registros x5 y x3 de desplazamientos, pero sin plasmar las camionetas
         add x5,x5,3
         sub x3,x3,120
         add x3,x3,120
         b sigueD
-    autosB:
+    autosB: //modifica x5 y x3 y dibuja la camionetaBlanca
         bl caminetaBlanca
         add x5,x5,3
         sub x3,x3,120
         add x3,x3,120
         b sigueD
-    autosA:
+    autosA: //modifica x5 y x3, plasmando camionetaBlanca y camioneta777(violeta)
         bl caminetaBlanca
         add x5,x5,3
         sub x3,x3,120
         bl camineta777
         add x3,x3,120
-    sigueD:
-        bl lineasRojas
-        bl puntBlanco
+    sigueD: //etiqueta de salto por si se hizo el salto a la etiqueta autosC o autosB
+        bl lineasRojas //llamado al proc que pinta el borde rojo del asfalto
+        bl puntBlanco //llama al proc que superpone un punteado blanco en las lineas rojas del borde del asfalto
         movz x10, 0x49, lsl 16 //color lima parte 1
         movk x10, 0x8602, lsl 00 //color lima parte 2
-        bl fondo
+        bl suelo //Plasmo el suelo con el color anterior
         add x5,x5,7
         bl arbolada
-        bl tiempo
-        bl lectura
+        bl tiempo //realizo un "delay"
+        bl lectura //inicia la lectura de GPIOs y por ende las teclas
         bl lecEspacio
         bl lecD
         bl lecA
         bl lecWArbol
         bl lecSArbol
-        subs xzr,x5,-10
+        subs xzr,x5,-10 //analizo los valores de los registros para resetarlos
         b.gt resetX5
         subs xzr,x3,-150
         b.lt resetX3
         subs xzr,x7,-150
         b.lt resetX7
-        b arbolecitos
+        b arbolecitos //realizo un salto para simular el bucle infinito de este paisaje
 
 //Inicio del paisaje pinitos
-resetX7B:
+resetX7B:                       //reseteo de registros
     mov x7,500
     subs xzr,x5,-10
     b.gt resetX5B
@@ -101,19 +100,19 @@ resetX3B:
     b pinitos
 resetX5B:
     mov x5,-300
-pinitos:
+pinitos: //plasmado del paisaje de tematica pinos
         bl asfalto
         subs xzr,x6,0xF7
         b.eq amariP
         bl separador
         b sigueP
-    amariP:
+    amariP:   //dibuja lineasAmarillas de cumplirse el estado nesario del reg x6
         bl lineasAmarillas
     sigueP:
         sub x7,x7,3
         bl autoAzul
         sub x3,x3,5
-        subs xzr,x2,0xA
+        subs xzr,x2,0xA  //Analisis del estado de x2 para determinar el nro de camionetas a dibujar
         b.eq autosAp 
         subs xzr,x2,0xB
         b.eq autosBp
@@ -141,26 +140,26 @@ pinitos:
         bl puntBlanco
         movz x10, 0x49, lsl 16 //color lima parte 1
         movk x10, 0x8602, lsl 00 //color lima parte 2
-        bl fondo
+        bl suelo
         add x5,x5,7
         bl pinar
         bl tiempo
-        bl lectura
+        bl lectura //lectura de las GPIOs y por ende teclas
         bl lecEspacio
         bl lecD
         bl lecA
         bl lecWPino
         bl lecSPino
-        subs xzr,x5,-10
+        subs xzr,x5,-10 //comprobación de valores de reg para determinar el reseteo de estos
         b.gt resetX5B
         subs xzr,x3,-150
         b.lt resetX3B
         subs xzr,x7,-150
         b.lt resetX7B
-        b pinitos
+        b pinitos //realizo un salto para simular el bucle infinito de este paisaje
 
 //Inicio del paisaje cactitus
-resetX7C:
+resetX7C:       //reseteo de registros
     mov x7,500
     subs xzr,x5,-10
     b.gt resetX5
@@ -172,19 +171,19 @@ resetX3C:
     b cactitus
 resetX5C:
     mov x5,-300
-cactitus:
+cactitus: //plasmado del paisaje de tematica desierto
         bl asfalto
         subs xzr,x6,0xF7
         b.eq amariC
         bl separador
         b sigueC
-    amariC:
+    amariC: //dibuja lineasAmarillas de cumplirse el estado nesario del reg x6
         bl lineasAmarillas
     sigueC:
         sub x7,x7,3
         bl autoAzul
         sub x3,x3,5
-        subs xzr,x2,0xA
+        subs xzr,x2,0xA //Analisis del estado de x2 para determinar el nro de camionetas a dibujar
         b.eq autosAc 
         subs xzr,x2,0xB
         b.eq autosBc
@@ -212,31 +211,31 @@ cactitus:
         bl puntBlanco
         movz x10, 0xFF, lsl 16 //color amarillo parte 1
         movk x10, 0xD500, lsl 00 //color amarillo parte 2
-        bl fondo
+        bl suelo
         add x5,x5,7
         bl cactada
         bl tiempo
-        bl lectura
+        bl lectura //lectura de las GPIOs y por ende teclas
         bl lecEspacio
         bl lecD
         bl lecA
         bl lecWCactus
         bl lecSCactus
-        subs xzr,x5,-10
+        subs xzr,x5,-10 //comprobación de valores de reg para determinar el reseteo de estos
         b.gt resetX5C
         subs xzr,x3,-150
         b.lt resetX3C
         subs xzr,x7,-150
         b.lt resetX7C
-        b cactitus
+        b cactitus //realizo un salto para simular el bucle infinito de este paisaje
 
-//Funcion encargada de dibujar el paisajeFinal del programa
+//procedimiento encargada de dibujar el paisajeFinal del programa
 paisajeFinal:
     mov x7,500 //Y del auto
     mov x6,217 //X del auto
     mov x5,-900 //Y de separadorB
     mov x3,0xD //bomba desactivada
-    final:
+    final: //plasmado del paisaje de tematica asesina
         bl caminoB
         bl separadorB
         subs xzr,x3,0xD
@@ -266,9 +265,9 @@ paisajeFinal:
     sigueF3:
         subs xzr,x7,180
         b.gt sigueF2
-        mov x3,0xA //bomba activada
+        mov x3,0xA //bomba activada tras tirar el misil la avioneta
         b final
-    fin:
+    fin: //eliminacion del autoGris y la bomba/explosion y misil derecho de avioneta
         bl autoGris
         bl bomba
         add x13,x7,100
@@ -280,7 +279,7 @@ paisajeFinal:
         bl tiempo
         bl tiempo
         mov x5,-900 //Y de separadorB
-    resetAvionetita:
+    resetAvionetita:  //desplazamiento de la avioneta tras la bomba
         subs xzr,x13,-300
         b.lt regreso
         sub x13,x13,5
@@ -291,16 +290,17 @@ paisajeFinal:
         bl avioneta
         bl tiempo
         b resetAvionetita
-    regreso:
+    regreso: //lectura de teclas W y S para regresar a los paisajes antiguos
+             //No se implementan la A y D por no influir en esta secuencia como tal
         bl lectura
         bl lecWArbol
         bl lecSArbol
         b regreso
-        
-//Fin loop
+
+//Fin loop, al cual "nunca" se va debido a que nunca se llega a ella.
     b InfLoop
 
-//"Delay"
+//"Delay": simula un delay mediante el decrecimiento del reg x10
 tiempo:
     movz x10,0x0773,lsl 16 //tiempo de delay parte 1
     movk x10,0x5940,lsl 00 //tiempo de delay parte 2
@@ -317,17 +317,17 @@ lectura:
     ldr w10, [x10, GPIO_GPLEV0] //leo los estados de los GPIO 0 - 31
     and w10, w10, 0b0000111110 //Hago un and para revelar el bit 2, ie, el estado de GPIO 1
     br lr
-lecWArbol:
-    subs wzr, w10, 0b00010
-    b.eq pinitos
+lecWArbol: 
+    subs wzr, w10, 0b00010 //verifico si el GPIO1 es de estado alto
+    b.eq pinitos //permite el salto al paisaje pinitos sin perder informacion de los vehículos y lineas en el asfalto
     br lr
 lecWPino:
     subs wzr, w10, 0b00010
-    b.eq cactitus
+    b.eq cactitus //permite el salto al paisaje cactitus sin perder informacion de los vehículos y lineas en el asfalto
     br lr
 lecWCactus:
     subs wzr, w10, 0b00010
-    b.eq arbolecitos 
+    b.eq arbolecitos //permite el salto al paisaje arbolecitos sin perder informacion de los vehículos y lineas en el asfalto
     br lr
 lecSArbol:
     subs wzr, w10, 0b01000
@@ -342,7 +342,7 @@ lecSCactus:
     b.eq pinitos 
     br lr
 
-lecA:
+lecA: //De ser estado ALTO permite cambiar las lineas que separan la ruta mediante el cambio del valor de x6
     subs wzr, w10, 0b00100
     b.eq est
     br lr
@@ -355,7 +355,7 @@ lecA:
         mov x6,0xF
         br lr
 
-lecD:
+lecD: //De ser estado AlTO consigue cambiar el valor de x2  y así el numero de camionetas
     subs wzr, w10, 0b10000
     b.eq estD
     br lr
@@ -376,12 +376,12 @@ lecD:
             mov x2,0xA
             br lr
 
-lecEspacio:
+lecEspacio: //De ser estado ALTO ejecuta una cinematica antes de habilitar nuevamente la lectura de W y S.
     subs wzr, w10, 0b100000
     b.eq paisajeFinal
     br lr
 
-//Funcion encargada de plasmar una avioneta
+//procedimiento encargada de plasmar una avioneta
 avioneta:
     mov x1,lr
     // x13 = Y, x12 = X
@@ -550,15 +550,15 @@ avioneta:
     bl rectangulo
     br x1
 
-//Funcion encargada de plasmar una bomba en la ruta
+//procedimiento encargada de plasmar una bomba en la ruta
 bomba:
     mov x1,lr //almaceno la direccion de llamado
     movz x10, 0xD7, lsl 16 //color rojo parte 1
     movk x10, 0x0505, lsl 00 //color rojo parte 2 
-    mov x17,370
-    mov x15,243 
-    mov x4,30
-    bl circulo
+    mov x17,370 //determino la X para plasmar mi circulo
+    mov x15,243 //determino la Y para plasmar mi circulo
+    mov x4,30 //determino el radio del circulo necesario
+    bl circulo //hago llamado del proc circulo
     movz x10, 0xFF, lsl 16 //color naranja parte 1
     movk x10, 0x0505, lsl 00 //color naranja parte 2
     mov x4,25
@@ -569,8 +569,8 @@ bomba:
     bl circulo
     br x1 //regreso a la dire de llamada
     
-//Funcion encargada de dibujar la calle de barro
-caminoB:
+//procedimiento encargada de dibujar la calle de barro
+caminoB: //Es el fondo personalizado para el paisajeFinal
     mov x1,lr //Almaceno la direccion de llamada
     movz x10, 0x79, lsl 16 //color barro parte 1
     movk x10, 0x5E1F, lsl 00 //color barro parte 2 
@@ -580,37 +580,37 @@ caminoB:
     mov x18,470 //FX
     mov x22,SCREEN_HEIGH //tam de largo de lineas
     mov x23,0 //sep del punteado
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     movz x10, 0x4C, lsl 16 //color pasto parte 1
     movk x10, 0x755A, lsl 00 //color pasto parte 2
     mov x15,0 //PY
     mov x16,SCREEN_HEIGH //FY
     mov x17,0 //PX
     mov x18,170 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     mov x15,0 //PY
     mov x16,SCREEN_HEIGH //FY
     mov x17,470 //PX
     mov x18,SCREEN_WIDTH //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x1 //Retorno a la direccion de llamada
 
-//Funcion encargada de dibujar el fondo (pasto)
-fondo:
+//procedimiento encargada de dibujar el suelo 
+suelo:
     mov x1,lr //Almaceno la direccion de llamada
     mov x15,0 //PY
     mov x16,SCREEN_HEIGH //FY
     mov x17,0 //PX
     mov x18,120 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     mov x15,0 //PY
     mov x16,SCREEN_HEIGH //FY
     mov x17,520 //PX
     mov x18,SCREEN_WIDTH //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x1 //Retorno a la direccion de llamada
 
-//Funcion encargada de dibujar el asfalto
+//procedimiento encargada de dibujar el asfalto
 asfalto:
     mov x1,lr
     movz x10, 0xC0, lsl 16 //color gris parte 1
@@ -621,10 +621,10 @@ asfalto:
     mov x18,520 //FX
     mov x22,SCREEN_HEIGH //tam de largo de lineas
     mov x23,0 //sep del punteado
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x1
 
-//Funcion encargada de plasmar las lineas rojas del borde del asfalto
+//procedimiento encargada de plasmar las lineas rojas del borde del asfalto
 lineasRojas:
     mov x1,lr
     movz x10, 0xFF, lsl 16 //color rojo
@@ -632,16 +632,16 @@ lineasRojas:
     mov x17,120 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,125 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     movz x10, 0xFF, lsl 16 //color rojo
     mov x15,0 //PY
     mov x17,515 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,520 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x1
 
-//Funcion encargada de dibujar lineas amarillas
+//procedimiento encargada de dibujar lineas amarillas
 lineasAmarillas:
     mov x1,lr
     movz x10, 0xFF, lsl 16 //color amarillo
@@ -662,14 +662,14 @@ lineasAmarillas:
     mov x17,381 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,384 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     mov x15,0 //PY
     mov x17,387 //PX
     mov x16,SCREEN_HEIGH //FY
     mov x18,390 //FX
     bl rectangulo 
     br x1
-//Funcion encargada de dibujar lineas separadas en el borde del asfalto
+//procedimiento encargada de dibujar lineas separadas en el borde del asfalto
 puntBlanco:
     mov x1,lr
     movz x10, 0xE5, lsl 16 //color blanco parte 1
@@ -690,7 +690,7 @@ puntBlanco:
     bl repRectanguloY
     br x1
 
-//Funcion encargada de plasmar las lineas que separan las carreteras
+//procedimiento encargada de plasmar las lineas que separan las carreteras
 separador:
     mov x1,lr
     movz x10, 0xFF, lsl 16 //color blanco parte 1
@@ -711,7 +711,7 @@ separador:
     bl repRectanguloY
     br x1
 
-//Funcion encargada de plasmar lineas separadas en camino de tierra
+//procedimiento encargada de plasmar lineas separadas en camino de tierra
 separadorB:
     mov x1,lr
     movz x10, 0xE8, lsl 16 //color blanco parte 1
@@ -725,7 +725,7 @@ separadorB:
     bl repRectanguloY
     br x1
 
-//Funcion encargada de plasmar un pinar
+//procedimiento encargada de plasmar un pinar
 pinar:
     mov x1,lr
     mov x15,x5 //Y -> PY
@@ -749,7 +749,7 @@ pinar:
         b.lt pinoDer
     br x1
 
-//Funcion encargada de dibujar un rectangulo
+//procedimiento encargada de dibujar un rectangulo
 rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=auxY;x22=auxDire
     mov x22,lr //guardo dire de partida
     mov x19,x17 //almaceno el valor inicial de X
@@ -769,7 +769,7 @@ rectangulo://x15=PY;x16=FY;x17=PX;x18=FX;w10=color;x19=auxX;x21=auxY;x22=auxDire
         br x22 //Retorno a la ubicación de la llamada 
 
 
-//Funcion encargada de dibujar rectangulos repetidos en Y
+//procedimiento encargada de dibujar rectangulos repetidos en Y
 repRectanguloY:
     mov x25,lr //Almaceno la direccion de llamada
     sub x26,x16,x15 //tam y
@@ -783,7 +783,7 @@ repRectanguloY:
 
 
 
-//Funcion encargada de dibujar un circulo
+//procedimiento encargada de dibujar un circulo
 circulo:
 	// Draws a circle given a (x0, y0) center coords (x17, x15) a radius (x4) and a color (x10)
 	mov x16,lr //guardo el valor del lr(x30)
@@ -825,7 +825,7 @@ pintar_pixel:
     stur w10,[x21] //pinto el pixel
     br lr
 
-//Funcion encargada de dibujar un triangulo   
+//procedimiento encargada de dibujar un triangulo   
 triangulo:
     //coordenadas (x,y) son (x17,x15), color x10, dire x27,alto x16
     mov x23,lr //almaceno la dire de llamada
@@ -843,7 +843,7 @@ triangulo:
         b.lt loopTriangulo
         br x23
 
-//Funcion encargada de pintar una fila
+//procedimiento encargada de pintar una fila
 pintarFila:
     //Pinta una fila horizontal dadas unas (x,y) coords (x17,x15) una longitud (x4) y un color (x10)
     mov x24,lr //almaceno la dire de llamada
@@ -857,7 +857,7 @@ pintarFila:
         sub x17,x17,x4 //Reseteo X
         br x24
 
-//Funcion encargada de dibujar un arbol normal (copa circular)
+//procedimiento encargada de dibujar un arbol normal (copa circular)
 arbol:
     //tronco
     mov x27,x15 //inicial y
@@ -869,7 +869,7 @@ arbol:
     add x18,x28,3 //FX
     add x15,xzr,x15 //PY
     add x16,x15,60 //FY
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion
     //Hojas
     movz x10,0x15,lsl 16 //color verde oscuro parte 1
     movk x10,0x7705, lsl 00 //color verde oscuro parte 2
@@ -879,7 +879,7 @@ arbol:
     bl circulo
     br x26 //regreso a la dire de llamada
 
-//Funcion encargada de dibujar un pino
+//procedimiento encargada de dibujar un pino
 pino:
     //tronco
     mov x27,x15 //inicial y
@@ -891,7 +891,7 @@ pino:
     add x18,x28,3 //FX
     add x15,xzr,x15 //PY
     add x16,x15,60 //FY
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion
     //Hojas
     movz x10,0x0F,lsl 16 //color verde oscuro parte 1
     movk x10,0x6C41, lsl 00 //color verde oscuro parte 2
@@ -913,7 +913,7 @@ pino:
     bl triangulo
     br x26 //regreso a la dire de llamada
 
-//Funcion encargada de plasmar una arbolada de copa circular
+//procedimiento encargada de plasmar una arbolada de copa circular
 arbolada:
     mov x1,lr
     mov x15,x5 //Y -> PY
@@ -937,7 +937,7 @@ arbolada:
         b.lt arbDer
     br x1
 
-//Funcion encargada de dibujar un auto azul 
+//procedimiento encargada de dibujar un auto azul 
 autoAzul:
     mov x1,lr //almaceno la dire de llamado
     mov x17,290 //valor de X
@@ -948,7 +948,7 @@ autoAzul:
     bl auto
     br x1
 
-//Funcion encargada de dibujar un auto gris
+//procedimiento encargada de dibujar un auto gris
 autoGris:
     mov x1,lr //almaceno la dire de llamado
     mov x17,x6 //valor de X
@@ -960,7 +960,7 @@ autoGris:
     bl auto
     br x1
 
-//Funcion encargada de dibujar una camioneta blanca:
+//procedimiento encargada de dibujar una camioneta blanca:
 caminetaBlanca:
     mov x1,lr //almaceno la dire de llamado
     mov x17,159 //X
@@ -972,7 +972,7 @@ caminetaBlanca:
     bl camioneta
     br x1 //retorno a la dire de llamado
 
-//Funcion encargada de dibujar una camioneta morada:
+//procedimiento encargada de dibujar una camioneta morada:
 camineta777:
     mov x1,lr //almaceno la dire de llamado
     mov x17,425 //valor de X
@@ -996,14 +996,14 @@ auto:
     add x16,x15,22 //FY
     sub x17,x12,5 //PX
     add x18,x12,65 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //ruedas inferiores 
     add x15,x13,68 //PY
     add x16,x15,22 //FY
     sub x17,x12,5 //PX
     add x18,x12,65 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //base del auto
     mov x10,x14 //color base
@@ -1011,7 +1011,7 @@ auto:
     add x16,x15,105 //FY
     mov x17,x12 //PX
     add x18,x17,60 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //luces amarillas 
     movz x10,0xFF,lsl 16 //color amarillo parte 1
@@ -1020,12 +1020,12 @@ auto:
     mov x16,x13 //FY
     add x17,x12,4 //PX
     add x18,x17,10 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     sub x15,x13,4 //PY
     mov x16,x13 //FY
     add x17,x12,46 //PX
     add x18,x17,10 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //luces rojas
     movz x10,0xFF,lsl 16 //color rojo
@@ -1033,12 +1033,12 @@ auto:
     add x16,x15,4 //FY
     add x17,x12,4 //PX
     add x18,x17,12 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     add x15,x13,105 //PY
     add x16,x15,4 //FY
     add x17,x12,44 //PX
     add x18,x17,12 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //linea blanca de arriba
     movz x10,0xFF,lsl 16 //color blanco parte 1
@@ -1047,7 +1047,7 @@ auto:
     add x16,x15,20 //FY
     add x17,x12,26 //PX
     add x18,x17,8 //FX 
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //vidrio delantero
     movz x10,0x00,lsl 16 //color negro
@@ -1061,13 +1061,13 @@ auto:
     add x16,x15,15 //FY
     mov x17,x12 //PX
     add x18,x17,60 //FX 
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     mov x10,x9 //color sombra
     add x15,x13,40 //PY
     add x16,x15,29 //FY
     add x17,x12,19 //PX
     add x18,x17,22 //FX 
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //linea blanca de baja
     movz x10,0xFF,lsl 16 //color blanco parte 1
@@ -1076,7 +1076,7 @@ auto:
     add x16,x15,68 //FY
     add x17,x12,26 //PX
     add x18,x17,8 //FX 
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //ventana izquierda
     movz x10,0x00,lsl 16 //color negro parte
@@ -1084,12 +1084,12 @@ auto:
     add x16,x15,25 //FY
     add x17,x12,10 //PX
     add x18,x17,3 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     add x15,x13,44 //PY
     add x16,x15,25 //FY
     add x17,x12,13 //PX
     add x18,x17,3 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //ventana derecha
     movz x10,0x00,lsl 16 //color negro parte
@@ -1097,22 +1097,22 @@ auto:
     add x16,x15,25 //FY
     add x17,x12,47 //PX
     add x18,x17,3 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     add x15,x13,44 //PY
     add x16,x15,25 //FY
     add x17,x12,44 //PX
     add x18,x17,3 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
 
     //ventana trasera
     add x15,x13,72 //PY
     add x16,x15,25 //FY
     add x17,x12,16 //PX
     add x18,x17,28 //FX
-    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
     br x11
 
-//Funcion encargada de dibujar una camioneta
+//procedimiento encargada de dibujar una camioneta
 camioneta:
     mov x11, lr //almaceno la dire de llamado
     mov x12,x17 //x12 almacena el valor inicial de X
@@ -1295,11 +1295,7 @@ camioneta:
     add x17,x12,51 //PX ancho hacia izq
     add x18,x17,13 //FX ancho
     bl rectangulo
-
     br x11 //retorno a la dire de llamado
-
-
-
 
 //arbolada de cactus
 cactada:
@@ -1324,7 +1320,7 @@ cactada:
         cmp x29,800
         b.lt cacDer
     br x1
-//Funcion encargada de plasmar un cactus
+//procedimiento encargada de plasmar un cactus
 cacto:
     mov x8,x15 //inicial y
     mov x28,x17 //inicial x
