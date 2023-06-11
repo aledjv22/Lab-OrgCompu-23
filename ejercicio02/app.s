@@ -371,7 +371,6 @@ paisajeFinal:
         bl lecWArbol
         bl lecSArbol
         b regreso
-        b InfLoop
 
 //Funcion encargada de plasmar una avioneta
 avioneta:
