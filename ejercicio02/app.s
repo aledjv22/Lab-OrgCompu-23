@@ -320,11 +320,20 @@ paisajeFinal:
     mov x7,500 //Y del auto
     mov x6,217 //X del auto
     mov x5,-900 //Y de separadorB
+    mov x3,0xD //bomba desactivada
     final:
         bl caminoB
         bl separadorB
+        subs xzr,x3,0xD
+        b.eq sigueF0
+        mov x3,x7
+        b fin
+    sigueF0:
         bl autoGris
         add x5,x5,7
+        add x13,x7,100
+        sub x12,x6,100
+        bl avioneta
         bl tiempo
         subs xzr,x5,-10
         b.lt sigueF1
@@ -343,9 +352,209 @@ paisajeFinal:
     sigueF3:
         subs xzr,x7,180
         b.gt sigueF2
+        mov x3,0xA //bomba activada
         b final
+    fin:
+        bl autoGris
+        bl bomba
+        bl tiempo
+        bl tiempo
+        bl tiempo
+        bl caminoB
+        bl separadorB
+        bl bomba
+        add x13,x3,100
+        sub x12,x6,100
+        bl avioneta
+    regreso:
+        bl lectura
+        bl lecWArbol
+        bl lecSArbol
+        b regreso
+        b InfLoop
 
+//Funcion encargada de plasmar una avioneta
+avioneta:
+    mov x1,lr
+    // x13 = Y, x12 = X
+
+    //boombs
+    movz x10, 0x64, lsl 16 //color 
+    movk x10, 0x5454, lsl 00
+    add x17,x12,114 ///x
+    add x15,x13,20 //y
+    mov x4,12
+    bl circulo
+    add x17,x12,28 //x
+    add x15,x13,20 //y
+    mov x4,12
+    bl circulo
+    add x15,x13,26//PY arriba abajo
+    add x16,x15,75//FY
+    sub x17,x12,-20 //PX ancho hacia izq
+    add x18,x12,36 //FX ancho
+    bl rectangulo
+    add x15,x13,26//PY arriba abajo
+    add x16,x15,75//FY
+    sub x17,x12,-106//PX ancho hacia izq
+    add x18,x12,123 //FX ancho
+    bl rectangulo   
+    add x17,x12,28
+    sub x15,x13,5//y 
+    mov x16,12
+    bl triangulo
+    add x17,x12,114
+    sub x15,x13,5//y 
+    mov x16,12
+    bl triangulo
+    //finbombs
+    
+    //aletabaja
+    movz x10, 0x80, lsl 16 //color rojo
+    add x15,x13,38 //PY arriba abajo
+    add x16,x15,40 //FY
+    sub x17,x12,-1 //PX ancho hacia izq
+    add x18,x12,140 //FX ancho
+    bl rectangulo
+    movz x10, 0xA0, lsl 16 //color rojo
+    add x15,x13,38 //PY arriba abajo
+    add x16,x15,35 //FY
+    sub x17,x12,-1 //PX ancho hacia izq
+    add x18,x12,140 //FX ancho
+    bl rectangulo
+    //uniones negras de aletas
+    movz x10,00, lsl 16 //color negro
+    add x15,x13,55//PY arriba abajo
+    add x16,x15,25//FY
+    sub x17,x12,-30 //PX ancho hacia izq
+    add x18,x12,35 //FX ancho
+    bl rectangulo
+    movz x10,00, lsl 16 //color negro
+    add x15,x13,55//PY arriba abajo
+    add x16,x15,25//FY
+    sub x17,x12,-108 //PX ancho hacia izq
+    add x18,x12,113 //FX ancho
+    bl rectangulo
+
+    //helise
+    movz x10, 0x70, lsl 16 //color hg
+    movk x10, 0x7070, lsl 0 //color hg
+    add x15,x13,-5 //PY arriba abajo
+    add x16,x15,2//FY
+    sub x17,x12,-55 //PX ancho hacia izq
+    add x18,x12,88 //FX ancho
+    bl rectangulo
+    //tronk
+    movz x10,0x8A,lsl 16 //color 
+    add x17,x12,70
+    sub x15,x27,36
+    mov x16,12
+    bl triangulo
+    movz x10, 0x70, lsl 16 //color oscuro rojo
+    add x15,x13,20 //PY arriba abajo
+    add x16,x15,105//FY
+    sub x17,x12,-55 //PX ancho hacia izq
+    add x18,x12,85 //FX ancho
+    bl rectangulo
+    movz x10, 0xAA, lsl 16 //color rojo
+    add x15,x13,10 //PY arriba abajo
+    add x16,x15,145//FY
+    sub x17,x12,-60 //PX ancho hacia izq
+    add x18,x12,80 //FX ancho
+    bl rectangulo
+
+    movz x10, 0x70, lsl 16 //color oscuro rojo
+    add x15,x13,155 //PY arriba abajo
+    add x16,x15,20//FY
+    sub x17,x12,-67 //PX ancho hacia izq
+    add x18,x12,72 //FX ancho
+    bl rectangulo
  
+    //cola
+    movz x10, 0x70, lsl 16 //color rojo
+    add x17,x12,85 ///x
+    add x15,x13,155 //y
+    mov x4,12
+    bl circulo
+    add x17,x12,55 ///x
+    add x15,x13,155 //y
+    mov x4,12
+    bl circulo
+
+
+    movz x10, 0x70, lsl 16 //color rojo
+    add x15,x13,150 //PY arriba abajo
+    add x16,x15,12//FY
+    sub x17,x12,-49 //PX ancho hacia izq
+    add x18,x12,91 //FX ancho
+
+    bl rectangulo
+    movz x10, 0xAA, lsl 16 //color rojo
+
+    
+    add x15,x13,148 //PY arriba abajo
+    add x16,x15,10//FY
+    sub x17,x12,-49 //PX ancho hacia izq
+    add x18,x12,91 //FX ancho
+    bl rectangulo
+    //centro tronk
+        movz x10, 0xE9, lsl 16 //color rojo
+    add x15,x13,23 //PY arriba abajo
+    add x16,x15,135//FY
+    sub x17,x12,-63 //PX ancho hacia izq
+    add x18,x12,78 //FX ancho
+    bl rectangulo
+    // --------
+    add x17,x12,85 ///x
+    add x15,x13,155 //y
+    mov x4,8
+    bl circulo
+    add x17,x12,55 ///x
+    add x15,x13,155 //y
+    mov x4, 8
+    bl circulo
+    //aleta sup
+    movz x10, 0x80, lsl 16 //color rojo
+    add x15,x13,23 //PY arriba abajo
+    add x16,x15,36 //FY
+    sub x17,x12,2 //PX ancho hacia izq
+    add x18,x12,143 //FX ancho
+    bl rectangulo
+    
+    movz x10, 0xD0, lsl 16 //color rojo
+    add x15,x13,25 //PY arriba abajo
+    add x16,x15,29 //FY
+    sub x17,x12,0 //PX ancho hacia izq
+    add x18,x12,141 //FX ancho
+    bl rectangulo
+    //detalle aleta sup
+    movz x10, 0xF0, lsl 16 //color rojo
+    add x15,x13,30 //PY arriba abajo
+    add x16,x15,14 //FY
+    sub x17,x12,0 //PX ancho hacia izq
+    add x18,x12,141 //FX ancho
+    bl rectangulo
+    br x1
+
+//Funcion encargada de plasmar una bomba en la ruta
+bomba:
+    mov x1,lr //almaceno la direccion de llamado
+    movz x10, 0xD7, lsl 16 //color rojo parte 1
+    movk x10, 0x0505, lsl 00 //color rojo parte 2 
+    mov x17,370
+    mov x15,243 
+    mov x4,30
+    bl circulo
+    movz x10, 0xFF, lsl 16 //color naranja parte 1
+    movk x10, 0x0505, lsl 00 //color naranja parte 2
+    mov x4,25
+    bl circulo
+    movz x10, 0xF7, lsl 16 //color amarillo parte 1
+    movk x10, 0xFF00, lsl 00 //color amarillo parte 2
+    mov x4,20
+    bl circulo
+    br x1 //regreso a la dire de llamada
+    
 //Funcion encargada de dibujar la calle de barro
 caminoB:
     mov x1,lr //Almaceno la direccion de llamada
@@ -589,7 +798,9 @@ circulo:
         add x15,x15,1
         cmp x27,x15
         b.ne loopcircle
-        br x16
+    mov x17,x18 //restauro el valor de X
+    mov x15,x19 //restauro el valor de Y
+    br x16
 
 pintar_pixel:
     mov x21,SCREEN_WIDTH //x21 = 640
@@ -598,7 +809,6 @@ pintar_pixel:
     lsl x21,x21,2 //4 * (X + Y*640)
     add x21,x0,x21 //direIni + 4*(X + Y*640)
     stur w10,[x21] //pinto el pixel
-    mov x0,x20
     br lr
 
 //Funcion encargada de dibujar un triangulo   
