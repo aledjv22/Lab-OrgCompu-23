@@ -317,75 +317,54 @@ lecEspacio:
 
 //Funcion encargada de dibujar el paisajeFinal del programa
 paisajeFinal:
-resetX7F:
-    mov x7,500
-    subs xzr,x5,-10
-    b.gt resetX5F
+    mov x7,500 //Y del auto
+    mov x6,217 //X del auto
+    mov x5,-900 //Y de separadorB
     b final
 resetX5F:
-    mov x5,-300
-final:
-    movz x10, 0xDA, lsl 16 //color pasto nevado parte 1
-    movk x10, 0xDADA, lsl 00 //color pasto nevado parte 2
-    bl fondo
-    bl asfalto
+    mov x5,-500
+    b final
+restarX7:
     sub x7,x7,3
-    bl autoAzul
-    add x5,x5,3
-    bl pinarNevado
-    bl lineasRojas
-    bl puntBlanco
-    bl separador
+final:
+    bl caminoB
+    bl separadorB
+    bl autoGris
+    add x5,x5,7
     bl tiempo
+    subs xzr,x7,300
+    b.gt restarX7
     subs xzr,x5,-10
     b.gt resetX5F
-    subs xzr,x7,-150
-    b.lt resetX7F
     b final
     b InfLoop
 
-//Funcion encargada de dibujar un pinar nevado
-pinarNevado:
-    mov x2,lr //almaceno la dire de partida
-    bl pinar
-    bl copasNevadas
-    br x2 //retorno a la dire de partida
+//Funcion encargada de dibujar la calle de barro
+caminoB:
+    mov x1,lr //Almaceno la direccion de llamada
+    movz x10, 0x79, lsl 16 //color barro parte 1
+    movk x10, 0x5E1F, lsl 00 //color barro parte 2 
+    mov x15,0 //PY
+    mov x17,170 //PX
+    mov x16,SCREEN_HEIGH //FY
+    mov x18,470 //FX
+    mov x22,SCREEN_HEIGH //tam de largo de lineas
+    mov x23,0 //sep del punteado
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    movz x10, 0x4C, lsl 16 //color pasto parte 1
+    movk x10, 0x755A, lsl 00 //color pasto parte 2
+    mov x15,0 //PY
+    mov x16,SCREEN_HEIGH //FY
+    mov x17,0 //PX
+    mov x18,170 //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    mov x15,0 //PY
+    mov x16,SCREEN_HEIGH //FY
+    mov x17,470 //PX
+    mov x18,SCREEN_WIDTH //FX
+    bl rectangulo //Salto a la "funcion" rectangulo y almaceno la direccion de partida
+    br x1 //Retorno a la direccion de llamada
 
-//Funcion encargada de dibujar las copas nevadas de los pinos
-copasNevadas:
-    mov x1,lr //almaceno la dire de partida
-    mov x15,x5 //Y -> PY
-    mov x29,x15//val inicial de Y
-    pinoIzq2:
-        mov x17,60 //X -> PX
-        mov x15,x29
-        bl pino
-        movz x10,0xFF,lsl 16 //color blanco nieve parte 1
-        movk x10,0xFFFF,lsl 00 //color blanco nieve parte 2
-        mov x17,60 //X -> PX
-        sub x15,x29,70
-        mov x16,24
-        bl triangulo
-        add x29,x29,160
-        cmp x29,800
-        b.lt pinoIzq2
-
-    add x15,x5,20 //Y -> PY
-    mov x29,x15//val inicial de Y
-    pinoDer2:
-        mov x17,580 //X -> PX
-        mov x15,x29
-        bl pino
-        movz x10,0xFF,lsl 16 //color blanco nieve parte 1
-        movk x10,0xFFFF,lsl 00 //color blanco nieve parte 2
-        mov x17,580 //X -> PX
-        sub x15,x29,70
-        mov x16,24
-        bl triangulo
-        add x29,x29,160
-        cmp x29,800
-        b.lt pinoDer2
-    br x1 //almaceno la dire de partida
 //Funcion encargada de dibujar el fondo (pasto)
 fondo:
     mov x1,lr //Almaceno la direccion de llamada
@@ -498,6 +477,20 @@ separador:
     mov x15,x5 //PY
     add x16,x15,30 //FY
     mov x23,10 //sep del punteado
+    mov x24,700 //tam de largo de todo
+    bl repRectanguloY
+    br x1
+
+//Funcion encargada de plasmar lineas separadas en camino de tierra
+separadorB:
+    mov x1,lr
+    movz x10, 0xE8, lsl 16 //color blanco parte 1
+    movk x10, 0xC9A6, lsl 00 //color blanco parte 2 
+    mov x17,318 //PX
+    mov x18,322 //FX
+    mov x15,x5 //PY
+    add x16,x15,45 //FY
+    mov x23,15 //sep del punteado
     mov x24,700 //tam de largo de todo
     bl repRectanguloY
     br x1
@@ -721,6 +714,18 @@ autoAzul:
     movz x14,0xFF,lsl 00 //Color base
     movz x9,0x03,lsl 16 //color sombra parte 1
     movk x9,0x039F,lsl 00 //color sombra parte 2
+    bl auto
+    br x1
+
+//Funcion encargada de dibujar un auto gris
+autoGris:
+    mov x1,lr //almaceno la dire de llamado
+    mov x17,x6 //valor de X
+    mov x15,x7 //valor de Y
+    movz x14,0x69,lsl 16 //Color base parte 1
+    movk x14,0x6969,lsl 00 //color base parte 2
+    movz x9,0x48,lsl 16 //color sombra parte 1
+    movk x9,0x4848,lsl 00 //color sombra parte 2
     bl auto
     br x1
 
