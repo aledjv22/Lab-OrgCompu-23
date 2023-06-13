@@ -65,8 +65,11 @@ fondo:
     mov x15,0 //PY
     mov x17,0 //PX
     mov x16,SCREEN_HEIGH //FY
-    mov x18,SCREEN_WIDTH //FX
+    mov x18,120 //FX
     bl rectangulo //Salto a la "procedimiento" rectangulo y almaceno la direccion de partida
+    mov x17,520
+    mov x18,SCREEN_WIDTH
+    bl rectangulo
     ldur lr,[sp,0] //recupero la dirección de llamada
     add sp,sp,8
     br lr //salto a la dirección de partida.
@@ -601,189 +604,243 @@ auto1:
 
 //procedimiento encargado de dibujar una camioneta
 camioneta:
-    mov x11, lr //almaceno la dire de llamado
-    mov x12,x17 //x12 almacena el valor inicial de X
-    mov x13,x15 //x13 almacena el valor inicial de Y
+    sub sp,sp,24
+    stur x17,[sp,16] //almaceno el valor inicial de PX
+    stur x15,[sp,8] //almaceno el valor inicial de PY
+    stur lr,[sp,0] //almaceno la dirección de llamado
 
     //Ruedas de arriba del auto
     movz x10, 0x00, lsl 16 // Color negro 
-    add x15,x13,34 // PY (posición Y)
+    add x15,x15,34 // PY (posición Y)
     add x16,x15,29 // FY (fin Y)
-    sub x17,x12,11 // PX (posición X)
+    sub x17,x17,11 // PX (posición X)
     add x18,x17,83 // FX (fin X)
     bl rectangulo 
     //Ruedas de abajo del auto
-    add x15,x13,101 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,101 // PY (posición Y)
     add x16,x15,29 // FY (fin Y)
-    sub x17,x12,11 // PX (posición X)
-    add x18,x12,72 // FX (fin X)
+    add x18,x17,72 // FX (fin X)
+    sub x17,x17,11 // PX (posición X)
     bl rectangulo 
 
     //contornos negros
-    add x15,x13,23 //PY  arriba abajo
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,23 //PY  arriba abajo
     add x16,x15,121 //FY
-    sub x17,x12,6 //PX ancho hacia izq
-    add x18,x12,67 //FX ancho
+    add x18,x17,67 //FX ancho
+    sub x17,x17,6 //PX ancho hacia izq
     bl rectangulo
     //Base del auto
     mov x10,x14 //color base
-    add x15,x13,25 //PY  arriba abajo
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,25 //PY  arriba abajo
     add x16,x15,110 //FY
-    sub x17,x12,4 //PX ancho hacia izq
-    add x18,x12,66 //FX ancho
+    add x18,x17,66 //FX ancho
+    sub x17,x17,4 //PX ancho hacia izq
     bl rectangulo
     
     //capot centro  
     mov x10,x9 //color sombra
-    add x15,x13,20 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,20 // PY (posición Y)
     add x16,x15,120 // FY (fin Y)
-    add x17,x12,11 // PX (posición X)
+    add x17,x17,11 // PX (posición X)
     add x18,x17,40 // FX (fin X)
     bl rectangulo 
     //detalle blanco capot
     mov x10,x14 //color base
-    add x15,x13,20 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,20 // PY (posición Y)
     add x16,x15,90// FY (fin Y)
-    add x17,x12,20 // PX (posición X)
+    add x17,x17,20 // PX (posición X)
     add x18,x17,21 // FX (fin X)
     bl rectangulo
 
     //sobra izq
     mov x10,x14 //color base
-    add x15,x13,30 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,30 // PY (posición Y)
     add x16,x15,110 // FY (fin Y)
-    add x17,x12,51 // PX (posición X)
+    add x17,x17,51 // PX (posición X)
     add x18,x17,15 // FX (fin X)
     bl rectangulo // Dibujar rueda izquierda
 
     //parabrisa delantero y parte del baul
     movz x10, 0x00, lsl 16 // Color negro 
-    add x15,x13,57 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,57 // PY (posición Y)
     add x16,x15,68 // FY (fin Y)
-    add x17,x12,12 // PX (posición X)
+    add x17,x17,12 // PX (posición X)
     add x18,x17,40 // FX (fin X)
     bl rectangulo 
     //parabrisa puertas izq
-    add x15,x13,77 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,77 // PY (posición Y)
     add x16,x15,17 // FY (fin Y)
-    add x17,x12,1 // PX (posición X)
+    add x17,x17,1 // PX (posición X)
     add x18,x17,7 // FX (fin X)
     bl rectangulo 
     //parabrisa puertas der
-    add x15,x13,77 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,77 // PY (posición Y)
     add x16,x15,17 // FY (fin Y)
-    add x17,x12,56 // PX (posición X)
+    add x17,x17,56 // PX (posición X)
     add x18,x17,7 // FX (fin X)
     bl rectangulo 
 
     //BAUL
-    add x15,x13,100 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,100 // PY (posición Y)
     add x16,x15,30 // FY (fin Y)
-    add x17,x12,4 // PX (posición X)
+    add x17,x17,4 // PX (posición X)
     add x18,x17,57 // FX (fin X)
     bl rectangulo
     //detalles baul
     movz x10, 0x40, lsl 16 // Color gris claro parte 1
     movk x10, 0x4040, lsl 00 // Color gris claro parte 2
-    add x15,x13,103 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,103 // PY (posición Y)
     add x16,x15,24 // FY (fin Y)
-    add x17,x12,9 // PX (posición X)
+    add x17,x17,9 // PX (posición X)
     add x18,x17,5 // FX (fin X)
     bl rectangulo
-    add x15,x13,98 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,98 // PY (posición Y)
     add x16,x15,29 // FY (fin Y)
-    add x17,x12,19 // PX (posición X)
+    add x17,x17,19 // PX (posición X)
     add x18,x17,6 // FX (fin X)
     bl rectangulo
-    add x15,x13,98 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,98 // PY (posición Y)
     add x16,x15,29 // FY (fin Y
-    add x17,x12,31 // PX (posición X)
+    add x17,x17,31 // PX (posición X)
     add x18,x17,6 // FX (fin X)
     bl rectangulo
-    add x15,x13,98 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,98 // PY (posición Y)
     add x16,x15,29 // FY (fin Y
-    add x17,x12,43 // PX (posición X)
+    add x17,x17,43 // PX (posición X)
     add x18,x17,4 // FX (fin X)
     bl rectangulo
-    add x15,x13,103 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,103 // PY (posición Y)
     add x16,x15,24 // FY (fin Y)
-    add x17,x12,53 // PX (posición X)
+    add x17,x17,53 // PX (posición X)
     add x18,x17,4 // FX (fin X)
     bl rectangulo
 
     //PARABRISA DELANTERO
     movz x10, 0x00, lsl 16 // Color negro
-    add x15,x13,64 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,64 // PY (posición Y)
     add x16,x15,8 // FY (fin Y)
-    add x17,x12,6 // PX (posición X)
+    add x17,x17,6 // PX (posición X)
     add x18,x17,52 // FX (fin X)
     bl rectangulo
-    movk x10, 0x2828, lsl 00 // Color verde oscuro
-    add x15,x13,52 // PY (posición Y)
+    movk x10, 0x2828, lsl 00 // Color gris oscuro
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,52 // PY (posición Y)
     add x16,x15,6 // FY (fin Y
-    add x17,x12,16 // PX (posición X)
+    add x17,x17,16 // PX (posición X)
     add x18,x17,32 // FX (fin X)
     bl rectangulo 
 
     //techo
     mov x10,x9 //color sombra
-    add x15,x13,72 // PY (posición Y)
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,72 // PY (posición Y)
     add x16,x15,23 // FY (fin Y)
-    add x17,x12,11 // PX (posición X)
+    add x17,x17,11 // PX (posición X)
     add x18,x17,42 // FX (fin X)
     bl rectangulo
 
     //contorno de luces
     movz x10, 0x00, lsl 16 //color negro sombra
-    add x15,x13,20 //PY  arriba abajo
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,20 //PY  arriba abajo
     add x16,x15,10 //FY
-    sub x17,x12,4 //PX ancho hacia izq
-    add x18,x12,14 //FX ancho
+    add x18,x17,14 //FX ancho
+    sub x17,x17,4 //PX ancho hacia izq
     bl rectangulo
-    add x15,x13,20 //PY  arriba abajo
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,20 //PY  arriba abajo
     add x16,x15,10 //FY
-    add x17,x12,48//PX ancho hacia izq
+    add x17,x17,48//PX ancho hacia izq
     add x18,x17,18 //FX ancho
     bl rectangulo
-    add x15,x13,134 //PY  arriba abajo
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,134 //PY  arriba abajo
     add x16,x15,13 //FY
-    sub x17,x12,6 //PX ancho hacia izq
-    add x18,x12,14 //FX ancho
+    add x18,x17,14 //FX ancho
+    sub x17,x17,6 //PX ancho hacia izq
     bl rectangulo
-    add x15,x13,134 //PY  arriba abajo
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,134 //PY  arriba abajo
     add x16,x15,13 //FY
-    add x17,x12,47 //PX ancho hacia izq
+    add x17,x17,47 //PX ancho hacia izq
     add x18,x17,20 //FX ancho
     bl rectangulo
     
     //Luces amarillas
     movz x10, 0xFF, lsl 16 //color amarillo parte 1
     movk x10, 0xF500, lsl 00 //color amarillo parte 2
-    add x15,x13,23 //PY  arriba abajo
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,23 //PY  arriba abajo
     add x16,x15,4  //FY
-    mov x17,x12 //PX ancho hacia izq
     add x18,x17,11 //FX ancho
     bl rectangulo
-    add x15,x13,23 //PY  arriba abajo
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,23 //PY  arriba abajo
     add x16,x15,4  //FY
-    add x17,x12,52 //PX ancho hacia izq
+    add x17,x17,52 //PX ancho hacia izq
     add x18,x17,11 //FX ancho
     bl rectangulo
 
     //Luces rojas 
     movz x10, 0xFF, lsl 16 //color rojo
-    add x15,x13,136 //PY arriba abajo
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,136 //PY arriba abajo
     add x16,x15,5 //FY
-    sub x17,x12,2 //PX ancho hacia izq
-    add x18,x12,11 //FX ancho
+    add x18,x17,11 //FX ancho
+    sub x17,x17,2 //PX ancho hacia izq
     bl rectangulo
-    add x15,x13,136 //PY arriba abajo
+    ldur x17,[sp,16] //restauro valor inicial de PX
+    ldur x15,[sp,8] //restauro valor inicial de PY
+    add x15,x15,136 //PY arriba abajo
     add x16,x15,5 //FY
-    add x17,x12,51 //PX ancho hacia izq
+    add x17,x17,51 //PX ancho hacia izq
     add x18,x17,13 //FX ancho
     bl rectangulo
 
-    br x11 //retorno a la dire de llamado
+    ldur lr,[sp,0] //recupero la direccion de partida
+    add sp,sp,24
+    br lr //salto a la direccion de partida.
 
 InfLoop:
 	b InfLoop
