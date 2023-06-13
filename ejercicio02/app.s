@@ -803,7 +803,7 @@ repRectanguloY:
 
 //procedimiento encargado de dibujar un circulo
 circulo:
-	// Draws a circle given a (x0, y0) center coords (x17, x15) a radius (x4) and a color (x10)
+	// Draws a circle given a (x0, y0) center coords (x17, x15) a radius (x4) and a color (x10).
 	sub sp,sp,24
     stur x17,[sp,16]
     stur x15,[sp,8]

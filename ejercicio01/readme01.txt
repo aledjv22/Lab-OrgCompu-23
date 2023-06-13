@@ -1,7 +1,7 @@
 Integrantes del grupo:
   -Victor Alejandro Díaz Jáuregui: 42785296
-  -Lihuel
-  -Nahuel
+  -Aravena Aaron Lihuel:           36142043
+  -Alejandro Nahuel Pitt Aparicio: 46173733
 
 Descripción:
   El código genera la imagen de una carretera con arboles de copa circular, un auto azul y una camioneta blanca. 

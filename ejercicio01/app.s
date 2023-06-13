@@ -119,7 +119,7 @@ puntBlanco:
     mov x15,0 //PY
     mov x16,15 //FY
     mov x23,10 //sep del punteado
-    mov x24,SCREEN_HEIGH //tam de largo de todo
+    mov x24,500 //tam de largo de todo
     bl repRectanguloY
     mov x17,515 //PX
     mov x18,520 //FX
@@ -250,6 +250,7 @@ circulo:
     add sp,sp,8
     br lr //salto a la direccion de partida.
 
+//procedimiento encargado de pintar un pixel
 pintar_pixel:
     sub sp,sp,8
     stur x21,[sp,0]
@@ -400,7 +401,7 @@ autoGris:
     movk x14,0x6969,lsl 00 //color gris claro base parte 2
     movz x9,0x48,lsl 16 //color gris oscuro sombra parte 1
     movk x9,0x4848,lsl 00 //color gris oscuro sombra parte 2
-    bl auto1
+    bl auto
     ldur lr,[sp,0] //recupero la direccion de partida
     add sp,sp,8
     br lr //salto a la direccion de partida.
@@ -414,7 +415,7 @@ autoAzul:
     movz x14,0xFF,lsl 00 //Color azul base
     movz x9,0x03,lsl 16 //color azul oscuro sombra parte 1
     movk x9,0x039F,lsl 00 //color azul oscuro sombra parte 2
-    bl auto1
+    bl auto
     ldur lr,[sp,0] //recupero la direccion de partida
     add sp,sp,8
     br lr //salto a la direccion de partida.
@@ -449,8 +450,9 @@ camineta777:
     ldur lr,[sp,0] //recupero la direccion de partida
     add sp,sp,8
     br lr //salto a la direccion de partida.
-//Procedimiento encargado de plasmar un auto cuyo
-auto1:
+
+//Procedimiento encargado de plasmar un auto 
+auto:
     sub sp,sp,24
     stur x17,[sp,16] //almaceno el valor inicial de PX
     stur x15,[sp,8] //almaceno el valor inicial de PY

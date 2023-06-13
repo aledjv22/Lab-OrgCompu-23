@@ -1,7 +1,7 @@
 Integrantes del grupo:
   -Victor Alejandro Díaz Jáuregui: 42785296
-  -Lihuel
-  -Nahuel
+  -Aravena Aaron Lihuel:           36142043
+  -Alejandro Nahuel Pitt Aparicio: 46173733
 
 Descripción:
   La animacion muestra 3 paisajes distintos de rutas diferenciadas por los tipos de arboles y suelo, se pueden cambiar con las teclas W y S ya que son un ciclo bidireccional.
