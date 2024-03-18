@@ -1,4 +1,4 @@
-# Lab Org. y Arq. de Computadoras
+# Laboratorio de  Organización del Computador - Edición 2023
 
 * Configuración de pantalla: `640x480` pixels, formato `ARGB` 32 bits.
 * El registro `X0` contiene la dirección base del FrameBuffer (Pixel 1).
@@ -20,7 +20,8 @@
 El archivo _Makefile_ contiene lo necesario para construir el proyecto.
 Se pueden utilizar otros archivos **.s** si les resulta práctico para emprolijar el código y el Makefile los ensamblará.
 
-**Para correr el proyecto ejecutar**
+### **Para correr el proyecto ejecutar**
+Debe ubicarse en el directorio [ejercicio01](./ejercicio01/) o en el directorio [ejercicio02](./ejercicio02/), ya que dependiendo del ejercicio que quiera correr obtendrá un resultado distinto.
 
 ```bash
 $ make runQEMU
@@ -29,13 +30,43 @@ Esto construirá el código y ejecutará qemu para su emulación.
 
 Si qemu se queja con un error parecido a `qemu-system-aarch64: unsupported machine type`, prueben cambiar `raspi3` por `raspi3b` en la receta `runQEMU` del **Makefile** (línea 23 si no lo cambiaron).
 
-**Para correr el gpio manager**
+### **Para correr el gpio manager**
 
 ```bash
 $ make runGPIOM
 ```
 
-Ejecutar *luego* de haber corrido qemu.
+Ejecutar **en otra terminal luego** de haber corrido qemu.
+
+### **Ejercicio 1:**
+El código genera la imagen de una carretera con arboles de copa circular, un auto azul y una camioneta blanca. 
+De pulsar la **tecla W** los arboles pasan a ser pinos, los vehiculos cambian de lugar y color. 
+De **pulsar W** se regresa a la imagen inicial.
+
+### **Ejercicio 2:**
+La animacion muestra 3 paisajes distintos de rutas diferenciadas por los tipos de arboles y suelo, se pueden cambiar con las **teclas W y S** ya que son un ciclo bidireccional.
+La **tecla A** cambia las lineas punteadas del asfalto por lineas amarillas.
+**Tecla D** elimina y aparece uno a uno las camionetas mediante un ciclo repetitivo.
+El **'espacio'** genera una secuencia de persecución entre un auto y una avioneta terminando el vehiculo eliminado por un misil. **Tras detenerse** la línea de ruta se habilita el uso de la W y S.
+
+### **Imagenes de ejecución:**
+![Ej01A](https://i.ibb.co/Y82JSWB/Captura-desde-2024-03-18-01-17-56.png "Ej01A")
+
+![Ej01B](https://i.ibb.co/Y8tTQ8j/Captura-desde-2024-03-18-01-21-16.png "Ej01B")
+
+![Ej02A](https://i.ibb.co/3fRc9nR/Captura-desde-2024-03-18-01-24-36.png "Ej02A")
+
+![Ej02B](https://i.ibb.co/HrwmgQx/Captura-desde-2024-03-18-01-25-39.png "Ej02B")
+
+![Ej02C](https://i.ibb.co/ssWbfDK/Captura-desde-2024-03-18-01-26-26.png "Ej02C")
+
+![Ej02D](https://i.ibb.co/zXQ43Jx/Captura-desde-2024-03-18-01-27-12.png "Ej02D")
+
+![Ej02E](https://i.ibb.co/WnKzHnH/Captura-desde-2024-03-18-01-28-14.png "Ej02E")
+
+![Ej02F](https://i.ibb.co/X2mRF2r/Captura-desde-2024-03-18-01-29-03.png "Ej02F")
+
+![Ej02G](https://i.ibb.co/CzzRp2M/Captura-desde-2024-03-18-01-29-06.png "Ej02G")
 
 ## Como correr qemu y gcc usando Docker containers
 
@@ -93,3 +124,11 @@ docker run -it --rm -v $(pwd):/local --privileged -e "DISPLAY=${DISPLAY:-:0.0}" 
 # Correr un shell en el container
 docker exec -it rpi-qemu /bin/bash
 ```
+
+## Licencia
+Este proyecto es software libre, y está disponible bajo la licencia [MIT](LICENSE).
+
+## Autores
+- **[Alejandro Díaz.](https://github.com/aledjv22)**
+- **[Lihuel Aravena.](https://github.com/y-36)**
+- **[Nahuel Pitt.](https://github.com/Amourak0)**
